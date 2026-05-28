@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import { GameCard } from "../../_components/GameCard";
 import { QuestIcon } from "../../_components/QuestIcon";
 import { SiteFooter } from "../../_components/SiteFooter";
 import { SiteHeader } from "../../_components/SiteHeader";
@@ -86,7 +87,7 @@ export default async function GamePage(
       </section>
 
       {/* ── Get it ── */}
-      <section>
+      <section className="border-b border-line">
         <div className="mx-auto max-w-6xl px-6 py-20 sm:px-10 sm:py-24">
           <p className="mb-6 text-[11px] font-semibold uppercase tracking-[0.22em] text-muted">
             Get Puzzlecub
@@ -114,6 +115,20 @@ export default async function GamePage(
             >
               Get it on Google Play
             </a>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Did you see? ── */}
+      <section>
+        <div className="mx-auto max-w-6xl px-6 py-20 sm:px-10 sm:py-24">
+          <p className="mb-10 text-[11px] font-semibold uppercase tracking-[0.22em] text-muted">
+            Did you see?
+          </p>
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {GAMES.filter(g => g.slug !== game.slug).map(g => (
+              <GameCard key={g.slug} game={g} />
+            ))}
           </div>
         </div>
       </section>

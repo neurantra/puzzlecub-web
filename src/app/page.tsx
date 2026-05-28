@@ -1,6 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
-import { QuestIcon } from "./_components/QuestIcon";
+import { GameCard } from "./_components/GameCard";
 import { SiteFooter } from "./_components/SiteFooter";
 import { SiteHeader } from "./_components/SiteHeader";
 import { APP_STORE_URL, GAMES, PLAY_STORE_URL } from "./_lib/games";
@@ -109,32 +108,7 @@ export default function Home() {
           </p>
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {GAMES.map(g => (
-              <Link
-                key={g.slug}
-                href={`/games/${g.slug}`}
-                className="group flex flex-col rounded-2xl border border-line bg-surface p-7 transition-all hover:-translate-y-0.5 hover:border-foreground/30 hover:shadow-[0_10px_28px_-14px_rgba(26,26,46,0.18)]"
-                style={{
-                  borderTopColor: `var(${g.accentVar})`,
-                  borderTopWidth: 3,
-                }}
-              >
-                <QuestIcon name={g.iconKey} size={52} />
-                <h3 className="mt-5 text-[22px] font-bold tracking-tight text-foreground">
-                  {g.name}
-                </h3>
-                <p className="mt-2 text-[15px] font-medium text-foreground/80">
-                  {g.tagline}
-                </p>
-                <p className="mt-4 flex-1 text-[14px] leading-relaxed text-muted">
-                  {g.short}
-                </p>
-                <p
-                  className="mt-6 inline-flex items-center text-[13px] font-semibold transition-transform group-hover:translate-x-0.5"
-                  style={{ color: `var(${g.accentVar})` }}
-                >
-                  Learn more →
-                </p>
-              </Link>
+              <GameCard key={g.slug} game={g} />
             ))}
           </div>
         </div>
