@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import { ChaturangStrip } from "../../_components/ChaturangStrip";
 import { GameCard } from "../../_components/GameCard";
 import { QuestIcon } from "../../_components/QuestIcon";
 import { SiteFooter } from "../../_components/SiteFooter";
@@ -111,7 +112,7 @@ export default async function GamePage(
               href={PLAY_STORE_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex h-12 items-center justify-center rounded-full border border-line bg-transparent px-7 text-sm font-semibold text-foreground transition-colors hover:bg-foreground hover:text-background"
+              className="inline-flex h-12 items-center justify-center rounded-full border border-foreground/30 bg-transparent px-7 text-sm font-semibold text-foreground transition-colors hover:bg-foreground hover:text-background"
             >
               Get it on Google Play
             </a>
@@ -120,7 +121,7 @@ export default async function GamePage(
       </section>
 
       {/* ── Did you see? ── */}
-      <section>
+      <section className="border-b border-line">
         <div className="mx-auto max-w-6xl px-6 py-20 sm:px-10 sm:py-24">
           <p className="mb-10 text-[11px] font-semibold uppercase tracking-[0.22em] text-muted">
             Did you see?
@@ -132,6 +133,8 @@ export default async function GamePage(
           </div>
         </div>
       </section>
+
+      <ChaturangStrip />
 
       <SiteFooter />
     </div>

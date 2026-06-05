@@ -1,3 +1,5 @@
+import { CHATURANG_URL } from "../_lib/games";
+
 export function SiteFooter() {
   const year = new Date().getFullYear();
   return (
@@ -21,6 +23,14 @@ export function SiteFooter() {
             className="transition-colors hover:text-foreground"
           >
             Support
+          </a>
+          <a
+            href={CHATURANG_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="transition-colors hover:text-foreground"
+          >
+            Chaturang
           </a>
           <a
             href="https://neurantra.com/privacy"

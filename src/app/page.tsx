@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { ChaturangStrip } from "./_components/ChaturangStrip";
 import { GameCard } from "./_components/GameCard";
 import { SiteFooter } from "./_components/SiteFooter";
 import { SiteHeader } from "./_components/SiteHeader";
@@ -16,14 +17,14 @@ export default function Home() {
             <Image
               src="/puzzlecub-logo.png"
               alt="Puzzlecub"
-              width={140}
-              height={140}
+              width={160}
+              height={160}
               priority
-              className="h-[140px] w-[140px] rounded-3xl"
+              className="h-[160px] w-[160px]"
             />
           </div>
           <div className="mb-7 flex justify-center">
-            <span className="inline-flex items-center whitespace-nowrap rounded-full border border-line-soft bg-surface px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-muted">
+            <span className="inline-flex items-center whitespace-nowrap rounded-full bg-surface px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-muted">
               Live on iOS &amp; Android
             </span>
           </div>
@@ -32,7 +33,7 @@ export default function Home() {
           </h1>
           <p className="mx-auto mt-7 max-w-xl text-lg leading-relaxed text-muted">
             One app, six AI-driven games — Math, Word, Sand, Alpha, Maze, and
-            Geo — bound together by a shared wallet, a daily streak, a Daily
+            Geo. Bound together by a shared wallet, a daily streak, a Daily
             Challenge, and an AI that adapts to how you play.
           </p>
           <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
@@ -48,7 +49,7 @@ export default function Home() {
               href={PLAY_STORE_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex h-12 items-center justify-center rounded-full border border-line bg-transparent px-7 text-sm font-semibold text-foreground transition-colors hover:bg-foreground hover:text-background"
+              className="inline-flex h-12 items-center justify-center rounded-full border border-foreground/30 bg-transparent px-7 text-sm font-semibold text-foreground transition-colors hover:bg-foreground hover:text-background"
             >
               Get it on Google Play
             </a>
@@ -68,10 +69,10 @@ export default function Home() {
                 One app. Six different ways to play.
               </h2>
               <p className="mt-6 text-base leading-relaxed text-muted">
-                Puzzlecub is a tangram cub with six games tucked inside — each
-                its own quest, each with its own rules. A shared wallet spans
-                them all. A daily streak follows you across them. A Daily
-                Challenge picks one each day to surprise you.
+                Puzzlecub is one app with six games tucked inside — each its
+                own quest, each with its own rules. A shared wallet spans them
+                all. A daily streak follows you across them. A Daily Challenge
+                picks one each day to surprise you.
               </p>
               <p className="mt-4 text-base leading-relaxed text-muted">
                 The AI is woven through gameplay, not bolted on. It tunes
@@ -115,7 +116,7 @@ export default function Home() {
       </section>
 
       {/* ── Get it ── */}
-      <section>
+      <section className="border-b border-line">
         <div className="mx-auto max-w-6xl px-6 py-20 sm:px-10 sm:py-24">
           <p className="mb-6 text-[11px] font-semibold uppercase tracking-[0.22em] text-muted">
             Get Puzzlecub
@@ -140,13 +141,15 @@ export default function Home() {
               href={PLAY_STORE_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex h-12 items-center justify-center rounded-full border border-line bg-transparent px-7 text-sm font-semibold text-foreground transition-colors hover:bg-foreground hover:text-background"
+              className="inline-flex h-12 items-center justify-center rounded-full border border-foreground/30 bg-transparent px-7 text-sm font-semibold text-foreground transition-colors hover:bg-foreground hover:text-background"
             >
               Get it on Google Play
             </a>
           </div>
         </div>
       </section>
+
+      <ChaturangStrip />
 
       <SiteFooter />
     </div>

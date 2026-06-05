@@ -45,7 +45,7 @@ export function SiteHeader({ variant = "home" }: { variant?: SiteHeaderVariant }
               width={36}
               height={36}
               priority
-              className="h-9 w-9 rounded-lg"
+              className="h-9 w-9"
             />
             <span className="text-[17px] font-bold tracking-tight text-foreground">
               Puzzlecub
@@ -87,7 +87,7 @@ function NavLink({
     <a
       href={href}
       data-active={active}
-      className="relative transition-colors hover:text-foreground data-[active=true]:text-foreground after:absolute after:-bottom-1 after:left-0 after:h-[1.5px] after:w-full after:origin-left after:scale-x-0 after:bg-foreground after:transition-transform after:duration-300 hover:after:scale-x-100 data-[active=true]:after:scale-x-100"
+      className="relative transition-colors hover:text-foreground data-[active=true]:text-foreground after:absolute after:-bottom-1 after:left-0 after:h-[1.5px] after:w-full after:origin-left after:scale-x-0 after:bg-accent after:transition-transform after:duration-300 hover:after:scale-x-100 data-[active=true]:after:scale-x-100"
     >
       {children}
     </a>

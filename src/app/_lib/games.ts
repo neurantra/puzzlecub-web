@@ -15,9 +15,11 @@ export interface Game {
 }
 
 export const APP_STORE_URL =
-  "https://apps.apple.com/us/app/questiverse/id6768766852";
+  "https://apps.apple.com/us/app/puzzlecub/id6768766852";
 export const PLAY_STORE_URL =
   "https://play.google.com/store/apps/details?id=com.sumquest.app";
+
+export const CHATURANG_URL = "https://neurantra.com/chaturang";
 
 export const GAMES: Game[] = [
   {
