@@ -1,4 +1,4 @@
-type QuestName = "math" | "word" | "tide" | "alpha" | "geo" | "maze";
+type QuestName = "math" | "word" | "tide" | "alpha" | "geo" | "maze" | "stack";
 
 interface QuestVisual {
   color: string;
@@ -36,6 +36,11 @@ const VISUALS: Record<QuestName, QuestVisual> = {
     color: "#F43F5E",
     glyph: <MazeGlyph />,
     glyphScale: 0.64,
+  },
+  stack: {
+    color: "#14B8A6",
+    glyph: <StackGlyph />,
+    glyphScale: 0.6,
   },
 };
 
@@ -90,6 +95,22 @@ function MazeGlyph() {
       preserveAspectRatio="xMidYMid meet"
     >
       <path d="M20 25 L65 25 L65 50 L40 50 L40 75 L80 75" />
+    </svg>
+  );
+}
+
+function StackGlyph() {
+  return (
+    <svg
+      viewBox="0 0 100 100"
+      width="62%"
+      height="62%"
+      fill="white"
+      preserveAspectRatio="xMidYMid meet"
+    >
+      <rect x="22" y="56" width="56" height="15" rx="7.5" />
+      <rect x="22" y="37" width="56" height="15" rx="7.5" />
+      <rect x="22" y="18" width="56" height="15" rx="7.5" />
     </svg>
   );
 }

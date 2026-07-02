@@ -1,5 +1,19 @@
-export type GameSlug = "math" | "word" | "sand" | "alpha" | "maze" | "geo";
-export type IconKey = "math" | "word" | "tide" | "alpha" | "geo" | "maze";
+export type GameSlug =
+  | "math"
+  | "word"
+  | "sand"
+  | "alpha"
+  | "maze"
+  | "geo"
+  | "stack";
+export type IconKey =
+  | "math"
+  | "word"
+  | "tide"
+  | "alpha"
+  | "geo"
+  | "maze"
+  | "stack";
 
 export interface Game {
   slug: GameSlug;
@@ -105,6 +119,21 @@ export const GAMES: Game[] = [
     screenshot: "/puzzlecub/puzzlecub-geo.png",
     screenshotAlt: "Geo Quest — Oceania region intro card with tray pieces",
     accentVar: "--game-geo",
+  },
+  {
+    slug: "stack",
+    iconKey: "stack",
+    name: "Stack Quest",
+    tagline: "Solve the sum, stack the puck.",
+    short:
+      "Combine two numbers to hit an answer, drop a puck, and fill the tube before the rising water overflows.",
+    body:
+      "Pick an operation, then tap two grid numbers to make one of the three answer pills — each solve drops a puck into the tube on the right. Division splits the board into numerators and denominators for clean, whole answers. Beat the water rising on the left before it overflows the beaker. A hint lights the two cells that solve a pill; a slow-fill power-up buys you extra seconds. Easy to Hard sets the number range and the pace of the water.",
+    skills: "Addition · subtraction · multiplication · division · mental math",
+    screenshot: "/puzzlecub/puzzlecub-stack.png",
+    screenshotAlt:
+      "Stack Quest — stacking pucks by solving arithmetic before the water overflows",
+    accentVar: "--game-stack",
   },
 ];
 

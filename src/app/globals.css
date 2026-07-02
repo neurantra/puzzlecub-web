@@ -17,6 +17,7 @@
   --game-alpha: #06B6D4;
   --game-maze:  #F43F5E;
   --game-geo:   #10B981;
+  --game-stack: #14B8A6;
 
   --chaturang:  #D4923A;
 }
@@ -38,6 +39,7 @@
   --color-game-alpha: var(--game-alpha);
   --color-game-maze:  var(--game-maze);
   --color-game-geo:   var(--game-geo);
+  --color-game-stack: var(--game-stack);
 
   --color-chaturang:  var(--chaturang);
 

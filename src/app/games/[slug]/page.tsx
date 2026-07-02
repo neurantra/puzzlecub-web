@@ -94,7 +94,7 @@ export default async function GamePage(
             Get Puzzlecub
           </p>
           <h2 className="max-w-2xl text-3xl font-bold leading-tight tracking-tight text-foreground sm:text-4xl">
-            {game.name} is one of six games inside Puzzlecub.
+            {game.name} is one of seven games inside Puzzlecub.
           </h2>
           <p className="mt-6 max-w-xl text-base leading-relaxed text-muted">
             Free, ad-supported, no account required. Live on iOS and Android.

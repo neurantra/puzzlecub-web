@@ -6,9 +6,9 @@ import { SiteHeader } from "../_components/SiteHeader";
 import { APP_STORE_URL, GAMES, PLAY_STORE_URL } from "../_lib/games";
 
 export const metadata: Metadata = {
-  title: "Download Puzzlecub — Six brain games, free on iOS & Android",
+  title: "Download Puzzlecub — Seven brain games, free on iOS & Android",
   description:
-    "Get Puzzlecub free on the App Store and Google Play. Six AI-driven brain games in one app — Math, Word, Sand, Alpha, Maze, and Geo. No account required.",
+    "Get Puzzlecub free on the App Store and Google Play. Seven AI-driven brain games in one app — Math, Word, Sand, Alpha, Maze, Geo, and Stack. No account required.",
 };
 
 /** Official store badges — used as the primary download CTA. */
@@ -56,12 +56,13 @@ const SHOTS: Record<string, string> = {
   alpha: "/puzzlecub/shot-alpha.png",
   maze: "/puzzlecub/shot-maze.png",
   geo: "/puzzlecub/shot-geo.png",
+  stack: "/puzzlecub/shot-stack.png",
 };
 
 const HIGHLIGHTS = [
   {
-    title: "Six games in one",
-    body: "Math, Word, Sand, Alpha, Maze, and Geo — each its own quest, each with its own rules.",
+    title: "Seven games in one",
+    body: "Math, Word, Sand, Alpha, Maze, Geo, and Stack — each its own quest, each with its own rules.",
   },
   {
     title: "A reason to come back",
@@ -112,7 +113,7 @@ export default function DownloadPage() {
             Get Puzzlecub
           </h1>
           <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-muted">
-            Six brain games in one app. Free, ad-supported, no account
+            Seven brain games in one app. Free, ad-supported, no account
             required. Tap a store to download and start playing.
           </p>
           <StoreBadges className="mt-10" />
@@ -146,22 +147,22 @@ export default function DownloadPage() {
           <p className="mb-10 text-[11px] font-semibold uppercase tracking-[0.22em] text-muted">
             A look inside
           </p>
-          <div className="-mx-6 flex snap-x gap-6 overflow-x-auto px-6 pb-4 sm:mx-0 sm:px-0">
+          <div className="flex flex-wrap justify-center gap-x-6 gap-y-10">
             {GAMES.map(g => {
               const shot = SHOTS[g.slug];
               if (!shot) return null;
               return (
-                <figure key={g.slug} className="shrink-0 snap-start">
+                <figure key={g.slug} className="w-[200px]">
                   <div
-                    className="overflow-hidden rounded-[26px] border"
+                    className="overflow-hidden rounded-[24px] border"
                     style={{ borderColor: `var(${g.accentVar})` }}
                   >
                     <Image
                       src={shot}
                       alt={`${g.name} — ${g.tagline}`}
-                      width={232}
-                      height={504}
-                      className="block h-[504px] w-[232px] object-cover"
+                      width={200}
+                      height={435}
+                      className="block h-auto w-full"
                     />
                   </div>
                   <figcaption className="mt-4 text-center">
@@ -186,7 +187,7 @@ export default function DownloadPage() {
       <section className="border-b border-line">
         <div className="mx-auto max-w-6xl px-6 py-20 text-center sm:px-10 sm:py-24">
           <h2 className="mx-auto max-w-2xl text-3xl font-bold leading-tight tracking-tight text-foreground sm:text-4xl">
-            Six games, one cub. Play free.
+            Seven games, one cub. Play free.
           </h2>
           <p className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-muted">
             Puzzlecub is live now on iOS and Android.

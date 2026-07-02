@@ -9,9 +9,9 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Puzzlecub — Six AI-driven games. One playful cub.",
+  title: "Puzzlecub — Seven AI-driven games. One playful cub.",
   description:
-    "Puzzlecub is a single app with six games — Math, Word, Sand, Alpha, Maze, and Geo — bound together by a shared wallet, daily streak, and an AI that adapts to how you play. Made by Neurantra.",
+    "Puzzlecub is a single app with seven games — Math, Word, Sand, Alpha, Maze, Geo, and Stack — bound together by a shared wallet, daily streak, and an AI that adapts to how you play. Made by Neurantra.",
 };
 
 export default function RootLayout({

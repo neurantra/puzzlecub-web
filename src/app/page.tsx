@@ -29,12 +29,12 @@ export default function Home() {
             </span>
           </div>
           <h1 className="text-[44px] font-extrabold leading-[1.04] tracking-[-0.02em] text-foreground sm:text-[64px]">
-            Six quests.<br />One Puzzlecub.
+            Seven quests.<br />One Puzzlecub.
           </h1>
           <p className="mx-auto mt-7 max-w-xl text-lg leading-relaxed text-muted">
-            One app, six AI-driven games — Math, Word, Sand, Alpha, Maze, and
-            Geo. Bound together by a shared wallet, a daily streak, a Daily
-            Challenge, and an AI that adapts to how you play.
+            One app, seven AI-driven games — Math, Word, Sand, Alpha, Maze,
+            Geo, and Stack. Bound together by a shared wallet, a daily streak,
+            a Daily Challenge, and an AI that adapts to how you play.
           </p>
           <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <a
@@ -66,10 +66,10 @@ export default function Home() {
           <div className="grid gap-12 lg:grid-cols-2">
             <div>
               <h2 className="text-[28px] font-bold leading-tight tracking-tight text-foreground sm:text-[34px]">
-                One app. Six different ways to play.
+                One app. Seven different ways to play.
               </h2>
               <p className="mt-6 text-base leading-relaxed text-muted">
-                Puzzlecub is one app with six games tucked inside — each its
+                Puzzlecub is one app with seven games tucked inside — each its
                 own quest, each with its own rules. A shared wallet spans them
                 all. A daily streak follows you across them. A Daily Challenge
                 picks one each day to surprise you.
@@ -101,11 +101,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── The six quests ── */}
+      {/* ── The seven quests ── */}
       <section id="games" className="scroll-mt-24 border-b border-line">
         <div className="mx-auto max-w-6xl px-6 py-20 sm:px-10 sm:py-24">
           <p className="mb-10 text-[11px] font-semibold uppercase tracking-[0.22em] text-muted">
-            The six quests
+            The seven quests
           </p>
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {GAMES.map(g => (
@@ -122,7 +122,7 @@ export default function Home() {
             Get Puzzlecub
           </p>
           <h2 className="max-w-2xl text-3xl font-bold leading-tight tracking-tight text-foreground sm:text-4xl">
-            Six games, one cub. Free, ad-supported, no account required.
+            Seven games, one cub. Free, ad-supported, no account required.
           </h2>
           <p className="mt-6 max-w-xl text-base leading-relaxed text-muted">
             Puzzlecub is live now on iOS and Android. Tap a store below to
