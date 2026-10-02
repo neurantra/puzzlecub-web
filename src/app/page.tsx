@@ -1,6 +1,10 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { WebShell, ModeCards } from "./_components/WebShell";
 import { ContinuePlaying, TryDeduction } from "./_components/Discovery";
+export const metadata: Metadata = {
+  alternates: { canonical: "https://puzzlecub.com/" },
+};
 export default function Home() {
   return (
     <WebShell>
