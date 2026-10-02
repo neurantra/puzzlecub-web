@@ -1,0 +1,12 @@
+{
+  "ESDB": {
+    "url": "https://raw.githubusercontent.com/en-wl/wordlist/v2/data/scowl-pre.txt",
+    "sha256": "a5fe3f11682a6ab9d31f2ea2a185833b1a01be7af83409c671bd0756a870f6c7",
+    "retrieved": "2026-10-02"
+  },
+  "WordNet 3.0": {
+    "url": "https://raw.githubusercontent.com/nltk/nltk_data/gh-pages/packages/corpora/wordnet.zip",
+    "sha256": "cbda5ea6eef7f36a97a43d4a75f85e07fccbb4f23657d27b4ccbc93e2646ab59",
+    "retrieved": "2026-10-02"
+  }
+}

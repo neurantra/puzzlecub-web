@@ -1,0 +1,53 @@
+name: alphadoku
+description: 'Alphadoku - nine letters, one hidden line.'
+publish_to: none
+version: 1.0.0+3
+
+environment:
+  sdk: ^3.11.5
+
+dependencies:
+  flutter:
+    sdk: flutter
+  shared_preferences: ^2.5.5
+  url_launcher: ^6.3.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.4
+
+flutter:
+  uses-material-design: true
+  assets:
+    - branding/icon.png
+    - assets/licenses/
+    - assets/sounds/
+    - assets/fonts/OFL.txt
+  fonts:
+    - family: PlusJakartaSans
+      fonts:
+        - asset: assets/fonts/PlusJakartaSans-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/PlusJakartaSans-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/PlusJakartaSans-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/PlusJakartaSans-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/PlusJakartaSans-ExtraBold.ttf
+          weight: 800
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: branding/icon.png
+  remove_alpha_ios: true
+  adaptive_icon_background: '#F8F5EC'
+  adaptive_icon_foreground: branding/icon.png
+  web:
+    generate: true
+    image_path: branding/icon.png
+    background_color: '#F8F5EC'
+    theme_color: '#14716C'

@@ -1,12 +1,17 @@
 {
   "name": "puzzlecub-web",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "build:classic": "./scripts/build-classic.sh",
+    "build:all": "npm run build:classic && npm run build",
+    "test": "node --test tests/mega.test.mjs",
+    "test:e2e": "playwright test",
+    "prebuild": "node scripts/classic-fingerprint.mjs"
   },
   "dependencies": {
     "next": "16.2.1",
@@ -14,12 +19,14 @@
     "react-dom": "19.2.4"
   },
   "devDependencies": {
+    "@playwright/test": "^1.63.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.1",
+    "prettier": "^3.9.9",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

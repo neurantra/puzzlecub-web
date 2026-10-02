@@ -42,3 +42,10 @@ next-env.d.ts
 
 # editor
 *.code-workspace
+
+# Local Flutter web build inputs and generated output
+/web-game/.dart_tool/
+/web-game/build/
+/web-game/.flutter-plugins-dependencies
+/test-results/
+/playwright-report/

@@ -1,0 +1,22 @@
+{
+  "version": "2026-10-02",
+  "approved": 2671,
+  "not_shipped": 1932,
+  "patterns": {
+    "2+7": 2,
+    "3+6": 250,
+    "4+5": 802,
+    "5+4": 942,
+    "6+3": 136,
+    "7+2": 6,
+    "9": 533
+  },
+  "sources": {
+    "ESDB": 177,
+    "WordNet 3.0": 588,
+    "Alphadoku editorial": 1867,
+    "Alphadoku starter corpus": 39
+  },
+  "review_method": "AI editorial review by Codex; not independent human review",
+  "ledger_sha256": "11391329b12588d660f452653941675d6903b037f0ef0eb6f8ec5f03b75ef654"
+}

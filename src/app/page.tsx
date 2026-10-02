@@ -1,127 +1,172 @@
-import Image from "next/image";
-import { ChaturangStrip } from "./_components/ChaturangStrip";
-import { GameCard } from "./_components/GameCard";
-import { SiteFooter } from "./_components/SiteFooter";
-import { SiteHeader } from "./_components/SiteHeader";
-import { StoreLinks } from "./_components/StoreLinks";
-import { StandaloneApps } from "./_components/StandaloneApps";
-import { GAMES } from "./_lib/games";
+import Link from "next/link";
+import { WebShell, ModeCards } from "./_components/WebShell";
+import { ContinuePlaying, TryDeduction } from "./_components/Discovery";
 export default function Home() {
   return (
-    <div className="flex flex-1 flex-col">
-      <SiteHeader variant="home" />
-      <main>
-        <section className="border-b border-line">
-          <div className="section-wrap grid items-center gap-12 lg:grid-cols-[1.2fr_1fr]">
-            <div>
-              <Image
-                src="/puzzlecub/icon.webp"
-                alt="Puzzlecub icon"
-                width={100}
-                height={100}
-                priority
-                className="mb-8 rounded-3xl"
-              />
-              <p className="eyebrow">A little thought. A bright discovery.</p>
-              <h1 className="text-5xl font-extrabold leading-[1.05] tracking-tight sm:text-7xl">
-                Four games.
-                <br />
-                One more
-                <br />
-                <span className="text-accent">“got it!”</span>
-              </h1>
-              <p className="mt-7 max-w-xl text-lg leading-relaxed text-muted">
-                Catch falling answers, solve mental-math challenges, build sums,
-                and uncover hidden words. Puzzlecub brings four quick-thinking
-                games together with a fresh look and plenty of reasons for one
-                more round.
-              </p>
-              <div className="mt-8">
-                <StoreLinks />
-              </div>
-              <p className="mt-4 text-sm text-muted">
-                For iOS and Android · Free, ad-supported play
-              </p>
+    <WebShell>
+      <main id="main">
+        <ContinuePlaying />
+        <section className="hero">
+          <div className="hero-copy">
+            <span className="tag">YOUR DAILY DOSE OF “GOT IT.”</span>
+            <h1>
+              A little thought.
+              <br />A <em>bright</em> discovery.
+            </h1>
+            <p>
+              Settle into something satisfying. Original letter puzzles to play,
+              learn, and come back to. Right here in your browser.
+            </p>
+            <div className="button-row">
+              <Link className="button primary" href="/challenges">
+                Play today’s challenge <span>↗</span>
+              </Link>
+              <Link className="text-link" href="/alphadoku">
+                Find your puzzle →
+              </Link>
             </div>
-            <div className="grid grid-cols-2 items-center gap-4 rounded-[40px] bg-[#E6EEDB] p-5 sm:p-7">
-              <Image
-                src="/puzzlecub/math.webp"
-                alt="Catch falling numbers in Tap the Answer"
-                width={800}
-                height={1738}
-                priority
-                sizes="(min-width: 1024px) 220px, 40vw"
-                className="h-auto w-full rounded-2xl shadow-xl"
-              />
-              <Image
-                src="/puzzlecub/word.webp"
-                alt="Solve clues in Find the Word"
-                width={800}
-                height={1738}
-                priority
-                sizes="(min-width: 1024px) 220px, 40vw"
-                className="mt-12 h-auto w-full rounded-2xl shadow-xl"
-              />
+            <div className="hero-note">
+              <span>✦</span> Unlimited play. No account. Your pace.
             </div>
           </div>
-        </section>
-        <section id="games" className="scroll-mt-24 border-b border-line">
-          <div className="section-wrap">
-            <p className="eyebrow">Inside Puzzlecub</p>
-            <h2 className="section-title">
-              Four ways to keep your mind moving.
-            </h2>
-            <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted">
-              Quick feedback, lively rounds, and a challenge you can make your
-              own. Pause when you need a breather; come back ready for the next
-              puzzle.
-            </p>
-            <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-              {GAMES.map((game) => (
-                <GameCard key={game.slug} game={game} />
+          <div className="hero-visual" aria-hidden="true">
+            <span className="orbit orbit-one">A fresh perspective</span>
+            <div className="hero-board">
+              {"ALGORITHM".split("").map((c, i) => (
+                <span className={[3, 4, 5].includes(i) ? "lit" : ""} key={i}>
+                  {c}
+                </span>
               ))}
             </div>
+            <div className="floating-note">
+              <span>✧</span> That’s the missing piece.
+            </div>
+            <span className="orbit orbit-two">
+              Nine letters. One hidden line.
+            </span>
           </div>
         </section>
-        <section className="border-b border-line">
-          <div className="section-wrap grid gap-10 md:grid-cols-3">
+        <section className="web-section">
+          <div className="section-heading">
             <div>
-              <p className="eyebrow">Keep exploring</p>
-              <h2 className="text-2xl font-bold">A fresh reason to return.</h2>
-              <p className="mt-4 leading-relaxed text-muted">
-                Take on daily challenges, build streaks, earn coins, unlock
-                tougher trails, and chase your personal bests.
-              </p>
+              <span className="tag">MEET ALPHADOKU</span>
+              <h2>Find your kind of challenge.</h2>
             </div>
-            <div>
-              <p className="eyebrow">Play your way</p>
-              <h2 className="text-2xl font-bold">Find your next challenge.</h2>
-              <p className="mt-4 leading-relaxed text-muted">
-                Choose difficulty levels and round settings. Warm up with
-                numbers, race the clock, or take an untimed scenic round in Tap
-                the Answer.
-              </p>
+            <p>
+              Two sizes. The same satisfying logic.
+              <br />
+              Choose a quick start or a longer adventure.
+            </p>
+          </div>
+          <ModeCards />
+        </section>
+        <section className="challenge-band">
+          <div>
+            <span className="tag">SOMETHING TO COME BACK TO</span>
+            <h2>
+              A fresh puzzle.
+              <br />A familiar little ritual.
+            </h2>
+            <p>
+              Daily Classic. Weekly Mega. Shared challenges with no race to the
+              finish. Missed a day? The archive is yours to explore.
+            </p>
+            <Link className="button primary" href="/challenges">
+              Explore challenges ↗
+            </Link>
+          </div>
+          <div className="challenge-illustration">
+            <span className="calendar-label">YOUR NEXT SMALL VICTORY</span>
+            <div className="calendar-cells">
+              {[
+                "M",
+                "T",
+                "W",
+                "T",
+                "F",
+                "S",
+                "S",
+                "✓",
+                "✓",
+                "✦",
+                "·",
+                "·",
+                "·",
+                "·",
+              ].map((x, i) => (
+                <span key={i} className={i === 9 ? "today" : ""}>
+                  {x}
+                </span>
+              ))}
             </div>
-            <div>
-              <p className="eyebrow">Cross-app Coin Vault</p>
-              <h2 className="text-2xl font-bold">Let your coins travel.</h2>
-              <p className="mt-4 leading-relaxed text-muted">
-                Link Puzzlecub and Chaturang with a one-time code, bank earned
-                coins into the shared Coin Vault, then collect them in the
-                linked game.
-              </p>
-              <p className="mt-3 text-xs leading-relaxed text-muted">
-                Transfers need an internet connection and an eligible profile,
-                and are available when the shared Vault is enabled. Game
-                progress and purchases are separate.
-              </p>
-            </div>
+            <p>Make time for a little thinking.</p>
           </div>
         </section>
-        <StandaloneApps />
-        <ChaturangStrip />
+        <section className="web-section">
+          <TryDeduction />
+        </section>
+        <section className="web-section learning-section">
+          <div>
+            <span className="tag">GET BETTER, ONE “AHA” AT A TIME</span>
+            <h2>
+              Good puzzles teach you
+              <br />
+              how to see differently.
+            </h2>
+            <p>
+              Start with a single missing letter. Learn to spot pairs, follow
+              candidates, and make a deduction you can explain.
+            </p>
+            <Link className="text-link" href="/learn">
+              Explore the technique library →
+            </Link>
+          </div>
+          <div className="lesson-stack">
+            {[
+              [
+                "01",
+                "one-choice",
+                "One choice",
+                "Find the only letter that fits.",
+              ],
+              [
+                "02",
+                "hidden-single",
+                "Hidden single",
+                "Find the only place a letter can go.",
+              ],
+              [
+                "03",
+                "naked-pair",
+                "Naked pair",
+                "Two cells can tell you more than one.",
+              ],
+            ].map(([n, url, title, desc]) => (
+              <Link href={`/learn/${url}`} key={n}>
+                <span>{n}</span>
+                <div>
+                  <h3>{title}</h3>
+                  <p>{desc}</p>
+                </div>
+                <b>↗</b>
+              </Link>
+            ))}
+          </div>
+        </section>
+        <section className="app-banner">
+          <div>
+            <span className="tag">TAKE A LITTLE PLAY WITH YOU</span>
+            <h2>More worlds. Same curiosity.</h2>
+            <p>
+              Discover our independent mobile games, from map puzzles to mazes
+              and strategy.
+            </p>
+          </div>
+          <Link className="button secondary" href="/mobile-apps">
+            Explore our apps ↗
+          </Link>
+        </section>
       </main>
-      <SiteFooter />
-    </div>
+    </WebShell>
   );
 }

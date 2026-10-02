@@ -1,0 +1,86 @@
+[
+  {
+    "slug": "scanning",
+    "name": "Scanning",
+    "alias": "Start here",
+    "rule": "Choose one letter. Inspect its existing placements to rule out empty cells in the same row, column and box. Look for a forced position.",
+    "example": "An A elsewhere in a column prevents another A in that column. Use several such exclusions to narrow down the A in a box."
+  },
+  {
+    "slug": "one-choice",
+    "name": "One Choice",
+    "alias": "Naked single",
+    "rule": "An empty cell has exactly one legal candidate after checking its row, column and box. Place that letter.",
+    "example": "If a cell cannot contain any target letter except M, it must be M."
+  },
+  {
+    "slug": "hidden-single",
+    "name": "Hidden Single",
+    "alias": "One location",
+    "rule": "Within one unit, a letter is possible in exactly one cell. That cell must contain it, even when other letters are also pencilled there.",
+    "example": "Only one cell in row 4 allows A. That cell is A, even if its notes also show B and C."
+  },
+  {
+    "slug": "naked-pair",
+    "name": "Naked Pair",
+    "alias": "Two cells, two letters",
+    "rule": "Two cells in the same unit each have exactly the same two candidates. Those letters must occupy those cells, in some order. Eliminate them from the other cells of that unit.",
+    "example": "Two cells in a row have {A,B} and {A,B}. Remove A and B from every other cell in that row."
+  },
+  {
+    "slug": "hidden-pair",
+    "name": "Hidden Pair",
+    "alias": "Two letters, two locations",
+    "rule": "In one unit, two letters are possible only in the same two cells. Keep those letters in those cells and remove their other candidates.",
+    "example": "A and B occur as candidates only in cells X and Y. Notes {A,B,C} and {A,B,D} become {A,B} and {A,B}."
+  },
+  {
+    "slug": "interaction",
+    "name": "Interaction",
+    "alias": "Locked candidates",
+    "rule": "Pointing: all positions for a letter in a box lie in one row or column, so exclude it from the rest of that line. Claiming: all positions in a line lie in one box, so exclude it from the rest of that box.",
+    "example": "All possible As in the top-left box lie in row 2. Remove A from row 2 outside that box."
+  },
+  {
+    "slug": "naked-triple",
+    "name": "Naked Triple",
+    "alias": "Three cells, three letters",
+    "rule": "Three unsolved cells in one unit have only three different candidates between them. Each cell may have two or three of them. Remove these letters from all other cells in the unit.",
+    "example": "{A,B}, {B,C}, {A,C} reserve A, B and C for those three cells."
+  },
+  {
+    "slug": "hidden-triple",
+    "name": "Hidden Triple",
+    "alias": "Three letters, three locations",
+    "rule": "Three letters are confined to three cells of a unit. Remove all other candidates from those cells. Every letter need not occur in every one of the three cells.",
+    "example": "If only X, Y and Z can hold A, B or C in a box, erase D and E from their notes."
+  },
+  {
+    "slug": "naked-quad",
+    "name": "Naked Quad",
+    "alias": "Four cells, four letters",
+    "rule": "Four unsolved cells in one unit collectively allow only four letters. Eliminate those four letters from every other cell in that unit.",
+    "example": "{A,B}, {B,C}, {C,D}, {A,D} reserve A, B, C and D for these four cells."
+  },
+  {
+    "slug": "x-wing",
+    "name": "X-Wing",
+    "alias": "A rectangle for one letter",
+    "rule": "Find two rows in which a particular letter has exactly two possible columns, the same two in both rows. Eliminate that letter from those columns in other rows. The rule also works with rows and columns swapped.",
+    "example": "A is possible only in columns 2 and 7 of rows 1 and 6. Remove A from columns 2 and 7 outside rows 1 and 6."
+  },
+  {
+    "slug": "y-wing",
+    "name": "Y-Wing",
+    "alias": "Also called XY-Wing",
+    "rule": "A pivot {A,B} sees two wings {A,C} and {B,C}. Each cell has exactly two candidates. Whichever pivot letter is chosen, one wing is C. Remove C from other cells that see both wings.",
+    "example": "The pivot need not share one unit with both wings: one can share its row and the other its box. Only cells seeing BOTH wings lose C."
+  },
+  {
+    "slug": "xy-chain",
+    "name": "XY-Chain",
+    "alias": "Linked two-candidate cells",
+    "rule": "Follow cells that each have exactly two candidates, with successive cells seeing one another. Each forced second candidate links to the next cell. If the endpoints share a letter and excluding it at one end forces it at the other, remove it from cells seeing both ends.",
+    "example": "A valid chain {A,B} \u2192 {B,C} \u2192 {C,D} \u2192 {D,A} means at least one endpoint is A. Other cells seeing both endpoints cannot be A."
+  }
+]

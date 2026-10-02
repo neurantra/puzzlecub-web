@@ -9,9 +9,10 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Puzzlecub — Four quick-thinking games. More to discover.",
+  metadataBase: new URL("https://puzzlecub.com"),
+  title: "PuzzleCub — Free letter puzzles. A bright discovery.",
   description:
-    "Play four number and word games in Puzzlecub. Discover Fill the Jar, Mapopia, Maze Words, Slide & Sort, and Chaturang from Neurantra.",
+    "Play Classic and Mega Alphadoku free in your browser. Daily letter Sudoku, weekly 25×25 challenges, and original guides to sharpen your solving.",
 };
 
 export default function RootLayout({
