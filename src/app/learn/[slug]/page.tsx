@@ -190,16 +190,20 @@ export default async function Page({
               it, then use crossing columns to rule candidates out. You do not
               have to survey all 625 cells at once.
             </p>
+            <p>
+              Mega is available on desktop and laptop screens at least 1,200
+              pixels wide and 700 pixels tall.
+            </p>
             <h2>A workspace for a large puzzle</h2>
             <ul>
               <li>
                 <strong>Focus on a box:</strong> display one 5×5 box at a
-                readable size. Use the 25 box buttons to move around the full
+                readable size. Use the box selector to move around the full
                 board.
               </li>
               <li>
-                <strong>Larger cells:</strong> enlarge the full board and scroll
-                across it.
+                <strong>Larger letters:</strong> increase the letter size while
+                keeping the full board on one screen.
               </li>
               <li>
                 <strong>High contrast:</strong> make letters and grid lines more
@@ -213,10 +217,10 @@ export default async function Page({
             <h2>Notes, hints and mistakes</h2>
             <p>
               Notes are manually entered candidates, not an automatic solution.
-              A small dot marker on the full board indicates notes; focus or
-              zoom to read them. Duplicate letters in a shared row, column or
-              box are marked as conflicts. A non-conflicting letter is not
-              necessarily correct.
+              A small dot marker on the full board indicates notes; focus mode
+              or larger letters to read them. Duplicate letters in a shared row,
+              column or box are marked as conflicts. A non-conflicting letter is
+              not necessarily correct.
             </p>
             <p>
               Hints reveal an empty selected cell. Pro disables them. Undo

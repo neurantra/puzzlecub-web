@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { WebShell, AlphaIdentity } from "../../_components/WebShell";
-import Mega from "../../_game/Mega";
+import MegaGate from "../../_game/MegaGate";
 import { utcDay, weekStart } from "../../_lib/challenges";
 export const metadata = {
   title: "Play Mega Alphadoku — 25×25 alphabet Sudoku",
@@ -24,7 +24,7 @@ export default async function Page({
       : undefined;
   return (
     <WebShell>
-      <main id="main" className="play-page">
+      <main id="main" className="play-page mega-play-page">
         <div className="play-heading">
           <AlphaIdentity />
           <nav>
@@ -39,7 +39,7 @@ export default async function Page({
           Place A–Y once in every row, column and 5×5 box. No hidden line. Start
           with the full board, or focus on one box.
         </p>
-        <Mega key={valid ?? "free"} week={valid} />
+        <MegaGate key={valid ?? "free"} week={valid} />
       </main>
     </WebShell>
   );

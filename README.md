@@ -21,7 +21,9 @@ Open http://localhost:3127. Requires Node compatible with Next.js 16.
 - `/alphadoku/classic`: the existing Flutter Classic engine and controls, embedded
   in an HTML guide page. All 2,671 corpus targets, four levels, hidden-line rules,
   notes, undo, tutorial, techniques and local saves. No billing/ad SDKs.
-- `/alphadoku/mega`: A–Y, 25×25 Sudoku, 5×5 boxes, four clue-density tiers,
+- `/alphadoku/mega`: desktop/laptop only at 1200×700 CSS pixels or larger,
+  with the full board and controls fitted to the viewport. A–Y, 25×25 Sudoku,
+  5×5 boxes, four clue-density tiers,
   notes, undo, hints (not Pro), keyboard A–Y/arrows/Backspace/Space, pause,
   zoom, focused-box view, contrast, local saves, completion count and result copy.
 - Mega generation runs in a worker. Removing only forced clues yields a reverse

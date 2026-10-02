@@ -257,280 +257,306 @@ export default function Mega({ week }: { week?: string }) {
   );
   return (
     <div className={`mega-game ${contrast ? "high-contrast" : ""}`}>
-      <div className="game-toolbar">
-        <label>
-          Difficulty{" "}
-          <select
-            value={tier}
-            disabled={busy || !!week}
-            onChange={(e) => setTier(e.target.value as Tier)}
-          >
-            {["easy", "medium", "hard", "pro"].map((t) => (
-              <option key={t}>{t}</option>
-            ))}
-          </select>
-        </label>
-        <button className="button secondary" disabled={busy} onClick={newGame}>
-          New puzzle
-        </button>
-        <button
-          className="button secondary"
-          disabled={busy || won}
-          onClick={() => setPaused(!paused)}
-        >
-          {paused ? "Resume" : "Pause"}
-        </button>
-        <button className="button secondary" onClick={() => setHelp(!help)}>
-          {help ? "Close guide" : "How to play"}
-        </button>
-        <span className="game-clock">
-          {Math.floor((save?.seconds ?? 0) / 60)}:
-          {String((save?.seconds ?? 0) % 60).padStart(2, "0")}
-        </span>
-      </div>
-      {help && (
-        <section className="inline-guide">
-          <h2>Twenty-five letters. Three simple rules.</h2>
-          <p>
-            Each row, column and bold 5×5 box contains A–Y once. There is no
-            hidden word. Select a cell, then type a letter or use the letter
-            tray. Arrow keys move, Backspace erases, and Space switches notes.
-            Notes are your own pencil marks.
-          </p>
-          <p>
-            Try focusing on one 5×5 box on smaller screens. The box selector
-            moves around the whole puzzle. Hints reveal a selected empty cell;
-            Pro keeps hints disabled. Difficulty controls clue density in this
-            first edition, not a certified human solving-technique rating.
-          </p>
-          <Link href="/learn/mega-guide">Read the full Mega guide →</Link>
-        </section>
-      )}
-      <div className="board-options">
-        <button aria-pressed={focusBox} onClick={() => setFocusBox(!focusBox)}>
-          {focusBox ? "Show full board" : "Focus on a box"}
-        </button>
-        <button aria-pressed={zoom} onClick={() => setZoom(!zoom)}>
-          {zoom ? "Fit board" : "Larger cells"}
-        </button>
-        <button aria-pressed={contrast} onClick={() => setContrast(!contrast)}>
-          High contrast
-        </button>
-        <span>
-          {save?.board.filter((v) => v >= 0).length ?? 0}/625 filled ·{" "}
-          {save?.puzzle.tier ?? tier} · {completed} completed
-        </span>
-      </div>
-      {focusBox && (
-        <div className="box-picker" aria-label="Choose a 5 by 5 box">
-          {Array.from({ length: 25 }, (_, i) => (
-            <button
-              key={i}
-              aria-pressed={
-                Math.floor(selected / 125) * 5 +
-                  Math.floor((selected % 25) / 5) ===
-                i
-              }
-              onClick={() => setSelected(Math.floor(i / 5) * 125 + (i % 5) * 5)}
+      <div className="mega-controls">
+        <div className="game-toolbar mega-topbar">
+          <label>
+            Difficulty{" "}
+            <select
+              value={tier}
+              disabled={busy || !!week}
+              onChange={(e) => setTier(e.target.value as Tier)}
             >
-              Box {i + 1}
+              {["easy", "medium", "hard", "pro"].map((t) => (
+                <option key={t}>{t}</option>
+              ))}
+            </select>
+          </label>
+          <button
+            className="button secondary"
+            disabled={busy}
+            onClick={newGame}
+          >
+            New puzzle
+          </button>
+          <button
+            className="button secondary"
+            disabled={busy || won}
+            onClick={() => setPaused(!paused)}
+          >
+            {paused ? "Resume" : "Pause"}
+          </button>
+          <button className="button secondary" onClick={() => setHelp(!help)}>
+            {help ? "Close guide" : "How to play"}
+          </button>
+          <span className="game-clock">
+            {Math.floor((save?.seconds ?? 0) / 60)}:
+            {String((save?.seconds ?? 0) % 60).padStart(2, "0")}
+          </span>
+        </div>
+        {help && (
+          <section className="inline-guide">
+            <h2>Twenty-five letters. Three simple rules.</h2>
+            <p>
+              Each row, column and bold 5×5 box contains A–Y once. There is no
+              hidden word. Select a cell, then type a letter or use the letter
+              tray. Arrow keys move, Backspace erases, and Space switches notes.
+              Notes are your own pencil marks.
+            </p>
+            <p>
+              Try focusing on one 5×5 box to study its letters. The box selector
+              moves around the whole puzzle. Hints reveal a selected empty cell;
+              Pro keeps hints disabled. Difficulty controls clue density in this
+              first edition, not a certified human solving-technique rating.
+            </p>
+            <Link href="/learn/mega-guide">Read the full Mega guide →</Link>
+          </section>
+        )}
+        <div className="board-options">
+          <button
+            aria-pressed={focusBox}
+            onClick={() => setFocusBox(!focusBox)}
+          >
+            {focusBox ? "Show full board" : "Focus on a box"}
+          </button>
+          {focusBox ? (
+            <label className="box-picker">
+              Box
+              <select
+                aria-label="Choose a 5 by 5 box"
+                value={
+                  Math.floor(selected / 125) * 5 +
+                  Math.floor((selected % 25) / 5)
+                }
+                onChange={(e) =>
+                  setSelected(
+                    Math.floor(Number(e.target.value) / 5) * 125 +
+                      (Number(e.target.value) % 5) * 5,
+                  )
+                }
+              >
+                {Array.from({ length: 25 }, (_, i) => (
+                  <option value={i} key={i}>
+                    Box {i + 1}
+                  </option>
+                ))}
+              </select>
+            </label>
+          ) : (
+            <button aria-pressed={zoom} onClick={() => setZoom(!zoom)}>
+              {zoom ? "Normal letters" : "Larger letters"}
+            </button>
+          )}
+          <button
+            aria-pressed={contrast}
+            onClick={() => setContrast(!contrast)}
+          >
+            High contrast
+          </button>
+          <span>
+            {save?.board.filter((v) => v >= 0).length ?? 0}/625 filled ·{" "}
+            {save?.puzzle.tier ?? tier} · {completed} completed
+          </span>
+        </div>
+        <div className="letter-tray" aria-label="Letter entry">
+          {Array.from(letters).map((c, v) => (
+            <button
+              key={c}
+              disabled={busy || paused || won}
+              onClick={() => place(v)}
+            >
+              <strong>{c}</strong>
+              <small>
+                {Math.max(
+                  0,
+                  25 - (save?.board.filter((x) => x === v).length ?? 0),
+                )}{" "}
+                left
+              </small>
             </button>
           ))}
         </div>
-      )}
-      {busy ? (
-        <div className="game-loading" role="status">
-          Creating your puzzle…
-        </div>
-      ) : paused ? (
-        <div className="game-loading">
-          <h2>A moment to breathe.</h2>
-          <button className="button primary" onClick={() => setPaused(false)}>
-            Resume puzzle
-          </button>
-        </div>
-      ) : (
-        save && (
-          <div className="board-scroll">
-            <div
-              role="grid"
-              aria-label="Mega Sudoku, 25 rows and 25 columns"
-              aria-rowcount={25}
-              aria-colcount={25}
-              className={`mega-board ${focusBox ? "focused" : ""} ${zoom ? "zoomed" : ""}`}
-              style={{
-                gridTemplateColumns: `repeat(${focusBox ? 5 : 25},minmax(0,1fr))`,
-              }}
-              onKeyDown={(e) => {
-                if (e.ctrlKey || e.metaKey || e.altKey) return;
-                let next = selected;
-                if (e.key === "ArrowLeft") next = Math.max(0, selected - 1);
-                else if (e.key === "ArrowRight")
-                  next = Math.min(624, selected + 1);
-                else if (e.key === "ArrowUp") next = Math.max(0, selected - 25);
-                else if (e.key === "ArrowDown")
-                  next = Math.min(624, selected + 25);
-                else if (e.key === " ") {
-                  setNoteMode(!noteMode);
-                  e.preventDefault();
-                  return;
-                } else if (e.key === "Backspace" || e.key === "Delete") {
-                  place(-1);
-                  e.preventDefault();
-                  return;
-                } else if (
-                  e.key.length === 1 &&
-                  letters.includes(e.key.toUpperCase())
-                ) {
-                  place(letters.indexOf(e.key.toUpperCase()));
-                  e.preventDefault();
-                  return;
-                } else return;
-                e.preventDefault();
-                select(next);
-              }}
-            >
-              {Array.from(new Set(shown.map((i) => Math.floor(i / 25)))).map(
-                (row) => (
-                  <div role="row" key={row} style={{ display: "contents" }}>
-                    {shown
-                      .filter((i) => Math.floor(i / 25) === row)
-                      .map((i) => {
-                        const v = save.board[i],
-                          given = save.puzzle.givens[i] >= 0,
-                          conflict =
-                            v >= 0 &&
-                            save.board.some(
-                              (x, j) => i !== j && x === v && peers(i, j),
-                            );
-                        return (
-                          <button
-                            role="gridcell"
-                            aria-rowindex={Math.floor(i / 25) + 1}
-                            aria-colindex={(i % 25) + 1}
-                            aria-selected={i === selected}
-                            aria-readonly={given}
-                            aria-label={`Row ${Math.floor(i / 25) + 1}, column ${(i % 25) + 1}, ${v < 0 ? "empty" : letters[v]}${given ? ", given" : ""}${conflict ? ", conflict" : ""}${save.notes[i].length ? ", notes " + save.notes[i].map((n) => letters[n]).join(" ") : ""}`}
-                            tabIndex={i === selected ? 0 : -1}
-                            ref={(el) => {
-                              cellRefs.current[i] = el;
-                            }}
-                            key={i}
-                            onClick={() => setSelected(i)}
-                            className={`mega-cell ${given ? "given" : ""} ${i === selected ? "selected" : ""} ${peers(i, selected) ? "peer" : ""} ${v >= 0 && v === save.board[selected] ? "same" : ""} ${conflict ? "conflict" : ""}`}
-                            style={{
-                              borderRightWidth: i % 5 === 4 ? 2 : 1,
-                              borderBottomWidth:
-                                Math.floor(i / 25) % 5 === 4 ? 2 : 1,
-                            }}
-                          >
-                            {v >= 0 ? (
-                              letters[v]
-                            ) : save.notes[i].length ? (
-                              <small>
-                                {focusBox || zoom
-                                  ? save.notes[i]
-                                      .map((n) => letters[n])
-                                      .join(" ")
-                                  : "·".repeat(
-                                      Math.min(3, save.notes[i].length),
-                                    )}
-                              </small>
-                            ) : (
-                              ""
-                            )}
-                          </button>
-                        );
-                      })}
-                  </div>
-                ),
-              )}
-            </div>
-          </div>
-        )
-      )}
-      <div className="letter-tray" aria-label="Letter entry">
-        {Array.from(letters).map((c, v) => (
+        <div className="game-toolbar mega-actions">
           <button
-            key={c}
-            disabled={busy || paused || won}
-            onClick={() => place(v)}
+            aria-pressed={noteMode}
+            onClick={() => setNoteMode(!noteMode)}
           >
-            <strong>{c}</strong>
-            <small>
-              {Math.max(
-                0,
-                25 - (save?.board.filter((x) => x === v).length ?? 0),
-              )}{" "}
-              left
-            </small>
+            Notes {noteMode ? "on" : "off"} (Space)
           </button>
-        ))}
+          <button
+            disabled={!save?.history.length || busy || paused || won}
+            onClick={() => {
+              if (!save) return;
+              const last = save.history.at(-1)!;
+              setSave({ ...save, ...last, history: save.history.slice(0, -1) });
+            }}
+          >
+            Undo
+          </button>
+          <button disabled={busy || paused || won} onClick={() => place(-1)}>
+            Erase
+          </button>
+          <button
+            disabled={save?.puzzle.tier === "pro" || busy || paused || won}
+            onClick={hint}
+          >
+            Hint {save?.puzzle.tier === "pro" ? "· unavailable in Pro" : ""}
+          </button>
+        </div>
+        <p className="game-status" role="status">
+          {message ||
+            "Saved automatically on this device. Select a cell to begin."}
+        </p>
+        {won && (
+          <section className="win-card" role="status">
+            <span className="tag">625 CELLS. ONE SATISFYING FINISH.</span>
+            <h2>You found the big picture.</h2>
+            <p>
+              {save?.hints
+                ? `${save.hints} hints used.`
+                : "Solved without revealing hints."}{" "}
+              Your completed puzzle is saved.
+            </p>
+            <div className="button-row">
+              <button className="button primary" onClick={newGame}>
+                {week ? "Replay weekly puzzle" : "Play again"}
+              </button>
+              <button
+                className="button secondary"
+                onClick={async () => {
+                  const text = `I solved Alphadoku Mega (${save?.puzzle.tier}) on PuzzleCub! ${week ? location.href : location.origin + "/alphadoku/mega"}`;
+                  try {
+                    await navigator.clipboard.writeText(text);
+                    setMessage("Result copied.");
+                  } catch {
+                    setMessage(text);
+                  }
+                }}
+              >
+                Copy result
+              </button>
+            </div>
+          </section>
+        )}
+        <p className="small-note">
+          Unlimited play. No purchases. Hints are free during the launch beta.
+          Notes and saves stay in this browser; clearing site data removes them.
+          Pro disables revealing hints. Mega’s initial tiers vary clue density.
+        </p>
       </div>
-      <div className="game-toolbar">
-        <button aria-pressed={noteMode} onClick={() => setNoteMode(!noteMode)}>
-          Notes {noteMode ? "on" : "off"} (Space)
-        </button>
-        <button
-          disabled={!save?.history.length || busy || paused || won}
-          onClick={() => {
-            if (!save) return;
-            const last = save.history.at(-1)!;
-            setSave({ ...save, ...last, history: save.history.slice(0, -1) });
-          }}
-        >
-          Undo
-        </button>
-        <button disabled={busy || paused || won} onClick={() => place(-1)}>
-          Erase
-        </button>
-        <button
-          disabled={save?.puzzle.tier === "pro" || busy || paused || won}
-          onClick={hint}
-        >
-          Hint {save?.puzzle.tier === "pro" ? "· unavailable in Pro" : ""}
-        </button>
-      </div>
-      <p className="game-status" role="status">
-        {message ||
-          "Saved automatically on this device. Select a cell to begin."}
-      </p>
-      {won && (
-        <section className="win-card" role="status">
-          <span className="tag">625 CELLS. ONE SATISFYING FINISH.</span>
-          <h2>You found the big picture.</h2>
-          <p>
-            {save?.hints
-              ? `${save.hints} hints used.`
-              : "Solved without revealing hints."}{" "}
-            Your completed puzzle is saved.
-          </p>
-          <div className="button-row">
-            <button className="button primary" onClick={newGame}>
-              {week ? "Replay weekly puzzle" : "Play again"}
-            </button>
-            <button
-              className="button secondary"
-              onClick={async () => {
-                const text = `I solved Alphadoku Mega (${save?.puzzle.tier}) on PuzzleCub! ${week ? location.href : location.origin + "/alphadoku/mega"}`;
-                try {
-                  await navigator.clipboard.writeText(text);
-                  setMessage("Result copied.");
-                } catch {
-                  setMessage(text);
-                }
-              }}
-            >
-              Copy result
+      <div className="mega-stage">
+        {busy ? (
+          <div className="game-loading" role="status">
+            Creating your puzzle…
+          </div>
+        ) : paused ? (
+          <div className="game-loading">
+            <h2>A moment to breathe.</h2>
+            <button className="button primary" onClick={() => setPaused(false)}>
+              Resume puzzle
             </button>
           </div>
-        </section>
-      )}
-      <p className="small-note">
-        Unlimited play. No purchases. Hints are free during the launch beta.
-        Notes and saves stay in this browser; clearing site data removes them.
-        Pro disables revealing hints. Mega’s initial tiers vary clue density.
-      </p>
+        ) : (
+          save && (
+            <div className="board-scroll">
+              <div
+                role="grid"
+                aria-label="Mega Sudoku, 25 rows and 25 columns"
+                aria-rowcount={25}
+                aria-colcount={25}
+                className={`mega-board ${focusBox ? "focused" : ""} ${zoom ? "zoomed" : ""}`}
+                style={{
+                  gridTemplateColumns: `repeat(${focusBox ? 5 : 25},minmax(0,1fr))`,
+                }}
+                onKeyDown={(e) => {
+                  if (e.ctrlKey || e.metaKey || e.altKey) return;
+                  let next = selected;
+                  if (e.key === "ArrowLeft") next = Math.max(0, selected - 1);
+                  else if (e.key === "ArrowRight")
+                    next = Math.min(624, selected + 1);
+                  else if (e.key === "ArrowUp")
+                    next = Math.max(0, selected - 25);
+                  else if (e.key === "ArrowDown")
+                    next = Math.min(624, selected + 25);
+                  else if (e.key === " ") {
+                    setNoteMode(!noteMode);
+                    e.preventDefault();
+                    return;
+                  } else if (e.key === "Backspace" || e.key === "Delete") {
+                    place(-1);
+                    e.preventDefault();
+                    return;
+                  } else if (
+                    e.key.length === 1 &&
+                    letters.includes(e.key.toUpperCase())
+                  ) {
+                    place(letters.indexOf(e.key.toUpperCase()));
+                    e.preventDefault();
+                    return;
+                  } else return;
+                  e.preventDefault();
+                  select(next);
+                }}
+              >
+                {Array.from(new Set(shown.map((i) => Math.floor(i / 25)))).map(
+                  (row) => (
+                    <div role="row" key={row} style={{ display: "contents" }}>
+                      {shown
+                        .filter((i) => Math.floor(i / 25) === row)
+                        .map((i) => {
+                          const v = save.board[i],
+                            given = save.puzzle.givens[i] >= 0,
+                            conflict =
+                              v >= 0 &&
+                              save.board.some(
+                                (x, j) => i !== j && x === v && peers(i, j),
+                              );
+                          return (
+                            <button
+                              role="gridcell"
+                              aria-rowindex={Math.floor(i / 25) + 1}
+                              aria-colindex={(i % 25) + 1}
+                              aria-selected={i === selected}
+                              aria-readonly={given}
+                              aria-label={`Row ${Math.floor(i / 25) + 1}, column ${(i % 25) + 1}, ${v < 0 ? "empty" : letters[v]}${given ? ", given" : ""}${conflict ? ", conflict" : ""}${save.notes[i].length ? ", notes " + save.notes[i].map((n) => letters[n]).join(" ") : ""}`}
+                              tabIndex={i === selected ? 0 : -1}
+                              ref={(el) => {
+                                cellRefs.current[i] = el;
+                              }}
+                              key={i}
+                              onClick={() => setSelected(i)}
+                              className={`mega-cell ${given ? "given" : ""} ${i === selected ? "selected" : ""} ${peers(i, selected) ? "peer" : ""} ${v >= 0 && v === save.board[selected] ? "same" : ""} ${conflict ? "conflict" : ""}`}
+                              style={{
+                                borderRightWidth: i % 5 === 4 ? 2 : 1,
+                                borderBottomWidth:
+                                  Math.floor(i / 25) % 5 === 4 ? 2 : 1,
+                              }}
+                            >
+                              {v >= 0 ? (
+                                letters[v]
+                              ) : save.notes[i].length ? (
+                                <small>
+                                  {focusBox || zoom
+                                    ? save.notes[i]
+                                        .map((n) => letters[n])
+                                        .join(" ")
+                                    : "·".repeat(
+                                        Math.min(3, save.notes[i].length),
+                                      )}
+                                </small>
+                              ) : (
+                                ""
+                              )}
+                            </button>
+                          );
+                        })}
+                    </div>
+                  ),
+                )}
+              </div>
+            </div>
+          )
+        )}
+      </div>
     </div>
   );
 }

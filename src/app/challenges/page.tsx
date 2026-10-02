@@ -34,7 +34,7 @@ export default function Page() {
           <Link href={`/alphadoku/mega?week=${week}`}>
             <span className="tag">WEEK OF {week}</span>
             <h2>Weekly Mega</h2>
-            <p>Medium · A to Y. Room to think.</p>
+            <p>Medium · A to Y. Desktop or laptop only.</p>
             <strong>Start this week’s board ↗</strong>
           </Link>
         </div>

@@ -15,7 +15,8 @@ export default function Page() {
         <p className="intro">
           Classic hides a nine-letter word or phrase in one row or column. Mega
           is a larger, pure alphabet Sudoku: A–Y, with no hidden line. Both are
-          free to play, with progress saved in this browser.
+          free to play, with progress saved in this browser. Mega needs a
+          desktop or laptop screen.
         </p>
         <ModeCards />
         <div className="button-row">

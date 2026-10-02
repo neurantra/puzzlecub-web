@@ -94,14 +94,14 @@ export function ModeCards() {
         <Link href="/alphadoku/mega" className="mode-card">
           <ModeArt mega />
           <div className="card-copy">
-            <span className="tag">25 × 25 · THE BIG PICTURE</span>
+            <span className="tag">25 × 25 · DESKTOP ONLY</span>
             <h3>
               More letters.
               <br />A little more ambition.
             </h3>
             <p>
               A to Y, twenty-five boxes, and room to think. Pure alphabet
-              Sudoku, without a hidden line.
+              Sudoku, without a hidden line. Made for a desktop or laptop.
             </p>
             <strong>
               Play Mega <span>↗</span>

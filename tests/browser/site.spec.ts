@@ -59,7 +59,9 @@ test("Mega entries, keyboard N, notes, undo, save/resume and Pro", async ({
   ).toBeVisible();
   await page.getByRole("button", { name: "Focus on a box" }).click();
   expect(await page.getByRole("gridcell").count()).toBe(25);
-  await page.getByRole("button", { name: "Box 25", exact: true }).click();
+  await page
+    .getByRole("combobox", { name: "Choose a 5 by 5 box" })
+    .selectOption("24");
   await expect(page.getByRole("gridcell").first()).toHaveAttribute(
     "aria-rowindex",
     "21",
@@ -75,8 +77,55 @@ test("Mega entries, keyboard N, notes, undo, save/resume and Pro", async ({
     page.getByRole("button", { name: "Hint · unavailable in Pro" }),
   ).toBeDisabled();
   await page.setViewportSize({ width: 390, height: 844 });
+  await expect(
+    page.getByRole("heading", { name: "Mega needs a desktop or laptop." }),
+  ).toBeVisible();
+  await expect(page.getByRole("grid")).toHaveCount(0);
   await expect(page.locator("body")).toHaveJSProperty("scrollWidth", 390);
 });
+test("Mega fits a laptop viewport and never mounts on a phone", async ({
+  browser,
+}) => {
+  const laptop = await browser.newPage({
+    viewport: { width: 1200, height: 700 },
+  });
+  await laptop.goto("/alphadoku/mega");
+  await expect(laptop.getByRole("grid")).toBeVisible();
+  const edges = await laptop.evaluate(() => ({
+    board: document.querySelector(".mega-board")!.getBoundingClientRect()
+      .bottom,
+    controls: document.querySelector(".mega-controls")!.getBoundingClientRect()
+      .bottom,
+    width: document.body.scrollWidth,
+  }));
+  expect(edges.board).toBeLessThanOrEqual(700);
+  expect(edges.controls).toBeLessThanOrEqual(700);
+  expect(edges.width).toBe(1200);
+  await laptop.setViewportSize({ width: 1199, height: 700 });
+  await expect(laptop.getByRole("grid")).toHaveCount(0);
+  await expect(
+    laptop.getByRole("heading", { name: "Mega needs a desktop or laptop." }),
+  ).toBeVisible();
+  await laptop.close();
+
+  const phone = await browser.newPage({
+    viewport: { width: 1400, height: 900 },
+    userAgent:
+      "Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 Chrome/125.0 Mobile Safari/537.36",
+  });
+  const workers: string[] = [];
+  phone.on("request", (r) => {
+    if (r.url().includes("mega-engine.mjs")) workers.push(r.url());
+  });
+  await phone.goto("/alphadoku/mega");
+  await expect(
+    phone.getByRole("heading", { name: "Mega needs a desktop or laptop." }),
+  ).toBeVisible();
+  await expect(phone.getByRole("grid")).toHaveCount(0);
+  expect(workers).toHaveLength(0);
+  await phone.close();
+});
+
 test("Mega weekly deterministic and separate save slot", async ({
   browser,
 }) => {
