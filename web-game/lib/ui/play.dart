@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -337,6 +339,7 @@ class _PlayScreenState extends State<PlayScreen> with WidgetsBindingObserver {
   }
 
   bool get _pinTray =>
+      (!kIsWeb || MediaQuery.sizeOf(context).width >= 600) &&
       MediaQuery.sizeOf(context).height >= 750 &&
       MediaQuery.textScalerOf(context).scale(14) <= 15.4;
 
@@ -528,6 +531,51 @@ class _PlayScreenState extends State<PlayScreen> with WidgetsBindingObserver {
 class _CellNavigator extends StatelessWidget {
   const _CellNavigator({required this.session});
   final Session session;
+
+  Future<void> _choose(BuildContext context) => showDialog<void>(
+    context: context,
+    builder: (dialogContext) => AlertDialog(
+      title: const Text('Choose a cell'),
+      content: ListenableBuilder(
+        listenable: session,
+        builder: (context, _) {
+          final selected = session.selected;
+          return SizedBox(
+            width: 320,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Expanded(
+                  child: _AxisPicker(
+                    label: 'Row',
+                    selected: selected == null ? null : selected ~/ 9,
+                    onPick: (r) =>
+                        session.select(r, (session.selected ?? 0) % 9),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: _AxisPicker(
+                    label: 'Column',
+                    selected: selected == null ? null : selected % 9,
+                    onPick: (c) =>
+                        session.select((session.selected ?? 0) ~/ 9, c),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(dialogContext).pop(),
+          child: const Text('Done'),
+        ),
+      ],
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
     final selected = session.selected;
@@ -537,8 +585,8 @@ class _CellNavigator extends StatelessWidget {
         : 'Row ${selected ~/ 9 + 1}, column ${selected % 9 + 1}: ${value < 0 ? "empty" : session.puzzle.phrase.letters[value]}'
               '${session.isFixed(selected ~/ 9, selected % 9) ? " (fixed)" : ""}'
               '${session.conflicts.contains(selected) ? " — conflict" : ""}';
-    return ExpansionTile(
-      tilePadding: EdgeInsets.zero,
+    return ListTile(
+      contentPadding: EdgeInsets.zero,
       title: Semantics(
         liveRegion: true,
         child: Text(
@@ -547,48 +595,57 @@ class _CellNavigator extends StatelessWidget {
         ),
       ),
       subtitle: const Text(
-        'Row and column controls',
+        'Tap to choose row and column',
         style: TextStyle(fontSize: 11),
       ),
-      children: [
-        Row(
-          children: [
-            Expanded(
-              child: DropdownButton<int>(
-                isExpanded: true,
-                value: selected == null ? null : selected ~/ 9,
-                hint: const Text('Row'),
-                itemHeight: 48,
-                items: [
-                  for (var i = 0; i < 9; i++)
-                    DropdownMenuItem(value: i, child: Text('Row ${i + 1}')),
-                ],
-                onChanged: (r) {
-                  if (r != null) session.select(r, (selected ?? 0) % 9);
-                },
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: DropdownButton<int>(
-                isExpanded: true,
-                value: selected == null ? null : selected % 9,
-                hint: const Text('Column'),
-                itemHeight: 48,
-                items: [
-                  for (var i = 0; i < 9; i++)
-                    DropdownMenuItem(value: i, child: Text('Column ${i + 1}')),
-                ],
-                onChanged: (c) {
-                  if (c != null) session.select((selected ?? 0) ~/ 9, c);
-                },
-              ),
-            ),
-          ],
-        ),
-      ],
+      trailing: const Icon(Icons.grid_on_rounded),
+      onTap: () => _choose(context),
     );
   }
+}
+
+class _AxisPicker extends StatelessWidget {
+  const _AxisPicker({
+    required this.label,
+    required this.selected,
+    required this.onPick,
+  });
+  final String label;
+  final int? selected;
+  final ValueChanged<int> onPick;
+
+  @override
+  Widget build(BuildContext context) => Column(
+    mainAxisSize: MainAxisSize.min,
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(label, style: const TextStyle(fontWeight: FontWeight.w800)),
+      const SizedBox(height: 8),
+      GridView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          mainAxisSpacing: 4,
+          crossAxisSpacing: 4,
+        ),
+        itemCount: 9,
+        itemBuilder: (context, i) => Semantics(
+          label: '$label ${i + 1}',
+          selected: selected == i,
+          child: OutlinedButton(
+            onPressed: () => onPick(i),
+            style: OutlinedButton.styleFrom(
+              padding: EdgeInsets.zero,
+              backgroundColor: selected == i ? teal : null,
+              foregroundColor: selected == i ? Colors.white : ink,
+            ),
+            child: Text('${i + 1}'),
+          ),
+        ),
+      ),
+    ],
+  );
 }
 
 class _AxisStatus extends StatelessWidget {

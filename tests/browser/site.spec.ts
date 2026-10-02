@@ -252,3 +252,56 @@ test("Classic daily board is reproducible and isolated from free play", async ({
   expect(boards[0]).not.toBeNull();
   expect(boards[0].puzzle).toEqual(boards[1].puzzle);
 });
+
+test("Classic cell picker and board stay tappable on a Pixel-sized screen", async ({
+  browser,
+}) => {
+  const context = await browser.newContext({
+    viewport: { width: 393, height: 851 },
+    deviceScaleFactor: 2.75,
+    isMobile: true,
+    hasTouch: true,
+    userAgent:
+      "Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 Chrome/125.0.0.0 Mobile Safari/537.36",
+  });
+  const page = await context.newPage();
+  await page.goto("/alphadoku/classic");
+  const bounds = await page.locator("iframe").boundingBox();
+  expect(bounds?.x).toBe(0);
+  expect(bounds?.y).toBe(48);
+  expect(bounds?.height).toBe(803);
+  expect(await page.evaluate(() => document.body.scrollHeight)).toBe(851);
+  const frame = page.frameLocator("iframe");
+  const play = frame.getByRole("button", { name: "Play Medium", exact: true });
+  await expect(play).toBeVisible({ timeout: 45000 });
+  await play.press("Enter");
+  const picker = frame.getByRole("button", {
+    name: /Choose a cell.*Tap to choose/,
+  });
+  await expect(picker).toBeVisible({ timeout: 45000 });
+  await picker.tap();
+  await frame.getByRole("group", { name: "Row 3" }).getByRole("button").tap();
+  await frame
+    .getByRole("group", { name: "Column 4" })
+    .getByRole("button")
+    .tap();
+  await frame.getByRole("button", { name: "Done" }).tap();
+  await expect(
+    frame.getByRole("button", { name: /Row 3, column 4:/ }),
+  ).toBeVisible();
+  const empty = frame
+    .getByRole("button", { name: /Row (?!3, column 4,)\d+, column \d+, empty/ })
+    .first();
+  const coordinates = (await empty.textContent())!.match(
+    /Row (\d+), column (\d+), empty/,
+  )!;
+  await empty.tap();
+  await expect(
+    frame.getByRole("button", {
+      name: new RegExp(
+        `Row ${coordinates[1]}, column ${coordinates[2]}: empty`,
+      ),
+    }),
+  ).toBeVisible();
+  await context.close();
+});

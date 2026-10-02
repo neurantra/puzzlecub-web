@@ -15,7 +15,7 @@ export default async function Page({
   const challenge = day && validDay(day) ? day : null;
   return (
     <WebShell>
-      <main id="main" className="play-page">
+      <main id="main" className="play-page classic-play-page">
         <div className="play-heading">
           <AlphaIdentity />
           <nav>
@@ -35,6 +35,11 @@ export default async function Page({
           {challenge &&
             "Select Medium and start a new puzzle for today’s shared board. Challenge progress has its own save slot."}
         </p>
+        <div className="classic-mobile-bar">
+          <Link href="/alphadoku">← PuzzleCub</Link>
+          <strong>Classic Alphadoku</strong>
+          <Link href="/learn/getting-started">Guide</Link>
+        </div>
         <iframe
           title="Playable Classic Alphadoku"
           className="classic-frame"

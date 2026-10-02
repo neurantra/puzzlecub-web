@@ -1587,3 +1587,58 @@ select:focus-visible {
     padding: 28px 22px;
   }
 }
+
+/* Give Classic its own mobile viewport so Flutter handles one scroll surface. */
+.classic-mobile-bar {
+  display: none;
+}
+@media (max-width: 900px), (hover: none) and (pointer: coarse) {
+  body:has(.classic-play-page) {
+    overflow: hidden;
+  }
+  body:has(.classic-play-page) .web-header,
+  body:has(.classic-play-page) .web-footer,
+  .classic-play-page .play-heading,
+  .classic-play-page h1,
+  .classic-play-page > p,
+  .classic-play-page .play-explainer {
+    display: none;
+  }
+  .classic-play-page {
+    padding: 0;
+  }
+  .classic-mobile-bar {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 20;
+    height: 48px;
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    border-bottom: 1px solid #d1ddcb;
+    background: #f8f5ec;
+    font-size: 12px;
+  }
+  .classic-mobile-bar a {
+    font-weight: 750;
+    white-space: nowrap;
+  }
+  .classic-mobile-bar strong {
+    font-size: 12px;
+    text-align: center;
+  }
+  .classic-play-page .classic-frame {
+    position: fixed;
+    inset: 48px 0 0;
+    z-index: 19;
+    display: block;
+    width: 100vw;
+    max-width: none;
+    height: calc(100dvh - 48px);
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+  }
+}
