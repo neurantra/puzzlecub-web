@@ -1,142 +1,162 @@
-export type GameSlug =
-  | "math"
-  | "word"
-  | "sand"
-  | "alpha"
-  | "maze"
-  | "geo"
-  | "stack";
-export type IconKey =
-  | "math"
-  | "word"
-  | "tide"
-  | "alpha"
-  | "geo"
-  | "maze"
-  | "stack";
-
 export interface Game {
-  slug: GameSlug;
-  iconKey: IconKey;
+  slug: string;
   name: string;
   tagline: string;
   short: string;
   body: string;
   skills: string;
-  screenshot: string | null;
-  screenshotAlt?: string;
+  screenshot: string;
+  screenshotAlt: string;
+  icon: string;
   accentVar: string;
 }
-
-export const APP_STORE_URL =
-  "https://apps.apple.com/us/app/puzzlecub/id6768766852";
+export interface StandaloneApp {
+  appStoreComingSoon?: boolean;
+  playStoreComingSoon?: boolean;
+  slug: string;
+  name: string;
+  tagline: string;
+  description: string;
+  detail: string;
+  note: string;
+  icon: string;
+  screenshot: string;
+  appStoreUrl: string;
+  playStoreUrl: string;
+}
+export const APP_STORE_URL = "https://apps.apple.com/app/id6768766852";
 export const PLAY_STORE_URL =
   "https://play.google.com/store/apps/details?id=com.sumquest.app";
-
 export const CHATURANG_URL = "https://neurantra.com/chaturang";
-
+export const CHATURANG_APP_STORE_URL =
+  "https://apps.apple.com/app/id6770267722";
+export const CHATURANG_PLAY_STORE_URL =
+  "https://play.google.com/store/apps/details?id=com.chaturang.app";
 export const GAMES: Game[] = [
   {
     slug: "math",
-    iconKey: "math",
-    name: "Math Quest",
-    tagline: "Find the answer, stop the drop.",
+    name: "Tap the Answer",
+    tagline: "Beat the drop. Catch the answer.",
     short:
-      "Quick-fire arithmetic, rendered as a quest. Streaks unlock the next scene; misses loosen the timer.",
-    body:
-      "Quick-fire arithmetic, rendered as a quest. Pick an operation, pick a difficulty, race the clock. Each correct answer unlocks the next scene of the quest and earns coins toward your wallet. The AI behind the scenes tunes pacing as you play: clean streaks accelerate, slips loosen the timer.",
-    skills: "Addition · subtraction · multiplication · division · mixed mode",
-    screenshot: "/puzzlecub/puzzlecub-math.png",
-    screenshotAlt: "Math Quest gameplay — 11 + 18, Halloween scene",
+      "Solve the equation and tap the right number before it hits the floor.",
+    body: "Choose an operation and a difficulty, then catch the correct answer as the number tiles fall. Keep a streak going, protect your four chances, and chase your personal best. Correct answers, mistakes, and timeouts move straight into the next question. Prefer an untimed round? Choose the scenic route.",
+    skills: "Addition · subtraction · multiplication · division · mixed rounds",
     accentVar: "--game-math",
-  },
-  {
-    slug: "word",
-    iconKey: "word",
-    name: "Word Quest",
-    tagline: "Find the word, save the cart.",
-    short:
-      "A definition, an A-Z keyboard, a hidden word. Pick letters one at a time; each one tells you something.",
-    body:
-      "Each round gives you a definition. The keyboard runs A through Z; the word stays hidden. You pick letters one by one — each one tells you something. Hints peel back a single letter; reveal jumps to the answer. Word Quest grows your vocabulary without ever feeling like flashcards.",
-    skills: "Vocabulary · spelling · pattern recognition",
-    screenshot: "/puzzlecub/puzzlecub-word.png",
+    screenshot: "/puzzlecub/math.webp",
     screenshotAlt:
-      "Word Quest gameplay — definition-driven word puzzle with A-Z keyboard",
-    accentVar: "--game-word",
+      "Tap the Answer gameplay in Puzzlecub’s cream-and-teal interface",
+    icon: "/puzzlecub/math-icon.webp",
   },
   {
     slug: "sand",
-    iconKey: "tide",
-    name: "Sand Quest",
-    tagline: "Stop the ball, save the castle.",
+    name: "Answer It",
+    tagline: "Think it. Type it. Beat it.",
     short:
-      "Math against a tide line. Right answers hold back the wave; wrong ones crumble a tower. Trivia in the margins.",
-    body:
-      "Math problems set against a tide line and a sandcastle you have to defend. Every right answer holds back the wave; every wrong one crumbles a tower. Each round serves up a piece of trivia alongside the problem — a fact about prime numbers, a stat about how far waves travel. Slower than Math Quest; the satisfaction is in the rhythm.",
-    skills: "Mental math · numeracy · general knowledge",
-    screenshot: "/puzzlecub/puzzlecub-sand.png",
-    screenshotAlt: "Sand Quest gameplay — beach scene with a math question and trivia",
+      "Enter your answer before time runs out. Keep your streak and protect your gems.",
+    body: "Work through mental-math questions with an on-screen number pad, or compare values with a tap. Pick your challenge and round settings, protect your gems, and keep your streak alive. Quick feedback leads directly into the next question, so every round keeps moving.",
+    skills: "Mental math · fractions · comparisons · quick thinking",
     accentVar: "--game-sand",
-  },
-  {
-    slug: "alpha",
-    iconKey: "alpha",
-    name: "Alpha Quest",
-    tagline: "Slide the letters, bring 'em home.",
-    short:
-      "Slide letters around a grid to spell words. Solo is a puzzle; vs-AI is a race against Doodle, Cipher, or Sphinx.",
-    body:
-      "Slide letters around a grid to spell as many valid words as you can. Solo mode is a contemplative puzzle. vs-AI mode is a race against one of three opponents — Doodle the Apprentice, Cipher the Journeyman, or Sphinx the Master. You play first with no AI visible; when you finish, your opponent plays the same shuffle. Beat their move count for a bonus.",
-    skills: "Word formation · spatial reasoning · strategy",
-    screenshot: "/puzzlecub/puzzlecub-alpha.png",
-    screenshotAlt: "Alpha Quest vs-AI race against Doodle",
-    accentVar: "--game-alpha",
-  },
-  {
-    slug: "maze",
-    iconKey: "maze",
-    name: "Maze Quest",
-    tagline: "Walk the maze, form the words.",
-    short:
-      "Walk a maze one cell at a time, picking up letters. The shape decides which words you can spell. No clock — only choices.",
-    body:
-      "A maze you walk one cell at a time, picking up letters as you go. The shape of the maze decides which words you can spell, and which paths cost you. Half puzzle, half pathfinding — the only Puzzlecub game where there is no clock, only choices.",
-    skills: "Word formation · spatial reasoning · planning",
-    screenshot: null,
-    accentVar: "--game-maze",
-  },
-  {
-    slug: "geo",
-    iconKey: "geo",
-    name: "Geo Quest",
-    tagline: "Slot the piece, make the map.",
-    short:
-      "Assemble a region from its real piece shapes. Difficulty rises from shape, to name, to capital, to a single fact.",
-    body:
-      "Assemble a region — USA states, European countries, Oceania, South America, Africa — from their real piece shapes. Difficulty is set by what's on the tray card: Beginner shows the country shape, Medium shows the name, Hard shows only the capital, Expert shows a single fact. The board always shows the full outlined map; on Hard and Expert, you build outward, each new piece touching one already placed. Or race a Cartographer AI.",
-    skills: "Geography · spatial reasoning · world knowledge",
-    screenshot: "/puzzlecub/puzzlecub-geo.png",
-    screenshotAlt: "Geo Quest — Oceania region intro card with tray pieces",
-    accentVar: "--game-geo",
+    screenshot: "/puzzlecub/sand.webp",
+    screenshotAlt: "Answer It gameplay in Puzzlecub’s cream-and-teal interface",
+    icon: "/puzzlecub/sand-icon.webp",
   },
   {
     slug: "stack",
-    iconKey: "stack",
-    name: "Stack Quest",
-    tagline: "Solve the sum, stack the puck.",
+    name: "Build the Sum",
+    tagline: "Two numbers. One perfect sum.",
     short:
-      "Combine two numbers to hit an answer, drop a puck, and fill the tube before the rising water overflows.",
-    body:
-      "Pick an operation, then tap two grid numbers to make one of the three answer pills — each solve drops a puck into the tube on the right. Division splits the board into numerators and denominators for clean, whole answers. Beat the water rising on the left before it overflows the beaker. A hint lights the two cells that solve a pill; a slow-fill power-up buys you extra seconds. Easy to Hard sets the number range and the pace of the water.",
-    skills: "Addition · subtraction · multiplication · division · mental math",
-    screenshot: "/puzzlecub/puzzlecub-stack.png",
-    screenshotAlt:
-      "Stack Quest — stacking pucks by solving arithmetic before the water overflows",
+      "Pick two numbers, then tap the target they make. Hit targets against the clock.",
+    body: "Find a pair of numbers that makes one of the target answers. Tap the two numbers and then their target to score, build a streak, and reveal fresh combinations. Explore addition, subtraction, multiplication, and division, with difficulty and timing options to suit your next round.",
+    skills: "Number combinations · arithmetic · pattern recognition",
     accentVar: "--game-stack",
+    screenshot: "/puzzlecub/stack.webp",
+    screenshotAlt:
+      "Build the Sum gameplay in Puzzlecub’s cream-and-teal interface",
+    icon: "/puzzlecub/stack-icon.webp",
+  },
+  {
+    slug: "word",
+    name: "Find the Word",
+    tagline: "Follow the clue. Find the word.",
+    short:
+      "Uncover a hidden word one letter at a time, before the clock or your guesses run out.",
+    body: "Read the clue, choose letters, and work out the hidden word. Keep an eye on the timer and your remaining guesses, use a hint when you need a nudge, and move automatically to the next word when a puzzle is resolved. Choose your difficulty and round length, then see how far your vocabulary takes you.",
+    skills: "Vocabulary · spelling · deduction",
+    accentVar: "--game-word",
+    screenshot: "/puzzlecub/word.webp",
+    screenshotAlt:
+      "Find the Word gameplay in Puzzlecub’s cream-and-teal interface",
+    icon: "/puzzlecub/word-icon.webp",
   },
 ];
-
-export function getGame(slug: string): Game | undefined {
-  return GAMES.find(g => g.slug === slug);
+export const STANDALONE_APPS: StandaloneApp[] = [
+  {
+    slug: "fill-the-jar",
+    name: "Fill the Jar",
+    tagline: "A little space. A perfect fit.",
+    description:
+      "Fit geometric pieces into a jar with no gaps, or complete colorful picture puzzles. Rotate, place, undo, and enjoy the moment when everything clicks into place.",
+    detail:
+      "Explore shape puzzles and picture collections at your own pace. A placement preview helps you plan your next move, and hints can help when you get stuck.",
+    note: "Free download; optional in-app purchases.",
+    icon: "/apps/fill-the-jar-icon.webp",
+    screenshot: "/apps/fill-the-jar.webp",
+    appStoreUrl: "https://apps.apple.com/app/id6813074285",
+    playStoreUrl:
+      "https://play.google.com/store/apps/details?id=com.fillthejar.app",
+  },
+  {
+    slug: "mapopia",
+    appStoreComingSoon: true,
+    name: "Mapopia",
+    tagline: "A whole world, one piece at a time.",
+    description:
+      "Build real maps from colorful pieces. Explore places through shapes, names, capitals, and clues, with relaxed play or a timed challenge.",
+    detail:
+      "Discover 18 maps, switch between day and night, and tap placed pieces to learn their capitals and facts. Save an expedition and return later. Australia is free, with a limited trial of one additional map.",
+    note: "Free Australia map; one-time Full Atlas purchase unlocks all maps.",
+    icon: "/apps/mapopia-icon.webp",
+    screenshot: "/apps/mapopia.webp",
+    appStoreUrl: "https://apps.apple.com/app/id6816405706",
+    playStoreUrl:
+      "https://play.google.com/store/apps/details?id=com.mapopia.app",
+  },
+  {
+    slug: "maze-words",
+    name: "Maze Words",
+    tagline: "Run the maze. Find the words.",
+    description:
+      "Trace connected letters through raised maze walls to discover words. Race the clock or take an untimed trail, then review the paths you missed.",
+    detail:
+      "Choose Easy, Medium, or Hard, follow a daily maze, and build your word-finding skills across a collection of original maze packs. Trace a continuous path or use tap-and-submit controls.",
+    note: "Timed and relaxed rounds; core puzzles work offline.",
+    icon: "/apps/maze-words-icon.webp",
+    screenshot: "/apps/maze-words.webp",
+    appStoreUrl: "https://apps.apple.com/app/id6816219346",
+    playStoreUrl:
+      "https://play.google.com/store/apps/details?id=com.mazewords.app",
+  },
+  {
+    slug: "slide-and-sort",
+    appStoreComingSoon: true,
+    playStoreComingSoon: true,
+    name: "Slide & Sort",
+    tagline: "Little slides. Big smiles.",
+    description:
+      "Slide pastel letter and number tiles into place. Sort the alphabet, discover number patterns, or arrange a counting sequence.",
+    detail:
+      "Play a quiet solo puzzle or race Pip, your friendly AI buddy. Choose a timer, a move limit, both, or neither. Three puzzle modes and a warm wooden tray make every small move a satisfying discovery.",
+    note: "Free, ad-supported play. No purchases or paid unlocks.",
+    icon: "/apps/slide-and-sort-icon.webp",
+    screenshot: "/apps/slide-and-sort.webp",
+    appStoreUrl: "https://apps.apple.com/app/id6817987916",
+    playStoreUrl:
+      "https://play.google.com/store/apps/details?id=com.slideandsort.app",
+  },
+];
+export function getGame(slug: string) {
+  return GAMES.find((game) => game.slug === slug);
+}
+export function getStandaloneApp(slug: string) {
+  return STANDALONE_APPS.find((app) => app.slug === slug);
 }

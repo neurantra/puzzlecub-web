@@ -5,7 +5,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const HOME_LINKS = [
-  { href: "#games", label: "Games", section: "games" },
+  { href: "#games", label: "Puzzlecub", section: "games" },
+  { href: "#apps", label: "More apps", section: "apps" },
 ] as const;
 
 export type SiteHeaderVariant = "home" | "subpage";
@@ -40,7 +41,7 @@ export function SiteHeader({ variant = "home" }: { variant?: SiteHeaderVariant }
             className="flex items-center gap-3 transition-opacity hover:opacity-80"
           >
             <Image
-              src="/puzzlecub-logo.png"
+              src="/puzzlecub/icon.webp"
               alt=""
               width={36}
               height={36}
@@ -60,7 +61,7 @@ export function SiteHeader({ variant = "home" }: { variant?: SiteHeaderVariant }
               ← Back to home
             </Link>
           ) : (
-            <nav className="flex gap-7 text-sm text-muted">
+            <nav className="flex gap-4 text-xs sm:gap-7 sm:text-sm text-muted">
               {HOME_LINKS.map(({ href, label, section }) => (
                 <NavLink key={href} href={href} active={active === section}>
                   {label}

@@ -6,15 +6,18 @@ import { SiteHeader } from "../_components/SiteHeader";
 import { APP_STORE_URL, GAMES, PLAY_STORE_URL } from "../_lib/games";
 
 export const metadata: Metadata = {
-  title: "Download Puzzlecub — Seven brain games, free on iOS & Android",
+  title:
+    "Download Puzzlecub — Four number and word games, free on iOS & Android",
   description:
-    "Get Puzzlecub free on the App Store and Google Play. Seven AI-driven brain games in one app — Math, Word, Sand, Alpha, Maze, Geo, and Stack. No account required.",
+    "Get Puzzlecub free on the App Store and Google Play. Tap the Answer, Answer It, Build the Sum, and Find the Word, with daily challenges and a cross-app Coin Vault.",
 };
 
 /** Official store badges — used as the primary download CTA. */
 function StoreBadges({ className = "" }: { className?: string }) {
   return (
-    <div className={`flex flex-wrap items-center justify-center gap-4 ${className}`}>
+    <div
+      className={`flex flex-wrap items-center justify-center gap-4 ${className}`}
+    >
       <a
         href={APP_STORE_URL}
         target="_blank"
@@ -49,40 +52,30 @@ function StoreBadges({ className = "" }: { className?: string }) {
   );
 }
 
-const SHOTS: Record<string, string> = {
-  math: "/puzzlecub/shot-math.png",
-  word: "/puzzlecub/shot-word.png",
-  sand: "/puzzlecub/shot-sand.png",
-  alpha: "/puzzlecub/shot-alpha.png",
-  maze: "/puzzlecub/shot-maze.png",
-  geo: "/puzzlecub/shot-geo.png",
-  stack: "/puzzlecub/shot-stack.png",
-};
-
 const HIGHLIGHTS = [
   {
-    title: "Seven games in one",
-    body: "Math, Word, Sand, Alpha, Maze, Geo, and Stack — each its own quest, each with its own rules.",
+    title: "Four games in one",
+    body: "Tap the Answer, Answer It, Build the Sum, and Find the Word — quick-thinking number and word challenges.",
   },
   {
-    title: "A reason to come back",
-    body: "A shared wallet, a daily streak, and a Daily Challenge that picks one game to surprise you every day.",
+    title: "Keep your streak",
+    body: "Daily challenges, earned coins, personal bests, and harder trails give you a reason for another round.",
   },
   {
-    title: "AI that adapts",
-    body: "Difficulty tunes itself as you play, races you in vs-AI modes, and picks what you see next.",
+    title: "Lively rounds",
+    body: "Catch falling answers and race the clock. Quick feedback and automatic progression keep the action moving.",
   },
   {
-    title: "Free. No account.",
-    body: "Ad-supported and free to play. Nothing leaves your device, and no sign-up is ever required.",
+    title: "Cross-app Coin Vault",
+    body: "Link Puzzlecub and Chaturang to transfer earned coins when the Vault is available. Internet access and an eligible profile are required.",
   },
   {
-    title: "Made for everyone",
-    body: "Neutral age check on first launch; under-13 players get non-personalized ads and a parental gate.",
+    title: "Choose your challenge",
+    body: "Adjust difficulty and round settings, or take an untimed scenic round in Tap the Answer.",
   },
   {
-    title: "iOS & Android",
-    body: "Live on both stores. Same games, same wallet, same streak — pick your phone and play.",
+    title: "More to discover",
+    body: "Find separate downloads for Fill the Jar, Mapopia, Maze Words, and Slide & Sort on our home page.",
   },
 ];
 
@@ -96,7 +89,7 @@ export default function DownloadPage() {
         <div className="mx-auto max-w-3xl px-6 py-20 text-center sm:px-10 sm:py-28">
           <div className="mb-7 flex justify-center">
             <Image
-              src="/puzzlecub-logo.png"
+              src="/puzzlecub/icon.webp"
               alt="Puzzlecub"
               width={140}
               height={140}
@@ -113,8 +106,8 @@ export default function DownloadPage() {
             Get Puzzlecub
           </h1>
           <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-muted">
-            Seven brain games in one app. Free, ad-supported, no account
-            required. Tap a store to download and start playing.
+            Four number and word games in one app. Free, ad-supported, no
+            account required. Tap a store to download and start playing.
           </p>
           <StoreBadges className="mt-10" />
         </div>
@@ -127,7 +120,7 @@ export default function DownloadPage() {
             What you get
           </p>
           <div className="grid gap-x-12 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
-            {HIGHLIGHTS.map(h => (
+            {HIGHLIGHTS.map((h) => (
               <div key={h.title}>
                 <h2 className="text-lg font-bold tracking-tight text-foreground">
                   {h.title}
@@ -148,8 +141,8 @@ export default function DownloadPage() {
             A look inside
           </p>
           <div className="flex flex-wrap justify-center gap-x-6 gap-y-10">
-            {GAMES.map(g => {
-              const shot = SHOTS[g.slug];
+            {GAMES.map((g) => {
+              const shot = g.screenshot;
               if (!shot) return null;
               return (
                 <figure key={g.slug} className="w-[200px]">
@@ -187,7 +180,7 @@ export default function DownloadPage() {
       <section className="border-b border-line">
         <div className="mx-auto max-w-6xl px-6 py-20 text-center sm:px-10 sm:py-24">
           <h2 className="mx-auto max-w-2xl text-3xl font-bold leading-tight tracking-tight text-foreground sm:text-4xl">
-            Seven games, one cub. Play free.
+            Four games. One more round.
           </h2>
           <p className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-muted">
             Puzzlecub is live now on iOS and Android.

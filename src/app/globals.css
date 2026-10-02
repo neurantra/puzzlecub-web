@@ -1,25 +1,25 @@
 @import "tailwindcss";
 
 :root {
-  --background: #1A1F4A;
-  --foreground: #F4F1EB;
-  --muted: #8B91B5;
-  --accent: #94D5D0;
-  --hi: #E89B3C;
-  --line: #2D3568;
-  --line-soft: #232858;
-  --surface: #232858;
-  --surface-hi: #2C336B;
+  --background: #f8f5ec;
+  --foreground: #163e3b;
+  --muted: #465f57;
+  --accent: #146c60;
+  --hi: #e89b3c;
+  --line: #ccd9ca;
+  --line-soft: #fffef8;
+  --surface: #fffef8;
+  --surface-hi: #e6eedb;
 
-  --game-math:  #4F46E5;
-  --game-word:  #7C3AED;
-  --game-sand:  #B45309;
-  --game-alpha: #06B6D4;
-  --game-maze:  #F43F5E;
-  --game-geo:   #10B981;
-  --game-stack: #14B8A6;
+  --game-math: #146c60;
+  --game-word: #72528b;
+  --game-sand: #b45309;
+  --game-alpha: #06b6d4;
+  --game-maze: #f43f5e;
+  --game-geo: #10b981;
+  --game-stack: #146c60;
 
-  --chaturang:  #D4923A;
+  --chaturang: #8f5826;
 }
 
 @theme inline {
@@ -33,15 +33,15 @@
   --color-surface: var(--surface);
   --color-surface-hi: var(--surface-hi);
 
-  --color-game-math:  var(--game-math);
-  --color-game-word:  var(--game-word);
-  --color-game-sand:  var(--game-sand);
+  --color-game-math: var(--game-math);
+  --color-game-word: var(--game-word);
+  --color-game-sand: var(--game-sand);
   --color-game-alpha: var(--game-alpha);
-  --color-game-maze:  var(--game-maze);
-  --color-game-geo:   var(--game-geo);
+  --color-game-maze: var(--game-maze);
+  --color-game-geo: var(--game-geo);
   --color-game-stack: var(--game-stack);
 
-  --color-chaturang:  var(--chaturang);
+  --color-chaturang: var(--chaturang);
 
   --font-sans: var(--font-jakarta);
 }
@@ -49,7 +49,40 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-jakarta), system-ui, -apple-system, sans-serif;
+  font-family:
+    var(--font-jakarta),
+    system-ui,
+    -apple-system,
+    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.section-wrap {
+  @apply mx-auto max-w-6xl px-6 py-16 sm:px-10 sm:py-20;
+}
+.eyebrow {
+  @apply mb-5 text-[11px] font-bold uppercase tracking-[0.18em] text-accent;
+}
+.section-title {
+  @apply text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl;
+}
+.store-link {
+  @apply inline-flex min-h-11 items-center justify-center rounded-full border border-accent px-5 py-3 text-sm font-bold text-accent transition-colors hover:bg-accent hover:text-white;
+}
+.store-link-primary {
+  @apply bg-accent text-white hover:opacity-90;
+}
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 5px;
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

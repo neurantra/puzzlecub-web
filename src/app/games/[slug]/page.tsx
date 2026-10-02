@@ -3,7 +3,6 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { ChaturangStrip } from "../../_components/ChaturangStrip";
 import { GameCard } from "../../_components/GameCard";
-import { QuestIcon } from "../../_components/QuestIcon";
 import { SiteFooter } from "../../_components/SiteFooter";
 import { SiteHeader } from "../../_components/SiteHeader";
 import {
@@ -44,7 +43,7 @@ export default async function GamePage(
       <section className="border-b border-line">
         <div className="mx-auto max-w-6xl px-6 py-16 sm:px-10 sm:py-20">
           <div className="flex flex-col items-start gap-6">
-            <QuestIcon name={game.iconKey} size={84} />
+            <Image src={game.icon} alt="" width={84} height={84} className="rounded-2xl" />
             <p
               className="text-[11px] font-semibold uppercase tracking-[0.22em]"
               style={{ color: `var(${game.accentVar})` }}
@@ -81,7 +80,7 @@ export default async function GamePage(
             </div>
           ) : (
             <div className="mx-auto flex aspect-[9/19.5] w-full max-w-[320px] items-center justify-center">
-              <QuestIcon name={game.iconKey} size={180} />
+              <Image src={game.icon} alt="" width={180} height={180} />
             </div>
           )}
         </div>
@@ -94,10 +93,10 @@ export default async function GamePage(
             Get Puzzlecub
           </p>
           <h2 className="max-w-2xl text-3xl font-bold leading-tight tracking-tight text-foreground sm:text-4xl">
-            {game.name} is one of seven games inside Puzzlecub.
+            {game.name} is one of four games inside Puzzlecub.
           </h2>
           <p className="mt-6 max-w-xl text-base leading-relaxed text-muted">
-            Free, ad-supported, no account required. Live on iOS and Android.
+            Free, ad-supported play for iOS and Android.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
             <a
