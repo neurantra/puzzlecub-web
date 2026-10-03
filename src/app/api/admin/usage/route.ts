@@ -17,7 +17,10 @@ export async function GET(request: Request) {
     return new Response(null, { status: 400, headers: noStore });
   try {
     return Response.json(
-      await rpc<UsageReport>("usage_report", { p_days: days, p_game: game }),
+      await rpc<UsageReport>("aggregate_report", {
+        p_days: days,
+        p_game: game,
+      }),
       { headers: noStore },
     );
   } catch {

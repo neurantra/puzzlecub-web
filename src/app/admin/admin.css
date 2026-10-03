@@ -161,3 +161,27 @@
     align-items: start;
   }
 }
+.admin-chart {
+  display: flex;
+  gap: 12px;
+  align-items: end;
+  overflow-x: auto;
+  padding: 24px 0;
+}
+.admin-chart-day {
+  flex: 1;
+  min-width: 42px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+.admin-chart-bar {
+  background: #21765f;
+  border-radius: 5px 5px 0 0;
+  width: 100%;
+  max-width: 65px;
+}

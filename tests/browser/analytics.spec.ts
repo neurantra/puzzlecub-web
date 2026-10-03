@@ -1,7 +1,5 @@
 import { test, expect } from "@playwright/test";
 import { randomUUID } from "node:crypto";
-
-// Run against the isolated server described in README; never a production database.
 test.skip(
   process.env.PUZZLECUB_TEST_DATABASE !== "1",
   "Requires isolated analytics test server",
@@ -9,7 +7,7 @@ test.skip(
 const password = "local-analytics-test-password";
 test.use({ userAgent: "Mozilla/5.0 PuzzleCubIntegrationTest" });
 
-test("admin authentication, usage ingestion, filters, logout and forgery protection", async ({
+test("private dashboard shows aggregate counters only; ingestion rejects identifying fields", async ({
   page,
   request,
   baseURL,
@@ -24,23 +22,16 @@ test("admin authentication, usage ingestion, filters, logout and forgery protect
     ).status(),
   ).toBe(403);
   expect((await request.get("/api/cron/usage-retention")).status()).toBe(401);
-  await page.goto("/admin");
-  await page.getByLabel("Admin password").fill("wrong-password");
-  await page.getByRole("button", { name: "Sign in securely" }).click();
-  await expect(page.locator(".admin-error")).toContainText(
-    "Incorrect password",
-  );
-  const id = randomUUID();
-  const payload = {
-    id,
-    seconds: 0,
-    sequence: 1,
-    path: "/alphadoku/classic",
-    referrer: "google.com",
-    games: ["alphadoku-classic"],
-    completed: [],
-    visible: true,
-    consent: true,
+  const data = {
+    version: 2,
+    eventId: randomUUID(),
+    page: "/alphadoku/classic",
+    views: 1,
+    plays: 1,
+    completions: 0,
+    seconds: 15,
+    playSeconds: 10,
+    pulse: true,
   };
   const headers = {
     origin: baseURL!,
@@ -51,7 +42,7 @@ test("admin authentication, usage ingestion, filters, logout and forgery protect
     (
       await request.post("/api/usage", {
         headers,
-        data: { ...payload, consent: false },
+        data: { ...data, ip: "203.0.113.22" },
       })
     ).status(),
   ).toBe(400);
@@ -59,38 +50,48 @@ test("admin authentication, usage ingestion, filters, logout and forgery protect
     (
       await request.post("/api/usage", {
         headers,
-        data: { ...payload, games: ["made-up"] },
+        data: { ...data, page: "/private-person-name" },
       })
     ).status(),
   ).toBe(400);
-  expect(
-    (await request.post("/api/usage", { headers, data: payload })).status(),
-  ).toBe(204);
+  expect((await request.post("/api/usage", { headers, data })).status()).toBe(
+    204,
+  );
+  expect((await request.post("/api/usage", { headers, data })).status()).toBe(
+    204,
+  );
+  await page.goto("/admin");
+  await page.getByLabel("Admin password").fill("wrong-password");
+  await page.getByRole("button", { name: "Sign in securely" }).click();
+  await expect(page.locator(".admin-error")).toContainText(
+    "Incorrect password",
+  );
   await page.getByLabel("Admin password").fill(password);
   await page.getByRole("button", { name: "Sign in securely" }).click();
   await expect(
-    page.getByRole("heading", { name: "How are people playing?" }),
-  ).toBeVisible();
-  await expect(page.getByText(id.slice(0, 8), { exact: true })).toBeVisible();
-  await expect(
-    page
-      .getByRole("row")
-      .filter({ hasText: id.slice(0, 8) })
-      .getByText("203.0.113.22", { exact: true }),
+    page.getByRole("heading", { name: "Daily usage" }),
   ).toBeVisible();
   const response = await page.request.get("/api/admin/usage");
   expect(response.headers()["cache-control"]).toContain("no-store");
+  const report = await response.json();
   expect(
-    (await response.json()).visits.find((v: { id: string }) => v.id === id),
-  ).toMatchObject({ games: ["alphadoku-classic"], online: true });
+    report.pages.find((p: { page: string }) => p.page === "/alphadoku/classic"),
+  ).toMatchObject({ views: 1, plays: 1, activeSeconds: 15, playSeconds: 10 });
+  expect(report).not.toHaveProperty("visits");
+  expect(JSON.stringify(report)).not.toContain(data.eventId);
+  expect(JSON.stringify(report)).not.toContain("203.0.113.22");
   await page.screenshot({
-    path: "test-results/admin-dashboard.png",
+    path: "test-results/admin-anonymous-dashboard.png",
     fullPage: true,
   });
-  await page.getByLabel("Played game").selectOption("alphadoku-mega");
-  await expect(page.getByText(id.slice(0, 8), { exact: true })).toHaveCount(0);
+  await page.getByLabel("Game").selectOption("alphadoku-mega");
+  await expect(
+    page.getByRole("heading", { name: "Game engagement" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("row").filter({ hasText: "Classic Alphadoku" }),
+  ).toHaveCount(0);
   await page.getByRole("button", { name: "Sign out" }).click();
-  await expect(page.getByLabel("Admin password")).toBeVisible();
   expect((await page.request.get("/api/admin/usage")).status()).toBe(401);
   await page.context().addCookies([
     {
@@ -102,39 +103,83 @@ test("admin authentication, usage ingestion, filters, logout and forgery protect
   expect((await page.request.get("/api/admin/usage")).status()).toBe(401);
 });
 
-test("analytics is opt-in; game loading is not play; real moves are reported; withdrawal stops requests", async ({
+test("automatic counting distinguishes page views from play, uses no visitor storage, and supports opt-out", async ({
   page,
 }) => {
-  const payloads: { games: string[]; path: string }[] = [];
-  page.on("request", (request) => {
-    if (request.url().endsWith("/api/usage"))
-      payloads.push(request.postDataJSON());
+  const payloads: Record<string, unknown>[] = [];
+  page.on("request", (r) => {
+    if (r.url().endsWith("/api/usage")) payloads.push(r.postDataJSON());
   });
   await page.setViewportSize({ width: 1440, height: 1000 });
-  await page.goto("/alphadoku/mega");
+  await page.goto("/alphadoku/mega?private=query-value");
   await expect(page.getByRole("grid")).toBeVisible();
-  expect(payloads).toHaveLength(0);
-  await page
-    .getByRole("button", { name: "Allow analytics", exact: true })
-    .click();
-  await expect.poll(() => payloads.length).toBeGreaterThan(0);
-  expect(payloads.at(-1)?.games).toEqual([]);
+  await expect.poll(() => payloads.some((p) => p.views === 1)).toBe(true);
+  expect(payloads.filter((p) => p.views === 1)).toHaveLength(1);
+  expect(payloads.some((p) => p.plays === 1)).toBe(false);
+  await expect(
+    page.getByRole("button", { name: "Allow analytics", exact: true }),
+  ).toHaveCount(0);
   await page.getByRole("gridcell", { name: /empty/ }).first().click();
   await page.keyboard.press("a");
-  await expect
-    .poll(() => payloads.some((p) => p.games.includes("alphadoku-mega")))
-    .toBe(true);
+  await expect.poll(() => payloads.some((p) => p.plays === 1)).toBe(true);
+  expect(payloads.every((p) => p.page === "/alphadoku/mega")).toBe(true);
+  expect(
+    payloads.every(
+      (p) =>
+        Object.keys(p).sort().join(",") ===
+        "completions,eventId,page,playSeconds,plays,pulse,seconds,version,views",
+    ),
+  ).toBe(true);
+  expect(new Set(payloads.map((p) => p.eventId)).size).toBe(payloads.length);
+  expect(
+    await page.evaluate(() => sessionStorage.getItem("puzzlecub-usage-visit")),
+  ).toBeNull();
+  expect(
+    await page.evaluate(() =>
+      localStorage.getItem("puzzlecub-analytics-choice"),
+    ),
+  ).toBeNull();
   await page.goto("/privacy");
-  await page.getByRole("button", { name: "Stop analytics" }).click();
+  await page.getByRole("button", { name: "Stop anonymous analytics" }).click();
   const count = payloads.length;
   await page.goto("/alphadoku/mega");
   await expect(page.getByRole("grid")).toBeVisible();
   await page.getByRole("gridcell", { name: /empty/ }).first().click();
   await page.keyboard.press("b");
-  expect(payloads.length).toBe(count);
+  expect(payloads).toHaveLength(count);
 });
 
-test("Classic iframe reports a real letter entry after consent", async ({
+test("previous declines and browser privacy signals remain respected", async ({
+  page,
+  context,
+}) => {
+  await context.addInitScript(() => {
+    localStorage.setItem("puzzlecub-analytics-choice", "deny");
+    sessionStorage.setItem("puzzlecub-usage-visit", "legacy-id");
+  });
+  const calls: string[] = [];
+  page.on("request", (r) => {
+    if (r.url().endsWith("/api/usage")) calls.push(r.url());
+  });
+  await page.goto("/privacy");
+  await expect(
+    page.getByRole("button", { name: "Enable anonymous analytics" }),
+  ).toBeVisible();
+  expect(calls).toHaveLength(0);
+  expect(
+    await page.evaluate(() => sessionStorage.getItem("puzzlecub-usage-visit")),
+  ).toBeNull();
+  await context.addInitScript(() => {
+    localStorage.removeItem("puzzlecub-analytics-choice");
+    Object.defineProperty(navigator, "globalPrivacyControl", { value: true });
+  });
+  await page.reload();
+  await expect(
+    page.getByText("Your browser’s privacy signal is respected."),
+  ).toBeVisible();
+  expect(calls).toHaveLength(0);
+});
+test("Classic reports actual play automatically without an analytics prompt", async ({
   browser,
   baseURL,
 }) => {
@@ -147,15 +192,12 @@ test("Classic iframe reports a real letter entry after consent", async ({
       "Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 Chrome/125.0.0.0 Mobile Safari/537.36",
   });
   const page = await context.newPage();
-  const games: string[] = [];
+  const plays: number[] = [];
   page.on("request", (request) => {
     if (request.url().endsWith("/api/usage"))
-      games.push(...request.postDataJSON().games);
+      plays.push(request.postDataJSON().plays);
   });
   await page.goto("/alphadoku/classic");
-  await page
-    .getByRole("button", { name: "Allow analytics", exact: true })
-    .click();
   const frame = page.frameLocator("iframe.classic-frame");
   const play = frame.getByRole("button", { name: "Play Medium", exact: true });
   await expect(play).toBeVisible({ timeout: 45000 });
@@ -164,7 +206,7 @@ test("Classic iframe reports a real letter entry after consent", async ({
     .getByRole("button", { name: /Row \d+, column \d+, empty/ })
     .first();
   await expect(empty).toBeVisible({ timeout: 45000 });
-  expect(games).not.toContain("alphadoku-classic");
+  expect(plays.filter(Boolean)).toHaveLength(0);
   const coordinates = (await empty.textContent())!.match(
     /Row (\d+), column (\d+), empty/,
   )!;
@@ -184,6 +226,6 @@ test("Classic iframe reports a real letter entry after consent", async ({
     .getByRole("button", { name: /^[A-Z] \d+ left$/ })
     .first()
     .press("Enter");
-  await expect.poll(() => games.includes("alphadoku-classic")).toBe(true);
+  await expect.poll(() => plays.includes(1)).toBe(true);
   await context.close();
 });

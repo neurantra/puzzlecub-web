@@ -1,16 +1,19 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { gameNames, type UsageReport } from "../_lib/analytics/types";
+import {
+  gameNames,
+  pageNames,
+  type UsageReport,
+} from "../_lib/analytics/types";
 
 function duration(seconds: number) {
   const rounded = Math.round(seconds);
   return `${Math.floor(rounded / 60)}m ${rounded % 60}s`;
 }
-function date(value: string) {
-  return new Date(value).toLocaleString();
+function percent(part: number, total: number) {
+  return total ? `${Math.round((part / total) * 100)}%` : "—";
 }
-
 export default function Dashboard() {
   const [days, setDays] = useState("7");
   const [game, setGame] = useState("");
@@ -67,7 +70,7 @@ export default function Dashboard() {
           <span className="admin-kicker">PuzzleCub · Private analytics</span>
           <h1>How are people playing?</h1>
           <p className="admin-muted">
-            Visits, real game interactions, and time spent on your site.
+            Anonymous totals, real game interactions, and time spent playing.
           </p>
         </div>
         <form action="/api/admin/logout" method="post">
@@ -84,14 +87,14 @@ export default function Dashboard() {
               setDays(e.target.value);
             }}
           >
-            <option value="1">Last 24 hours</option>
-            <option value="7">Last 7 days</option>
-            <option value="30">Last 30 days</option>
-            <option value="90">Last 90 days</option>
+            <option value="1">Today (UTC)</option>
+            <option value="7">7 days including today</option>
+            <option value="30">30 days including today</option>
+            <option value="90">90 days including today</option>
           </select>
         </label>
         <label>
-          Played game
+          Game
           <select
             value={game}
             onChange={(e) => {
@@ -99,7 +102,7 @@ export default function Dashboard() {
               setGame(e.target.value);
             }}
           >
-            <option value="">All visits</option>
+            <option value="">All pages</option>
             {Object.entries(gameNames).map(([id, name]) => (
               <option key={id} value={id}>
                 {name}
@@ -123,14 +126,15 @@ export default function Dashboard() {
         <>
           <div className="admin-stats">
             {[
-              ["Visits", report.total.toLocaleString()],
+              ["Page views", report.views.toLocaleString()],
+              ["Playing game views", report.plays.toLocaleString()],
+              ["Game view → play", percent(report.plays, report.gameViews)],
               [
-                "Visits with play",
-                `${report.players.toLocaleString()} (${report.total ? Math.round((report.players / report.total) * 100) : 0}%)`,
+                "Active tabs · estimate",
+                report.onlineEstimate.toLocaleString(),
               ],
-              ["Online now · estimated", report.online.toLocaleString()],
-              ["Average active time", duration(report.averageActiveSeconds)],
-              ["Visit/game completions", report.completions.toLocaleString()],
+              ["Active playing time", duration(report.playSeconds)],
+              ["Views with a solve", report.completions.toLocaleString()],
             ].map(([label, value]) => (
               <div className="admin-stat" key={label}>
                 <span className="admin-muted">{label}</span>
@@ -140,120 +144,153 @@ export default function Dashboard() {
           </div>
           <section className="admin-panel admin-games">
             <h2>Game engagement</h2>
-            {report.games.length ? (
-              report.games.map((g) => (
-                <div key={g.id} className="admin-game-row">
-                  <strong>{gameNames[g.id] ?? g.id}</strong>
-                  <span>
-                    {g.players} playing visits · {g.completions} completed
-                  </span>
+            <div className="admin-table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    {[
+                      "Game",
+                      "Page views",
+                      "Playing views",
+                      "Play rate",
+                      "Views with a solve",
+                      "Active play time",
+                    ].map((h) => (
+                      <th key={h} scope="col">
+                        {h}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {Object.entries(gameNames)
+                    .filter(([id]) => !game || game === id)
+                    .map(([id, name]) => {
+                      const page = report.pages.find(
+                        (p) =>
+                          p.page ===
+                          `/alphadoku/${id.replace("alphadoku-", "")}`,
+                      );
+                      return (
+                        <tr key={id}>
+                          <th scope="row">{name}</th>
+                          <td>{page?.views ?? 0}</td>
+                          <td>{page?.plays ?? 0}</td>
+                          <td>{percent(page?.plays ?? 0, page?.views ?? 0)}</td>
+                          <td>{page?.completions ?? 0}</td>
+                          <td>{duration(page?.playSeconds ?? 0)}</td>
+                        </tr>
+                      );
+                    })}
+                </tbody>
+              </table>
+            </div>
+          </section>
+          <section className="admin-panel admin-games">
+            <h2>Daily usage</h2>
+            <p className="admin-muted">
+              UTC calendar days · anonymous measurement began{" "}
+              {new Date(report.since).toLocaleDateString()}.
+            </p>
+            <div
+              className="admin-chart"
+              role="img"
+              aria-label="Daily page views; exact counts are in the table below"
+            >
+              {report.daily.map((d) => (
+                <div
+                  className="admin-chart-day"
+                  key={d.day}
+                  title={`${d.day}: ${d.views} views, ${d.plays} playing views`}
+                >
+                  <span>{d.views}</span>
+                  <div
+                    className="admin-chart-bar"
+                    style={{
+                      height: `${Math.max(2, (d.views / Math.max(1, ...report.daily.map((v) => v.views))) * 100)}px`,
+                    }}
+                  />
+                  <small>{d.day.slice(5)}</small>
                 </div>
-              ))
-            ) : (
-              <p className="admin-muted">
-                No game interactions recorded in this period.
-              </p>
-            )}
+              ))}
+            </div>
+            <div className="admin-table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    {[
+                      "Day (UTC)",
+                      "Page views",
+                      "Playing views",
+                      "Views with a solve",
+                      "Active site time",
+                      "Active play time",
+                    ].map((h) => (
+                      <th key={h} scope="col">
+                        {h}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {[...report.daily].reverse().map((d) => (
+                    <tr key={d.day}>
+                      <th scope="row">{d.day}</th>
+                      <td>{d.views}</td>
+                      <td>{d.plays}</td>
+                      <td>{d.completions}</td>
+                      <td>{duration(d.activeSeconds)}</td>
+                      <td>{duration(d.playSeconds)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </section>
           <section className="admin-panel">
-            <h2>Visit activity</h2>
-            <p className="admin-muted">
-              Latest {report.visits.length} of {report.total} visits. Dates are
-              shown in your browser’s time zone.
-            </p>
-            {report.visits.length ? (
+            <h2>Popular pages</h2>
+            {report.pages.length ? (
               <div className="admin-table-wrap">
                 <table>
                   <thead>
                     <tr>
-                      {[
-                        "Visitor / IP",
-                        "Visit started",
-                        "Did they play?",
-                        "Games played",
-                        "Active time",
-                        "Visit span",
-                        "Last seen",
-                        "Status",
-                        "Pages / source",
-                      ].map((h) => (
-                        <th key={h} scope="col">
-                          {h}
-                        </th>
-                      ))}
+                      <th scope="col">Page</th>
+                      <th scope="col">Views</th>
+                      <th scope="col">Active time</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {report.visits.map((v) => (
-                      <tr key={v.id}>
-                        <td>
-                          <code>{v.id.slice(0, 8)}</code>
-                          <small>{v.ip ?? "IP not collected"}</small>
-                          <small>{v.device}</small>
-                        </td>
-                        <td>{date(v.startedAt)}</td>
-                        <td>{v.games.length ? "Yes" : "No"}</td>
-                        <td>
-                          {v.games.map((g) => gameNames[g] ?? g).join(", ") ||
-                            "—"}
-                          {v.completedGames.length > 0 && (
-                            <small>
-                              Completed:{" "}
-                              {v.completedGames
-                                .map((g) => gameNames[g] ?? g)
-                                .join(", ")}
-                            </small>
-                          )}
-                        </td>
-                        <td>{duration(v.activeSeconds)}</td>
-                        <td>
-                          {duration(
-                            Math.max(
-                              0,
-                              (Date.parse(v.lastSeen) -
-                                Date.parse(v.startedAt)) /
-                                1000,
-                            ),
-                          )}
-                        </td>
-                        <td>{date(v.lastSeen)}</td>
-                        <td
-                          className={v.online ? "admin-online" : "admin-muted"}
-                        >
-                          {v.online ? "● Online" : "Offline"}
-                        </td>
-                        <td>
-                          {v.entryPath}
-                          <small>Last: {v.lastPath}</small>
-                          <small>{v.referrer || "Direct / unknown"}</small>
-                        </td>
+                    {report.pages.map((p) => (
+                      <tr key={p.page}>
+                        <th scope="row">{pageNames[p.page] ?? p.page}</th>
+                        <td>{p.views}</td>
+                        <td>{duration(p.activeSeconds)}</td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               </div>
             ) : (
-              <div className="admin-empty">
-                <h2>No visits yet</h2>
-                <p>
-                  Records appear after tracking is configured and visitors allow
-                  usage analytics. Past activity cannot be reconstructed.
-                </p>
-              </div>
+              <p className="admin-empty">
+                No anonymous activity recorded in this period yet.
+              </p>
             )}
           </section>
         </>
       )}
       <p className="admin-muted admin-note">
-        A visit is a browser-tab session, renewed after 30 minutes without
-        activity. Players do not sign in. “Played” means a game action, such as
-        entering a letter or using a hint. Active time counts visible time with
-        interaction in the last 60 seconds; visit span includes breaks. Online
-        means a visible heartbeat within 45 seconds. Completion counts are
-        distinct visit/game pairs, not total puzzles solved. These are
-        estimates; blocked analytics, declined consent, connection loss, and
-        bots can affect totals. IP addresses are network addresses, not reliable
-        identities.
+        These are page views, not unique people or visits. Reloading or opening
+        another tab counts another view. A playing view has at least one real
+        game action. A view with a solve completed at least one puzzle;
+        additional solves in that same view are not counted separately. Active
+        time counts visible time with interaction in the last 60 seconds. Active
+        play time follows game actions, pauses after a solve, and resumes on the
+        next game action. Active tabs is estimated from anonymous heartbeats in
+        the last three complete 15-second buckets; it can lag by about a minute
+        and is not an exact headcount. Daily counters use event dates, so rates
+        near date boundaries are approximate. Opt-outs, privacy signals,
+        blockers, bots and network loss can affect totals. No visitor profiles,
+        IP addresses or browsing histories are stored in analytics.
       </p>
     </>
   );

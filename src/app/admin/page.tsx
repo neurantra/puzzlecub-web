@@ -24,7 +24,7 @@ export default async function Admin({
           <span className="admin-kicker">PuzzleCub · Owner access</span>
           <h1>Site activity</h1>
           <p className="admin-muted">
-            Sign in to view private visitor and game analytics.
+            Sign in to view anonymous site and game statistics.
           </p>
           {!authConfigured() ? (
             <p className="admin-error">

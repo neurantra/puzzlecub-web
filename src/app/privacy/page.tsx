@@ -27,26 +27,38 @@ export default function Page() {
           and other external links take you to services with their own privacy
           practices.
         </p>
-        <h2>Advertising and analytics</h2>
+        <h2>Anonymous usage statistics</h2>
         <p>
-          When optional usage analytics is enabled, we ask before collecting it.
-          Declining does not affect your games. You can change your choice using
-          the analytics control on this page. We record a random visit identifier,
-          visit and last-seen times, page paths, referring website hostname,
-          device category, games interacted with or completed, and estimated
-          active time. If network-address collection is enabled, the visit also
-          includes your IP address. We do not record puzzle entries or the full
-          referring URL. There is no player sign-in or cross-device identity.
+          We measure aggregate page views, game engagement, completions and
+          active time to improve PuzzleCub. Measurement runs without an opt-in
+          prompt. You can turn it off using the anonymous analytics control at
+          the bottom of this page. Games work the same either way. We honor
+          previous analytics declines and browser Do Not Track and Global
+          Privacy Control signals.
         </p>
         <p>
-          Your choice is stored in this browser and the visit identifier is
-          stored for the browser tab. Activity records are stored in our Neon
-          database and are available through a password-protected owner dashboard.
-          Vercel serves the website. IP addresses are removed after seven days
-          and visit records after 90 days, by a daily cleanup (which may take up
-          to an additional day). Security rate limits also use a keyed hash of
-          the network address for short-lived abuse protection.
+          Our analytics stores totals by UTC day and fixed page category, not
+          individual visits. We do not store IP addresses, visitor identifiers,
+          device profiles, referrers, query strings, puzzle entries or browsing
+          histories in analytics. Pages are not linked to a person or to each
+          other. A fresh random delivery token prevents duplicate requests; it
+          has no activity attached and expires after ten minutes. Anonymous
+          heartbeat totals estimate active tabs and expire after two minutes.
         </p>
+        <p>
+          Vercel receives web requests and Neon stores the aggregate counters
+          for up to 90 days. Counters are only used to improve this service and
+          are not used for advertising or shared with advertising partners.
+          Expired temporary records are removed on subsequent activity or by
+          daily cleanup, so physical deletion may take up to one additional day.
+          Your analytics preference is the only analytics value saved in browser
+          storage. An older visit identifier is removed when this version loads.
+          Separate security rate limits briefly use a keyed network-address hash
+          to prevent abuse; it is never attached to analytics counters. Ordinary
+          hosting/security logs and provider backups follow their own retention
+          policies.
+        </p>
+        <h2>Advertising</h2>
         <p>
           Third-party advertising is not enabled. Before activating it, we will
           update these disclosures and provide applicable privacy controls. The

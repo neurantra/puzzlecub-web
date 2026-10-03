@@ -3,159 +3,157 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { randomUUID } from "node:crypto";
 import { PGlite } from "@electric-sql/pglite";
-
-let db;
+let db, migration;
 before(async () => {
   db = new PGlite();
+  // Simulate the previous deployment containing identifying records.
   await db.exec(
-    await readFile(
-      new URL("../database/analytics.sql", import.meta.url),
-      "utf8",
-    ),
+    "create schema puzzlecub_usage; create table puzzlecub_usage.usage_visits(id uuid,ip inet); insert into puzzlecub_usage.usage_visits values(gen_random_uuid(),'203.0.113.8');",
   );
+  migration = await readFile(
+    new URL("../database/analytics.sql", import.meta.url),
+    "utf8",
+  );
+  await db.exec(migration);
 });
 after(async () => {
   await db.close();
 });
 async function report(days = 7, game = null) {
   return (
-    await db.query("select puzzlecub_usage.usage_report($1,$2) as report", [
+    await db.query("select puzzlecub_usage.aggregate_report($1,$2) as report", [
       days,
       game,
     ])
   ).rows[0].report;
 }
-async function record(
-  id,
-  {
-    seconds = 0,
-    sequence = 1,
-    games = [],
-    completed = [],
-    visible = true,
-  } = {},
-) {
+async function record({
+  id = randomUUID(),
+  page = "/alphadoku/mega",
+  views = 0,
+  plays = 0,
+  completions = 0,
+  seconds = 0,
+  playSeconds = 0,
+  pulse = false,
+} = {}) {
   await db.query(
-    "select puzzlecub_usage.usage_record($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)",
-    [
-      id,
-      "203.0.113.8",
-      "/alphadoku/mega",
-      "google.com",
-      "Desktop / other",
-      seconds,
-      sequence,
-      games,
-      completed,
-      visible,
-    ],
+    "select puzzlecub_usage.aggregate_record($1,$2,$3,$4,$5,$6,$7,$8)",
+    [id, page, views, plays, completions, seconds, playSeconds, pulse],
   );
 }
-
-test("visits require actual game actions; retries and out-of-order heartbeats do not inflate time", async () => {
-  const id = randomUUID();
-  await record(id);
-  assert.equal((await report()).players, 0);
-  await db.query(
-    "update puzzlecub_usage.usage_visits set last_seen = now() - interval '16 seconds' where id=$1",
-    [id],
+test("migration removes identifying visit storage and disables legacy writes", async () => {
+  assert.equal(
+    (
+      await db.query(
+        "select to_regclass('puzzlecub_usage.usage_visits') as name",
+      )
+    ).rows[0].name,
+    null,
   );
-  await record(id, { seconds: 15, sequence: 2, games: ["alphadoku-mega"] });
-  await record(id, { seconds: 9000, sequence: 2, games: ["alphadoku-mega"] });
-  await record(id, { seconds: 9000, sequence: 1, visible: false });
+  await db.query(
+    "select puzzlecub_usage.usage_record($1,null,'/','secret-referrer','device',0,1,'{}','{}',true)",
+    [randomUUID()],
+  );
+  assert.equal((await report()).views, 0);
+  const keys = (
+    await db.query(
+      "select column_name from information_schema.columns where table_schema='puzzlecub_usage' and table_name='aggregate_receipts' order by column_name",
+    )
+  ).rows.map((r) => r.column_name);
+  assert.deepEqual(keys, ["event_id", "expires_at"]);
+});
+test("counts aggregate views, game actions and duration; duplicate deliveries do not inflate counts", async () => {
+  const id = randomUUID();
+  await record({ id, views: 1 });
+  await record({ id, views: 1 });
+  assert.equal((await report()).views, 1);
+  assert.equal((await report()).plays, 0);
+  await record({ plays: 1 });
+  await record({ completions: 1, seconds: 15, playSeconds: 12 });
   const result = await report();
-  const visit = result.visits.find((v) => v.id === id);
-  assert.equal(visit.activeSeconds, 15);
-  assert.equal(visit.online, true);
-  assert.equal(result.players, 1);
-  assert.equal(visit.ip, "203.0.113.8");
-  await record(id, {
-    seconds: 15,
-    sequence: 3,
-    games: ["alphadoku-mega"],
-    completed: ["alphadoku-mega"],
-    visible: false,
-  });
-  assert.equal((await report()).visits.find((v) => v.id === id).online, false);
-  assert.equal((await report()).completions, 1);
+  assert.equal(result.plays, 1);
+  assert.equal(result.completions, 1);
+  assert.equal(result.activeSeconds, 15);
+  assert.equal(result.playSeconds, 12);
+  assert.equal(result.gameViews, 1);
+  assert.equal(result.daily.length, 7);
+  assert.equal("visits" in result, false);
+  assert.deepEqual(Object.keys(result.pages[0]).sort(), [
+    "activeSeconds",
+    "completions",
+    "page",
+    "playSeconds",
+    "plays",
+    "views",
+  ]);
+  // Reapplying the migration keeps anonymous counters intact.
+  await db.exec(migration);
+  assert.equal((await report()).views, 1);
 });
-
-test("reports filter by game, return an empty result, and expire online status", async () => {
-  const id = randomUUID();
-  await record(id, { games: ["alphadoku-classic"] });
-  assert.equal((await report(7, "alphadoku-classic")).total, 1);
-  assert.equal((await report(7, "unknown")).total, 0);
-  await db.query(
-    "update puzzlecub_usage.usage_visits set last_seen = now() - interval '46 seconds' where id=$1",
-    [id],
+test("game and UTC date filters and zero-filled trends", async () => {
+  await record({ page: "/alphadoku/classic", views: 1 });
+  await record({ page: "/", views: 1 });
+  assert.equal((await report(7, "alphadoku-classic")).views, 1);
+  assert.equal((await report(7, "alphadoku-mega")).views, 1);
+  assert.equal((await report(7, "unknown")).views, 0);
+  await db.exec(
+    "insert into puzzlecub_usage.aggregate_daily(day,page,views) values((now() at time zone 'UTC')::date-7,'/',10)",
   );
-  assert.equal((await report()).visits.find((v) => v.id === id).online, false);
+  assert.equal((await report(7)).views, 3);
+  assert.equal((await report(30)).views, 13);
+  assert.equal((await report(1)).daily.length, 1);
 });
-
-test("shared rate limit expires and blocks excess attempts", async () => {
+test("online estimate uses anonymous complete buckets and ages out", async () => {
+  await db.exec(
+    "insert into puzzlecub_usage.aggregate_pulses select to_timestamp(floor(extract(epoch from now())/15)*15) - n * interval '15 seconds','alphadoku-mega',3 from generate_series(1,3) n",
+  );
+  assert.equal((await report()).onlineEstimate, 3);
+  assert.equal((await report(7, "alphadoku-classic")).onlineEstimate, 0);
+  await db.exec(
+    "update puzzlecub_usage.aggregate_pulses set bucket=bucket-interval '1 minute'",
+  );
+  assert.equal((await report()).onlineEstimate, 0);
+});
+test("shared rate limits and retention protect privacy", async () => {
   const key = randomUUID();
   const attempt = async () =>
     (
-      await db.query(
-        "select puzzlecub_usage.usage_rate_limit($1,2,900) as ok",
-        [key],
-      )
+      await db.query("select puzzlecub_usage.usage_rate_limit($1,1,60) as ok", [
+        key,
+      ])
     ).rows[0].ok;
   assert.equal(await attempt(), true);
-  assert.equal(await attempt(), true);
   assert.equal(await attempt(), false);
-  await db.query(
-    "update puzzlecub_usage.usage_limits set expires_at=now()-interval '1 second' where key=$1",
-    [key],
+  await db.exec(
+    "update puzzlecub_usage.usage_limits set expires_at=now()-interval '1 second'; update puzzlecub_usage.aggregate_receipts set expires_at=now()-interval '1 second'; insert into puzzlecub_usage.aggregate_daily(day,page,views) values((now() at time zone 'UTC')::date-90,'/',10)",
   );
-  assert.equal(await attempt(), true);
-});
-
-test("retention hides expired IPs immediately and deletes old visit records", async () => {
-  const recent = randomUUID(),
-    old = randomUUID();
-  await record(recent);
-  await record(old);
-  await db.query(
-    "update puzzlecub_usage.usage_visits set started_at=now()-interval '8 days' where id=$1",
-    [recent],
-  );
-  await db.query(
-    "update puzzlecub_usage.usage_visits set started_at=now()-interval '91 days' where id=$1",
-    [old],
-  );
-  assert.equal((await report(30)).visits.find((v) => v.id === recent).ip, null);
   await db.query("select puzzlecub_usage.usage_cleanup()");
   assert.equal(
-    (
-      await db.query(
-        "select ip from puzzlecub_usage.usage_visits where id=$1",
-        [recent],
-      )
-    ).rows[0].ip,
-    null,
+    (await db.query("select * from puzzlecub_usage.aggregate_receipts")).rows
+      .length,
+    0,
   );
   assert.equal(
     (
       await db.query(
-        "select id from puzzlecub_usage.usage_visits where id=$1",
-        [old],
+        "select * from puzzlecub_usage.aggregate_daily where day < (now() at time zone 'UTC')::date-89",
       )
     ).rows.length,
     0,
   );
+  assert.equal(await attempt(), true);
 });
-
-test("public roles cannot read usage or execute analytics functions", async () => {
+test("public roles cannot read counters or call reporting functions", async () => {
   await db.exec(
     "create role analytics_untrusted; set role analytics_untrusted;",
   );
   await assert.rejects(
-    db.query("select * from puzzlecub_usage.usage_visits"),
+    db.query("select * from puzzlecub_usage.aggregate_daily"),
     /permission denied/,
   );
   await assert.rejects(
-    db.query("select puzzlecub_usage.usage_report(7,null)"),
+    db.query("select puzzlecub_usage.aggregate_report(7,null)"),
     /permission denied/,
   );
   await db.exec("reset role");

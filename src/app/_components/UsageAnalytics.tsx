@@ -1,146 +1,157 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
-import { gameNames } from "../_lib/analytics/types";
+import { gameForPage, pageCategory } from "../_lib/analytics/types";
 
-const consentKey = "puzzlecub-analytics-choice";
-const visitKey = "puzzlecub-usage-visit";
-type Session = {
-  id: string;
-  seconds: number;
-  sequence: number;
-  games: string[];
-  completed: string[];
-  touched: number;
-  referrer: string;
-};
-function newSession(): Session {
-  let referrer = "";
+const preferenceKey = "puzzlecub-analytics-choice";
+function privacySignal() {
+  return (
+    navigator.doNotTrack === "1" ||
+    (navigator as Navigator & { globalPrivacyControl?: boolean })
+      .globalPrivacyControl === true
+  );
+}
+function permitted() {
+  if (privacySignal()) return false;
   try {
-    referrer = document.referrer ? new URL(document.referrer).hostname : "";
-  } catch {}
-  return {
-    id: crypto.randomUUID(),
-    seconds: 0,
-    sequence: 0,
-    games: [],
-    completed: [],
-    touched: Date.now(),
-    referrer,
-  };
+    return localStorage.getItem(preferenceKey) !== "deny";
+  } catch {
+    return true;
+  }
 }
 
 export default function UsageAnalytics() {
   const pathname = usePathname();
-  const [choice, setChoice] = useState<string | null>(null);
-  const [ready, setReady] = useState(false);
+  const [choice, setChoice] = useState("pending");
+  const deniedInMemory = useRef(false);
   const enabled = process.env.NEXT_PUBLIC_ANALYTICS_ENABLED === "true";
-  const excluded = pathname.startsWith("/admin");
   useEffect(() => {
-    queueMicrotask(() => {
-      try {
-        setChoice(localStorage.getItem(consentKey));
-      } catch {}
-      setReady(true);
-    });
+    // Remove the previous tracker ID. Only an opt-out preference remains in storage.
+    try {
+      sessionStorage.removeItem("puzzlecub-usage-visit");
+    } catch {}
+    queueMicrotask(() => setChoice(permitted() ? "allow" : "deny"));
     const sync = (event: StorageEvent) => {
-      if (event.key === consentKey) setChoice(event.newValue);
+      if (event.key === preferenceKey || event.key === null)
+        setChoice(permitted() ? "allow" : "deny");
     };
     window.addEventListener("storage", sync);
     return () => window.removeEventListener("storage", sync);
   }, []);
-  function choose(value: string) {
-    try {
-      localStorage.setItem(consentKey, value);
-    } catch {}
-    setChoice(value);
-  }
+
   useEffect(() => {
-    if (!enabled || excluded || choice !== "allow") {
-      if (choice === "deny") {
-        try {
-          sessionStorage.removeItem(visitKey);
-        } catch {}
-      }
+    const page = pageCategory(pathname);
+    if (
+      !enabled ||
+      choice !== "allow" ||
+      !page ||
+      /(^|\.)puzzlecub\.app$/.test(location.hostname)
+    )
       return;
-    }
-    let session = newSession();
-    try {
-      const saved = JSON.parse(sessionStorage.getItem(visitKey) ?? "null");
-      if (
-        saved &&
-        Date.now() - saved.touched < 30 * 60 * 1000 &&
-        saved.seconds < 86400 &&
-        Array.isArray(saved.games) &&
-        Array.isArray(saved.completed)
-      )
-        session = saved;
-    } catch {}
-    let lastInteraction = session.touched;
-    let lastTick = Date.now();
-    let lastSend = 0;
-    function persist() {
-      try {
-        sessionStorage.setItem(visitKey, JSON.stringify(session));
-      } catch {}
-    }
+    const game = gameForPage(page);
     function allowed() {
-      try {
-        return localStorage.getItem(consentKey) !== "deny";
-      } catch {
-        return true;
-      }
+      return !deniedInMemory.current && permitted();
     }
-    function send(visible = !document.hidden) {
+    let started = false,
+      stopped = false,
+      played = false,
+      completed = false,
+      puzzleFinished = false;
+    let active = 0,
+      playing = 0,
+      lastTick = performance.now(),
+      interaction = performance.now();
+    let lastPulse = -Infinity;
+    const retries = new Set<ReturnType<typeof setTimeout>>();
+    function post(body: string, retry = true) {
       if (!allowed()) return;
-      session.sequence++;
-      persist();
-      lastSend = Date.now();
-      const payload = JSON.stringify({
-        ...session,
-        seconds: Math.floor(session.seconds),
-        path: pathname,
-        visible,
-        consent: true,
-      });
       void fetch("/api/usage", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: payload,
+        body,
         keepalive: true,
-      }).catch(() => {});
+        referrerPolicy: "no-referrer",
+      })
+        .then((response) => {
+          if (response.status >= 500) throw new Error("Unavailable");
+        })
+        .catch(() => {
+          if (!retry || stopped || !allowed()) return;
+          const timer = setTimeout(() => {
+            retries.delete(timer);
+            if (!stopped) post(body, false);
+          }, 1500);
+          retries.add(timer);
+        });
+    }
+    function tick() {
+      const now = performance.now();
+      if (!document.hidden && now - interaction < 60000) {
+        const delta = Math.min(2, (now - lastTick) / 1000);
+        active += delta;
+        if (played && !puzzleFinished) playing += delta;
+      }
+      lastTick = now;
+    }
+    function send(views = 0, plays = 0, completions = 0, heartbeat = false) {
+      if (!allowed()) return;
+      tick();
+      const seconds = Math.min(30, Math.floor(active));
+      const playSeconds = Math.min(seconds, Math.floor(playing));
+      active -= seconds;
+      playing -= playSeconds;
+      const now = performance.now();
+      const pulse =
+        heartbeat &&
+        !document.hidden &&
+        now - interaction < 60000 &&
+        now - lastPulse >= 14000;
+      if (pulse) lastPulse = now;
+      if (!views && !plays && !completions && !seconds && !pulse) return;
+      // A fresh ID identifies this delivery only, never a browser, visit, or person.
+      post(
+        JSON.stringify({
+          version: 2,
+          eventId: crypto.randomUUID(),
+          page,
+          views,
+          plays,
+          completions,
+          seconds,
+          playSeconds,
+          pulse,
+        }),
+      );
+    }
+    function begin() {
+      if (!started) {
+        started = true;
+        send(1, 0, 0, true);
+      }
     }
     function interact() {
-      const now = Date.now();
-      if (now - session.touched > 30 * 60 * 1000 || session.seconds >= 86400)
-        session = newSession();
-      session.touched = now;
-      lastInteraction = now;
+      tick();
+      interaction = performance.now();
     }
     function gameEvent(event: Event) {
       const detail = (event as CustomEvent).detail;
-      if (
-        !detail ||
-        typeof detail.game !== "string" ||
-        !Object.hasOwn(gameNames, detail.game)
-      )
-        return;
+      if (!detail || detail.game !== game || !game || document.hidden) return;
+      begin();
       interact();
-      const changed =
-        !session.games.includes(detail.game) ||
-        (detail.completed && !session.completed.includes(detail.game));
-      if (!session.games.includes(detail.game)) session.games.push(detail.game);
-      if (detail.completed && !session.completed.includes(detail.game))
-        session.completed.push(detail.game);
-      if (changed) send();
+      const firstPlay = !played,
+        firstCompletion = detail.completed === true && !completed;
+      played = true;
+      if (firstCompletion) completed = true;
+      puzzleFinished = detail.completed === true;
+      send(0, Number(firstPlay), Number(firstCompletion));
     }
     function frameEvent(event: MessageEvent) {
       const frame = document.querySelector<HTMLIFrameElement>(
         "iframe.classic-frame",
       );
       if (
-        event.origin !== window.location.origin ||
+        event.origin !== location.origin ||
         event.source !== frame?.contentWindow ||
         event.data?.type !== "puzzlecub:classic"
       )
@@ -155,66 +166,66 @@ export default function UsageAnalytics() {
       );
     }
     function visibility() {
-      lastTick = Date.now();
-      send();
+      if (started) send();
+      lastTick = performance.now();
     }
     function leaving() {
-      send(false);
+      if (started) send();
     }
+    // Defer the first count so React's development effect replay cannot count it twice.
+    const initial = setTimeout(begin, 0);
+    const tickTimer = setInterval(tick, 1000);
+    const heartbeat = setInterval(() => {
+      begin();
+      send(0, 0, 0, true);
+    }, 15000);
     window.addEventListener("pointerdown", interact, { passive: true });
     window.addEventListener("keydown", interact);
     window.addEventListener("scroll", interact, { passive: true });
     window.addEventListener("puzzlecub:game", gameEvent);
     window.addEventListener("message", frameEvent);
-    document.addEventListener("visibilitychange", visibility);
     window.addEventListener("pagehide", leaving);
-    const timer = setInterval(() => {
-      const now = Date.now();
-      if (!document.hidden && now - lastInteraction < 60000)
-        session.seconds += Math.min(2, (now - lastTick) / 1000);
-      lastTick = now;
-      if (
-        !document.hidden &&
-        now - lastSend >= 15000 &&
-        now - session.touched < 30 * 60 * 1000
-      )
-        send();
-    }, 1000);
-    send();
+    document.addEventListener("visibilitychange", visibility);
     return () => {
-      clearInterval(timer);
-      send(false);
+      stopped = true;
+      clearTimeout(initial);
+      clearInterval(tickTimer);
+      clearInterval(heartbeat);
+      retries.forEach(clearTimeout);
+      if (started) send();
       window.removeEventListener("pointerdown", interact);
       window.removeEventListener("keydown", interact);
       window.removeEventListener("scroll", interact);
       window.removeEventListener("puzzlecub:game", gameEvent);
       window.removeEventListener("message", frameEvent);
-      document.removeEventListener("visibilitychange", visibility);
       window.removeEventListener("pagehide", leaving);
+      document.removeEventListener("visibilitychange", visibility);
     };
-  }, [pathname, choice, enabled, excluded]);
+  }, [pathname, choice, enabled]);
 
-  if (!enabled || excluded || !ready) return null;
-  if (choice)
-    return pathname === "/privacy" ? (
-      <div className="usage-choice">
-        <span>
-          Usage analytics: {choice === "allow" ? "allowed" : "declined"}.
-        </span>
-        <button onClick={() => choose(choice === "allow" ? "deny" : "allow")}>
-          {choice === "allow" ? "Stop analytics" : "Allow analytics"}
-        </button>
-      </div>
-    ) : null;
+  if (!enabled || pathname !== "/privacy" || choice === "pending") return null;
+  function toggle() {
+    const next = choice === "deny" ? "allow" : "deny";
+    deniedInMemory.current = next === "deny";
+    try {
+      localStorage.setItem(preferenceKey, next);
+    } catch {}
+    setChoice(privacySignal() ? "deny" : next);
+  }
   return (
-    <aside className="usage-choice" aria-label="Optional usage analytics">
-      <p>
-        Help improve PuzzleCub? Allow visit and game-activity analytics,
-        including active time and a network address when enabled. Games work
-        either way. <a href="/privacy">Privacy details</a>
-      </p>
-      <button onClick={() => choose("allow")}>Allow analytics</button>
-      <button onClick={() => choose("deny")}>No thanks</button>
-    </aside>
+    <section className="usage-choice" aria-label="Anonymous analytics settings">
+      <span>
+        Anonymous usage statistics: {choice === "deny" ? "off" : "on"}.
+      </span>
+      {privacySignal() ? (
+        <span>Your browser’s privacy signal is respected.</span>
+      ) : (
+        <button onClick={toggle}>
+          {choice === "deny"
+            ? "Enable anonymous analytics"
+            : "Stop anonymous analytics"}
+        </button>
+      )}
+    </section>
   );
 }

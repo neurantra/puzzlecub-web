@@ -39,6 +39,7 @@ export default async function Page({
           <Link href="/alphadoku">← PuzzleCub</Link>
           <strong>Classic Alphadoku</strong>
           <Link href="/learn/getting-started">Guide</Link>
+          <Link href="/privacy">Privacy</Link>
         </div>
         <iframe
           title="Playable Classic Alphadoku"

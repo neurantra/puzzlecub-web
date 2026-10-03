@@ -3,27 +3,49 @@ export const gameNames: Record<string, string> = {
   "alphadoku-mega": "Mega Alphadoku",
 };
 
-export type Visit = {
-  id: string;
-  startedAt: string;
-  lastSeen: string;
-  ip: string | null;
-  entryPath: string;
-  lastPath: string;
-  referrer: string;
-  device: string;
-  activeSeconds: number;
-  games: string[];
-  completedGames: string[];
-  online: boolean;
+// Only fixed page categories reach storage. Never collect query strings or arbitrary paths.
+export const pageNames: Record<string, string> = {
+  "/": "Home",
+  "/alphadoku": "Alphadoku overview",
+  "/alphadoku/classic": "Classic Alphadoku",
+  "/alphadoku/mega": "Mega Alphadoku",
+  "/challenges": "Challenges",
+  "/learn": "Learning library",
+  "/learn/guide": "Learning guides",
+  "/about": "About",
+  "/privacy": "Privacy",
+  "/terms": "Terms",
+  "/credits": "Credits",
+  "/download": "Downloads",
+  "/mobile-apps": "Mobile apps",
+  "/apps/app": "App details",
+  "/games/game": "Game details",
 };
-
-export type UsageReport = {
-  visits: Visit[];
-  total: number;
-  players: number;
-  online: number;
-  averageActiveSeconds: number;
+export function pageCategory(path: string) {
+  if (Object.hasOwn(pageNames, path)) return path;
+  if (/^\/learn\/[^/]+$/.test(path)) return "/learn/guide";
+  if (/^\/apps\/[^/]+$/.test(path)) return "/apps/app";
+  if (/^\/games\/[^/]+$/.test(path)) return "/games/game";
+  return null;
+}
+export function gameForPage(page: string) {
+  return page === "/alphadoku/classic"
+    ? "alphadoku-classic"
+    : page === "/alphadoku/mega"
+      ? "alphadoku-mega"
+      : "";
+}
+export type Aggregate = {
+  views: number;
+  plays: number;
   completions: number;
-  games: { id: string; players: number; completions: number }[];
+  activeSeconds: number;
+  playSeconds: number;
+};
+export type UsageReport = Aggregate & {
+  gameViews: number;
+  onlineEstimate: number;
+  since: string;
+  daily: (Aggregate & { day: string })[];
+  pages: (Aggregate & { page: string })[];
 };

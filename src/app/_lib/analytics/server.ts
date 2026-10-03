@@ -88,8 +88,8 @@ export function clientIp(request: Request) {
   const candidate = request.headers.get(header)?.split(",")[0].trim() ?? "";
   return isIP(candidate) ? candidate : null;
 }
-export function networkKey(request: Request) {
-  return mac(clientIp(request) ?? "unknown-network");
+export function networkKey(request: Request, scope = "login") {
+  return mac(`${scope}:${clientIp(request) ?? "unknown-network"}`);
 }
 export async function rpc<T>(
   name: string,
@@ -98,19 +98,17 @@ export async function rpc<T>(
   if (!configured()) throw new Error("Analytics database is not configured");
   const parameters: Record<string, string[]> = {
     usage_rate_limit: ["p_key", "p_limit", "p_seconds"],
-    usage_record: [
-      "p_id",
-      "p_ip",
-      "p_path",
-      "p_referrer",
-      "p_device",
+    aggregate_record: [
+      "p_event",
+      "p_page",
+      "p_views",
+      "p_plays",
+      "p_completions",
       "p_seconds",
-      "p_sequence",
-      "p_games",
-      "p_completed",
-      "p_visible",
+      "p_play_seconds",
+      "p_pulse",
     ],
-    usage_report: ["p_days", "p_game"],
+    aggregate_report: ["p_days", "p_game"],
     usage_cleanup: [],
   };
   if (!Object.hasOwn(parameters, name))
