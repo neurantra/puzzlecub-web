@@ -134,7 +134,7 @@ export default function Dashboard() {
                 report.onlineEstimate.toLocaleString(),
               ],
               ["Active playing time", duration(report.playSeconds)],
-              ["Views with a solve", report.completions.toLocaleString()],
+              ["Views with a finish", report.completions.toLocaleString()],
             ].map(([label, value]) => (
               <div className="admin-stat" key={label}>
                 <span className="admin-muted">{label}</span>
@@ -153,7 +153,7 @@ export default function Dashboard() {
                       "Page views",
                       "Playing views",
                       "Play rate",
-                      "Views with a solve",
+                      "Views with a finish",
                       "Active play time",
                     ].map((h) => (
                       <th key={h} scope="col">
@@ -222,7 +222,7 @@ export default function Dashboard() {
                       "Day (UTC)",
                       "Page views",
                       "Playing views",
-                      "Views with a solve",
+                      "Views with a finish",
                       "Active site time",
                       "Active play time",
                     ].map((h) => (
@@ -281,16 +281,17 @@ export default function Dashboard() {
       <p className="admin-muted admin-note">
         These are page views, not unique people or visits. Reloading or opening
         another tab counts another view. A playing view has at least one real
-        game action. A view with a solve completed at least one puzzle;
-        additional solves in that same view are not counted separately. Active
-        time counts visible time with interaction in the last 60 seconds. Active
-        play time follows game actions, pauses after a solve, and resumes on the
-        next game action. Active tabs is estimated from anonymous heartbeats in
-        the last three complete 15-second buckets; it can lag by about a minute
-        and is not an exact headcount. Daily counters use event dates, so rates
-        near date boundaries are approximate. Opt-outs, privacy signals,
-        blockers, bots and network loss can affect totals. No visitor profiles,
-        IP addresses or browsing histories are stored in analytics.
+        game action. A view with a finish solved a puzzle or ended a Chaturang
+        match (including a forfeit) after a player move; additional finishes in
+        that same view are not counted separately. Active time counts visible
+        time with interaction in the last 60 seconds. Active play time follows
+        game actions, pauses after a finish, and resumes on the next game
+        action. Active tabs is estimated from anonymous heartbeats in the last
+        three complete 15-second buckets; it can lag by about a minute and is
+        not an exact headcount. Daily counters use event dates, so rates near
+        date boundaries are approximate. Opt-outs, privacy signals, blockers,
+        bots and network loss can affect totals. No visitor profiles, IP
+        addresses or browsing histories are stored in analytics.
       </p>
     </>
   );

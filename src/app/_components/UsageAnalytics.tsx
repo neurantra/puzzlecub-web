@@ -62,6 +62,7 @@ export default function UsageAnalytics() {
       playing = 0,
       lastTick = performance.now(),
       interaction = performance.now();
+    let adActive = false;
     let lastPulse = -Infinity;
     const retries = new Set<ReturnType<typeof setTimeout>>();
     function post(body: string, retry = true) {
@@ -87,7 +88,7 @@ export default function UsageAnalytics() {
     }
     function tick() {
       const now = performance.now();
-      if (!document.hidden && now - interaction < 60000) {
+      if (!adActive && !document.hidden && now - interaction < 60000) {
         const delta = Math.min(2, (now - lastTick) / 1000);
         active += delta;
         if (played && !puzzleFinished) playing += delta;
@@ -146,20 +147,37 @@ export default function UsageAnalytics() {
       puzzleFinished = detail.completed === true;
       send(0, Number(firstPlay), Number(firstCompletion));
     }
+    function adStart() {
+      tick();
+      adActive = true;
+    }
+    function adEnd() {
+      lastTick = performance.now();
+      adActive = false;
+    }
     function frameEvent(event: MessageEvent) {
       const frame = document.querySelector<HTMLIFrameElement>(
-        "iframe.classic-frame",
+        "iframe.classic-frame, iframe.chaturang-frame",
       );
       if (
         event.origin !== location.origin ||
-        event.source !== frame?.contentWindow ||
-        event.data?.type !== "puzzlecub:classic"
+        event.source !== frame?.contentWindow
+      )
+        return;
+      if (event.data?.type === "puzzlecub:ad-state") {
+        if (event.data.active === true) adStart();
+        else adEnd();
+        return;
+      }
+      if (
+        event.data?.type !==
+        (game === "chaturang" ? "puzzlecub:chaturang" : "puzzlecub:classic")
       )
         return;
       gameEvent(
         new CustomEvent("puzzlecub:game", {
           detail: {
-            game: "alphadoku-classic",
+            game,
             completed: event.data.completed === true,
           },
         }),
@@ -184,6 +202,8 @@ export default function UsageAnalytics() {
     window.addEventListener("scroll", interact, { passive: true });
     window.addEventListener("puzzlecub:game", gameEvent);
     window.addEventListener("message", frameEvent);
+    window.addEventListener("puzzlecub:ad-start", adStart);
+    window.addEventListener("puzzlecub:ad-end", adEnd);
     window.addEventListener("pagehide", leaving);
     document.addEventListener("visibilitychange", visibility);
     return () => {
@@ -198,6 +218,8 @@ export default function UsageAnalytics() {
       window.removeEventListener("scroll", interact);
       window.removeEventListener("puzzlecub:game", gameEvent);
       window.removeEventListener("message", frameEvent);
+      window.removeEventListener("puzzlecub:ad-start", adStart);
+      window.removeEventListener("puzzlecub:ad-end", adEnd);
       window.removeEventListener("pagehide", leaving);
       document.removeEventListener("visibilitychange", visibility);
     };

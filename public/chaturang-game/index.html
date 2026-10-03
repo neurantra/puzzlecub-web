@@ -1,0 +1,10 @@
+<!doctype html><html lang="en"><head>
+<base href="/chaturang-game/"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex"><title>Chaturang — PuzzleCub</title>
+<script src="/game-ads.js"></script><script src="worker-bridge.js"></script>
+</head><body style="margin:0;background:#101e20">
+<p id="loading" style="font:18px system-ui;color:#ffe8bc;text-align:center;padding:80px 20px">Entering the court…</p>
+<script>
+window.addEventListener('flutter-first-frame',()=>document.getElementById('loading')?.remove());
+window.puzzlecubGameAction=completed=>{window.puzzlecubAds?.markPlayed();window.parent.postMessage({type:'puzzlecub:chaturang',completed:completed===true},window.location.origin);};
+</script><script src="flutter_bootstrap.js" async></script></body></html>

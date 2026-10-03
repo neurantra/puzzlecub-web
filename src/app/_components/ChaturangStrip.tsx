@@ -31,9 +31,15 @@ export function ChaturangStrip() {
               your moves, and make the court your own with cosmetic finishes.
             </p>
             <p className="mt-4 text-sm leading-relaxed text-muted">
-              Try one free match, shared across AI and online play. A one-time
-              full-game purchase unlocks unlimited matches.
+              In the mobile app, try one free match across AI and online play. A
+              one-time full-game purchase unlocks unlimited matches.
             </p>
+            <a
+              href="/chaturang"
+              className="mt-5 inline-block text-sm font-bold text-accent"
+            >
+              Play free against AI in your browser →
+            </a>
             <div className="mt-7">
               <StoreLinks
                 name="Chaturang"

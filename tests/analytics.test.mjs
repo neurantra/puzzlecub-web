@@ -158,3 +158,34 @@ test("public roles cannot read counters or call reporting functions", async () =
   );
   await db.exec("reset role");
 });
+
+test("Chaturang counters and game filters stay separate from Alphadoku", async () => {
+  await record({
+    page: "/chaturang",
+    views: 1,
+    plays: 1,
+    completions: 1,
+    seconds: 22,
+    playSeconds: 18,
+    pulse: true,
+  });
+  await record({ page: "/chaturang", views: 1 });
+  const data = await report(7, "chaturang");
+  assert.equal(data.views, 2);
+  assert.equal(data.gameViews, 2);
+  assert.equal(data.plays, 1);
+  assert.equal(data.completions, 1);
+  assert.equal(data.playSeconds, 18);
+  assert.deepEqual(
+    data.pages.map((row) => row.page),
+    ["/chaturang"],
+  );
+  assert.equal(
+    (
+      await db.query(
+        "select game from puzzlecub_usage.aggregate_pulses where game='chaturang'",
+      )
+    ).rows[0].game,
+    "chaturang",
+  );
+});

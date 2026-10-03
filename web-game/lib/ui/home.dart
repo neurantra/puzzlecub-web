@@ -1,3 +1,4 @@
+import '../services/usage.dart';
 import 'package:flutter/material.dart';
 
 import '../game/difficulty.dart';
@@ -121,6 +122,8 @@ class _HomeScreenState extends State<HomeScreen> {
       if (replace != true || !mounted) return;
     }
     setState(() => building = true);
+    await betweenGames();
+    if (!mounted) return;
     Session? next;
     try {
       if (!await ensureAccess(context, AccessKind.puzzle, selected) ||

@@ -9,3 +9,7 @@ void reportGameAction(bool completed) {
     _gameAction(completed.toJS);
   } catch (_) {}
 }
+
+@JS('puzzlecubBetweenGames')
+external JSPromise<JSAny?> _betweenGames();
+Future<void> betweenGames() async { try { await _betweenGames().toDart; } catch (_) {} }

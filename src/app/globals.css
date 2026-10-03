@@ -1668,3 +1668,66 @@ select:focus-visible {
   cursor: pointer;
   font-weight: 700;
 }
+
+/* Each game is visible on arrival; no carousel hides the second choice. */
+.games-welcome { max-width: 1200px; margin: auto; padding: 58px 32px 20px; text-align: center; scroll-margin-top: 24px; }
+.games-welcome > h1 { font-size: clamp(38px,5.5vw,68px); letter-spacing: -.055em; line-height: 1.12; margin: 18px 0; }
+.games-welcome > h1 em { font-style: normal; color: var(--teal, #226356); }
+.games-welcome > p { color: #576960; max-width: 640px; margin: 0 auto 32px; line-height: 1.7; }
+.game-collection { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; text-align: left; }
+.collection-card { border-radius: 24px; overflow: hidden; background: #fffdf7; border: 1px solid #deded0; display: flex; flex-direction: column; transition: transform .2s, box-shadow .2s; }
+.collection-card:hover { transform: translateY(-4px); box-shadow: 0 15px 40px #173e3a13; }
+.collection-card:focus-visible { outline: 3px solid #b77f2a; outline-offset: 5px; }
+.collection-art { height: 235px; position: relative; overflow: hidden; }
+.court-art { background: #152b2a; }
+.court-art img { object-fit: cover; object-position: 50% 35%; }
+.game-badge { position: absolute; top: 17px; left: 18px; padding: 7px 11px; background: #fff9e9ed; color: #25413a; font-size: 10px; font-weight: 800; letter-spacing: .09em; border-radius: 30px; }
+.letter-art { background: #e8eadc; display: grid; place-items: center; }
+.collection-letter-grid { display: grid; grid-template-columns: repeat(3,58px); gap: 4px; transform: rotate(-7deg); }
+.collection-letter-grid span { display: grid; place-items: center; height: 58px; background: #fffcf1; border-radius: 5px; font-size: 28px; font-weight: 600; color: #214e44; }
+.collection-letter-grid .lit { background: #e8bd61; }
+.collection-copy { padding: 26px 28px 28px; flex: 1; display: flex; flex-direction: column; }
+.collection-copy h2 { font-size: 34px; margin: 12px 0; letter-spacing: -.04em; }
+.collection-copy p { line-height: 1.7; color: #54675c; margin: 0 0 24px; flex: 1; }
+.collection-copy strong { display: flex; justify-content: space-between; color: #1f5546; }
+.games-welcome .games-note { margin-top: 25px; font-size: 12px; }
+.chaturang-frame { width: 100%; height: min(900px, calc(100svh - 90px)); min-height: 620px; display: block; border: 0; border-radius: 18px; background: #101e20; }
+.chaturang-play-page h1 span { font-weight: 400; }
+.ad-placement { max-width: 1100px; margin: 45px auto; padding: 14px 20px; width: 100%; text-align: center; }
+.ad-placement small { display: block; color: #687269; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 12px; }
+.ad-placement ins { min-height: 90px; }
+/* Google recommends >=150px between display ads and game controls. */
+.gameplay-ad { margin-top: 160px; margin-bottom: 36px; }
+.ad-placement[hidden], .ad-placement:has(ins[data-ad-status="unfilled"]) { display: none; }
+@media (max-width: 700px) {
+  .games-welcome { padding: 32px 20px 10px; }
+  .game-collection { grid-template-columns: 1fr; gap: 20px; }
+  .collection-art { height: 180px; }
+  .collection-letter-grid { grid-template-columns: repeat(3,43px); }
+  .collection-letter-grid span { height: 43px; font-size: 22px; }
+  .collection-copy { padding: 22px; }
+  .collection-copy h2 { font-size: 29px; }
+  .chaturang-play-page { padding: 0; }
+  .chaturang-play-page > h1, .chaturang-play-page > p { padding: 0 16px; }
+  .chaturang-play-page > .play-heading { padding: 12px 16px; }
+  .chaturang-frame { height: calc(100svh - 50px); min-height: 580px; border-radius: 0; }
+  .chaturang-play-page .play-explainer { padding: 30px 20px; }
+  .chaturang-play-page h1 { font-size: 25px; }
+  /* Preserve the full mobile board; display ads follow it in document flow. */
+  body:has(.classic-play-page) { overflow: auto; }
+  .classic-play-page { position: static; padding: 48px 0 0; height: auto; }
+  .classic-play-page .classic-frame { position: static; height: calc(100svh - 48px); width: 100%; }
+  .classic-play-page .gameplay-ad { margin-top: 160px; }
+}
+@media (prefers-reduced-motion: reduce) { .collection-card { transition: none; } }
+@media (max-width: 900px), (hover: none) and (pointer: coarse) {
+  body:has(.classic-play-page) { overflow: auto; }
+  .classic-play-page { position: static; padding: 48px 0 0; height: auto; }
+  .classic-play-page .classic-frame { position: static; height: calc(100svh - 48px); width: 100%; }
+}
+@media (max-width: 700px) {
+  body:has(.chaturang-play-page) .web-header,
+  .chaturang-play-page > h1,
+  .chaturang-play-page > p { display: none; }
+  .chaturang-play-page > .play-heading { position: sticky; top: 0; z-index: 20; height: 50px; margin: 0; background: #f8f5ec; font-size: 12px; }
+}

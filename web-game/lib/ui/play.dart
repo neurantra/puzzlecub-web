@@ -1,3 +1,4 @@
+import '../services/usage.dart';
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
@@ -164,6 +165,9 @@ class _PlayScreenState extends State<PlayScreen> with WidgetsBindingObserver {
   Future<void> _playAgain() async {
     if (_building) return;
     setState(() => _building = true);
+    session.pause();
+    await betweenGames();
+    if (!mounted) return;
     Session? next;
     try {
       final tier = session.puzzle.difficulty;

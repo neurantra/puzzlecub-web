@@ -202,20 +202,66 @@ clicks. It does not provide these on-site engagement measures.
 5. Verify crawler access and Search Console. Do not submit to AdSense until the
    playable site and content have passed public-beta review.
 
-## Monetization boundary
+## Chaturang and the games homepage
 
-**Ads and third-party marketing analytics are intentionally not active.** Anonymous
-first-party usage analytics is available through the admin setup above. No fake publisher
-ID, live ad request, paywall, billing SDK, or consent bypass is included. Gameplay
-is unlimited and hints are free during this launch beta. Pro stays unassisted.
+The homepage features visible Chaturang and Alphadoku cards. `/chaturang` embeds
+our Flutter browser edition, adapted from the mobile source without changing that
+repository. See [chaturang-game/README.md](chaturang-game/README.md) for provenance,
+worker architecture, browser differences and rebuilding. Run `npm run build:chaturang`
+after changes; commit the generated `public/chaturang-game` assets. `npm run build:all`
+builds both Flutter games and then Next. Chaturang keeps the mobile UI, AI, card-pick
+flow, hints, rules and local cosmetic progression, with unlimited free AI matches.
+No purchases or online multiplayer. Unfinished Chaturang matches are not saved.
 
-AdSense publisher/site approval, web CMP configuration and actual slot IDs remain
-external setup. Reserve display placements away from controls after consent is
-implemented; do not let ad loading shift the board. Rewarded hints require H5 Games
-Ads access (separate from standard display ad integration). Always support no-fill
-without blocking a saved game. Update the privacy page when these are enabled.
+Apply the updated `database/analytics.sql` to include Chaturang in aggregate game
+filters. A playing view requires a real human move. A finished view includes a
+terminal match after human play, including forfeits. The dashboard is aggregate,
+not a count of unique people or of every match in a multi-match page view.
 
-This is a local implementation, not an AdSense approval or published launch.
+## AdSense and H5 Games Ads activation
+
+Ads are implemented but **off by default**. The game works without ad approval,
+consent, ad inventory or an unblocked SDK. No fabricated publisher or slot IDs are
+shipped. Anonymous first-party analytics remains independent of advertising consent.
+
+1. Add puzzlecub.com in AdSense. Deploy `public/ads.txt`, which contains publisher
+   `pub-5992130091579926` and is served at `/ads.txt` without environment variables.
+   Verify using the ads.txt method and submit the site for review. Also set the
+   server environment variable `ADSENSE_CLIENT=ca-pub-5992130091579926` for the
+   verification meta tag and future ad requests. Ads remain off until activated.
+2. Create two responsive display units: a content unit (`ADSENSE_CONTENT_SLOT`)
+   and gameplay unit (`ADSENSE_GAMEPLAY_SLOT`). Use the numeric IDs, not pasted HTML.
+   Turn **Auto ads off** for this site (including anchors and vignettes) so Google
+   cannot add overlays or placements near controls outside these manual slots.
+3. In AdSense Privacy & messaging, publish Google's certified consent message for
+   applicable regions and configure applicable US state privacy messages. Verify
+   the message and revocation link on a preview before setting `ADS_CONSENT_READY=true`.
+   The SDK consumes CMP signals; non-personalized requests do not bypass consent.
+   “Privacy & cookie settings” appears when Google's consent API is available.
+4. Apply separately for [H5 Games Ads](https://adsense.google.com/start/h5-game-ads-apply/).
+   Normal AdSense display approval alone does not grant H5 access. Set
+   `H5_ADS_ENABLED=true` only after that access is granted.
+5. Once approved and tested, set `ADS_ENABLED=true`, keep `ADS_TEST_MODE=false`,
+   and redeploy. Display ads can launch independently while H5 stays disabled.
+   Never click your own live ads.
+
+For local/preview SDK checks use your publisher ID with `ADS_ENABLED=true`,
+`H5_ADS_ENABLED=true`, and `ADS_TEST_MODE=true`. This requests Google's test mode;
+never promote those preview settings to production. Our Playwright tests substitute
+an SDK entirely and generate no requests to Google. External approval and actual
+regional CMP behavior must still be verified with your real account before live ads.
+
+Display placements follow the rich static content and sit at least 160px beyond
+the game area. Mobile Classic keeps a full viewport for play and allows scrolling
+down to its separated ad. No ads are on the admin or legal pages. Unfilled display
+units collapse. Interstitials use H5 `next` placements after actual play, never on
+first entry or during a move. They wait at least 60 seconds after page load and
+at least three minutes between requests; Google's own cap and inventory may skip
+more. The API is loaded inside each Flutter game document as Google requires.
+Games pause/mute before the request and continue on `adBreakDone`, including no-fill;
+a blocked/not-ready SDK is skipped immediately. Ads do not contribute to active
+play time. Hints remain free and are not gated by rewarded ads.
+
 No accounts, cloud saves, public leaderboard or push/email notifications are
 implemented. Browser storage can be cleared and progress is device-local. Classic
 can continue in an already-loaded tab offline; this is not an installable offline PWA.

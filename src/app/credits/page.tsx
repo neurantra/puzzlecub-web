@@ -14,9 +14,10 @@ export default function Page() {
         <h2>Website and game frameworks</h2>
         <p>
           Next.js and React power the website and Mega interface. Flutter and
-          Dart power Classic, sharing the mobile game’s logic. Classic’s
-          Settings → About → View all licenses and notices contains its
-          dependency notices.
+          Dart power Classic and Chaturang, sharing their mobile games’ logic
+          and artwork. Classic’s Settings → About → View all licenses and
+          notices contains its dependency notices. Chaturang’s About → Licenses
+          includes its dependency and font notices.
         </p>
         <h2>Language resources</h2>
         <p>

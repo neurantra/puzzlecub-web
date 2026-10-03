@@ -1,3 +1,4 @@
+import { AdPlacement } from "../../_components/Advertising";
 import Link from "next/link";
 import { WebShell, AlphaIdentity } from "../../_components/WebShell";
 import { validDay } from "../../_lib/challenges";
@@ -36,7 +37,7 @@ export default async function Page({
             "Select Medium and start a new puzzle for today’s shared board. Challenge progress has its own save slot."}
         </p>
         <div className="classic-mobile-bar">
-          <Link href="/alphadoku">← PuzzleCub</Link>
+          <Link href="/#games">← PuzzleCub</Link>
           <strong>Classic Alphadoku</strong>
           <Link href="/learn/getting-started">Guide</Link>
           <Link href="/privacy">Privacy</Link>
@@ -63,6 +64,7 @@ export default async function Page({
             accounts.
           </p>
         </section>
+        <AdPlacement gameplay />
       </main>
     </WebShell>
   );

@@ -1,4 +1,5 @@
 "use client";
+import { betweenGames } from "../_components/Advertising";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { trackGame } from "../_lib/analytics/client";
@@ -204,7 +205,10 @@ export default function Mega({ week }: { week?: string }) {
       board[selected] = v;
       notes[selected] = [];
     }
-    trackGame("alphadoku-mega", board.every((value, i) => value === save.puzzle.solution[i]));
+    trackGame(
+      "alphadoku-mega",
+      board.every((value, i) => value === save.puzzle.solution[i]),
+    );
     setSave({
       ...save,
       board,
@@ -226,7 +230,10 @@ export default function Mega({ week }: { week?: string }) {
       notes = save.notes.map((n) => [...n]);
     board[selected] = save.puzzle.solution[selected];
     notes[selected] = [];
-    trackGame("alphadoku-mega", board.every((value, i) => value === save.puzzle.solution[i]));
+    trackGame(
+      "alphadoku-mega",
+      board.every((value, i) => value === save.puzzle.solution[i]),
+    );
     setSave({
       ...save,
       board,
@@ -241,7 +248,8 @@ export default function Mega({ week }: { week?: string }) {
       `Hint: row ${Math.floor(selected / 25) + 1}, column ${(selected % 25) + 1} is ${letters[board[selected]]}.`,
     );
   }
-  function newGame() {
+  async function newGame() {
+    if (busy) return;
     if (
       save &&
       !won &&
@@ -250,6 +258,9 @@ export default function Mega({ week }: { week?: string }) {
       )
     )
       return;
+    setBusy(true);
+    if (save?.history.length || won) window.puzzlecubAds?.markPlayed();
+    await betweenGames();
     request(week ? "medium" : tier, week ?? crypto.randomUUID());
   }
   const shown = Array.from({ length: 625 }, (_, i) => i).filter(

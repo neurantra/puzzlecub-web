@@ -1,3 +1,4 @@
+import { ContentAdvertisement, AdvertisingPrivacy } from "./Advertising";
 import Link from "next/link";
 import ModeCarousel from "./ModeCarousel";
 import Image from "next/image";
@@ -11,7 +12,7 @@ export function WebHeader() {
         puzzlecub<span className="brand-dot">.</span>
       </Link>
       <nav aria-label="Main navigation">
-        <Link href="/alphadoku">Play</Link>
+        <Link href="/#games">Games</Link>
         <Link href="/challenges">Challenges</Link>
         <Link href="/learn">Learn</Link>
         <Link href="/mobile-apps" className="nav-apps">
@@ -34,6 +35,7 @@ export function WebFooter() {
       <nav aria-label="Footer navigation">
         <Link href="/about">About & contact</Link>
         <Link href="/privacy">Privacy</Link>
+        <AdvertisingPrivacy />
         <Link href="/terms">Terms</Link>
         <Link href="/credits">Credits & licenses</Link>
         <Link href="/mobile-apps">Mobile apps</Link>
@@ -66,6 +68,7 @@ export function WebShell({ children }: { children: React.ReactNode }) {
       </a>
       <WebHeader />
       {children}
+      <ContentAdvertisement />
       <WebFooter />
     </>
   );

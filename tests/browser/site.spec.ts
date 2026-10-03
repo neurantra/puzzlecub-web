@@ -3,7 +3,7 @@ test("homepage discovery and mobile layout", async ({ page }) => {
   await page.goto("/");
   await expect(
     page.getByRole("heading", {
-      name: "A little thought. A bright discovery.",
+      name: "Make time for play.",
     }),
   ).toBeVisible();
   await page.getByRole("button", { name: "E", exact: true }).click();

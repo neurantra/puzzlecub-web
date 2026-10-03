@@ -7,20 +7,21 @@ export default function Page() {
     <WebShell>
       <main id="main" className="article">
         <h1>Playing on PuzzleCub</h1>
-        <p>Browser edition · Updated October 2, 2026.</p>
+        <p>Browser edition · Updated October 3, 2026.</p>
         <h2>Free browser play</h2>
         <p>
-          This edition offers unlimited puzzles without a purchase or account.
-          Hints are free during the launch beta, except in unassisted Pro play.
-          We may introduce advertising and optional rewarded hints in a later
-          update; the interface will explain any change before you use it.
+          This edition offers unlimited Alphadoku puzzles and Chaturang games
+          against AI without a purchase or account. Hints are free, except in
+          unassisted Alphadoku Pro play. Display ads and interstitial ads
+          between games may support free play when advertising is available.
         </p>
         <h2>Local progress</h2>
         <p>
           Progress is saved on the browser and device you use. We cannot restore
-          it after browser storage is deleted. Daily and weekly challenge
-          schedules use UTC. Browser saves and mobile app purchases are
-          separate.
+          it after browser storage is deleted. Chaturang stores local statistics
+          and settings, but unfinished matches end when the page closes or
+          reloads. Daily and weekly challenge schedules use UTC. Browser saves
+          and mobile app purchases are separate.
         </p>
         <h2>Fair use and feedback</h2>
         <p>

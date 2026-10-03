@@ -1,4 +1,5 @@
 export const gameNames: Record<string, string> = {
+  chaturang: "Chaturang",
   "alphadoku-classic": "Classic Alphadoku",
   "alphadoku-mega": "Mega Alphadoku",
 };
@@ -6,6 +7,7 @@ export const gameNames: Record<string, string> = {
 // Only fixed page categories reach storage. Never collect query strings or arbitrary paths.
 export const pageNames: Record<string, string> = {
   "/": "Home",
+  "/chaturang": "Chaturang",
   "/alphadoku": "Alphadoku overview",
   "/alphadoku/classic": "Classic Alphadoku",
   "/alphadoku/mega": "Mega Alphadoku",
@@ -29,11 +31,13 @@ export function pageCategory(path: string) {
   return null;
 }
 export function gameForPage(page: string) {
-  return page === "/alphadoku/classic"
-    ? "alphadoku-classic"
-    : page === "/alphadoku/mega"
-      ? "alphadoku-mega"
-      : "";
+  return page === "/chaturang"
+    ? "chaturang"
+    : page === "/alphadoku/classic"
+      ? "alphadoku-classic"
+      : page === "/alphadoku/mega"
+        ? "alphadoku-mega"
+        : "";
 }
 export type Aggregate = {
   views: number;

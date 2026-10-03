@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { WebShell, ModeCards } from "./_components/WebShell";
 import { ContinuePlaying, TryDeduction } from "./_components/Discovery";
 export const metadata: Metadata = {
@@ -10,45 +11,66 @@ export default function Home() {
     <WebShell>
       <main id="main">
         <ContinuePlaying />
-        <section className="hero">
-          <div className="hero-copy">
-            <span className="tag">YOUR DAILY DOSE OF “GOT IT.”</span>
-            <h1>
-              A little thought.
-              <br />A <em>bright</em> discovery.
-            </h1>
-            <p>
-              Settle into something satisfying. Original letter puzzles to play,
-              learn, and come back to. Right here in your browser.
-            </p>
-            <div className="button-row">
-              <Link className="button primary" href="/challenges">
-                Play today’s challenge <span>↗</span>
-              </Link>
-              <Link className="text-link" href="/alphadoku">
-                Find your puzzle →
-              </Link>
-            </div>
-            <div className="hero-note">
-              <span>✦</span> Unlimited play. No account. Your pace.
-            </div>
+        <section className="games-welcome" id="games">
+          <span className="tag">A LITTLE THOUGHT. A BRIGHT DISCOVERY.</span>
+          <h1>
+            Make time for <em>play.</em>
+          </h1>
+          <p>
+            Ancient strategy. A fresh twist on Sudoku. Find your next good
+            challenge.
+          </p>
+          <div className="game-collection">
+            <Link href="/chaturang" className="collection-card chaturang-card">
+              <div className="collection-art court-art" aria-hidden="true">
+                <Image
+                  src="/chaturang/court.png"
+                  alt=""
+                  fill
+                  sizes="(max-width: 700px) 100vw, 50vw"
+                  priority
+                />
+                <span className="game-badge">NEW ON THE WEB</span>
+              </div>
+              <div className="collection-copy">
+                <span className="tag">ANCIENT STRATEGY · PLAY AGAINST AI</span>
+                <h2>Chaturang</h2>
+                <p>
+                  Enter the royal court. Choose your side and meet your rival in
+                  the Indian ancestor of chess.
+                </p>
+                <strong>
+                  Play Chaturang <span>↗</span>
+                </strong>
+              </div>
+            </Link>
+            <Link href="/alphadoku" className="collection-card alphadoku-card">
+              <div className="collection-art letter-art" aria-hidden="true">
+                <div className="collection-letter-grid">
+                  {"ALGORITHM".split("").map((c, i) => (
+                    <span className={i > 2 && i < 6 ? "lit" : ""} key={i}>
+                      {c}
+                    </span>
+                  ))}
+                </div>
+                <span className="game-badge">CLASSIC + MEGA</span>
+              </div>
+              <div className="collection-copy">
+                <span className="tag">LETTER SUDOKU · YOUR DAILY AHA</span>
+                <h2>Alphadoku</h2>
+                <p>
+                  Nine letters. One hidden line. Or stretch out with a 25 × 25
+                  Mega board. All logic, at your pace.
+                </p>
+                <strong>
+                  Play Alphadoku <span>↗</span>
+                </strong>
+              </div>
+            </Link>
           </div>
-          <div className="hero-visual" aria-hidden="true">
-            <span className="orbit orbit-one">A fresh perspective</span>
-            <div className="hero-board">
-              {"ALGORITHM".split("").map((c, i) => (
-                <span className={[3, 4, 5].includes(i) ? "lit" : ""} key={i}>
-                  {c}
-                </span>
-              ))}
-            </div>
-            <div className="floating-note">
-              <span>✧</span> That’s the missing piece.
-            </div>
-            <span className="orbit orbit-two">
-              Nine letters. One hidden line.
-            </span>
-          </div>
+          <p className="games-note">
+            Free to play · No account needed · No downloads
+          </p>
         </section>
         <section className="web-section">
           <div className="section-heading">

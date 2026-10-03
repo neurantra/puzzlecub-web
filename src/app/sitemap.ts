@@ -3,6 +3,7 @@ import techniques from "./_lib/techniques.json";
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     "",
+    "/chaturang",
     "/alphadoku",
     "/alphadoku/classic",
     "/alphadoku/mega",

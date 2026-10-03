@@ -1,0 +1,72 @@
+name: chaturang
+description: "Chaturang — the 8th-century Indian ancestor of chess, reborn on mobile with a strong learned AI."
+publish_to: 'none'
+
+# Versioning: `major.minor.patch+build`. Bump build on every release;
+# bump minor on each feature wave; bump major on breaking save-format
+# changes. 0.9 marks the pre-1.0 beta line — first public release will
+# be 1.0.0+1.
+version: 2.0.3+23
+
+environment:
+  sdk: ^3.11.5
+
+# Dependencies specify other packages that your package needs in order to work.
+# To automatically upgrade your package dependencies to the latest versions
+# consider running `flutter pub upgrade --major-versions`. Alternatively,
+# dependencies can be manually updated by changing the version numbers below to
+# the latest version available on pub.dev. To see which dependencies have newer
+# versions available, run `flutter pub outdated`.
+dependencies:
+  flutter:
+    sdk: flutter
+  audioplayers: ^6.6.0
+  flutter_svg: ^2.0.10
+  meta: ^1.15.0
+  package_info_plus: ^8.0.0
+  share_plus: ^10.1.4
+  shared_preferences: ^2.3.0
+  url_launcher: ^6.3.1
+  video_player: ^2.11.1
+  web: ^1.1.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter packages.
+flutter:
+
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+  fonts:
+    - family: CormorantGaramond
+      fonts:
+        - asset: assets/fonts/CormorantGaramond.ttf
+    - family: RoyalSans
+      fonts:
+        - asset: assets/fonts/PlusJakartaSans-Regular.ttf
+        - asset: assets/fonts/PlusJakartaSans-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/PlusJakartaSans-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/PlusJakartaSans-Bold.ttf
+          weight: 700
+
+  assets:
+    - assets/video/
+    - assets/pieces/
+    # Generated royal sprites; source artwork and prompts live in output/art.
+    - assets/pieces/royal/
+    - assets/book/
+    - assets/decorations/
+    - assets/fonts/OFL.txt
+    - assets/fonts/CormorantGaramond-OFL.txt
+    - assets/sounds/
+

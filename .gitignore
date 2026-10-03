@@ -50,3 +50,6 @@ next-env.d.ts
 /web-game/.flutter-plugins-dependencies
 /test-results/
 /playwright-report/
+/chaturang-game/.dart_tool/
+/chaturang-game/build/
+/chaturang-game/.flutter-plugins-dependencies

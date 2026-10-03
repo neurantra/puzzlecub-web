@@ -1,3 +1,4 @@
+import { AdvertisingPrivacy } from "../_components/Advertising";
 import { WebShell } from "../_components/WebShell";
 export const metadata = { title: "PuzzleCub browser privacy information" };
 export default function Page() {
@@ -11,8 +12,9 @@ export default function Page() {
           PuzzleCub stores game boards, notes, tutorial progress, target
           history, elapsed play time and local completion records in your
           browser. It uses that data to resume play and avoid repeating Classic
-          targets. There is no player account or cloud game-save service in this
-          edition.
+          targets. Chaturang stores local statistics, difficulty and cosmetic
+          choices; it does not restore unfinished matches. There is no player
+          account or cloud game-save service in this edition.
         </p>
         <p>
           You can remove these records by clearing this site’s storage in your
@@ -60,10 +62,28 @@ export default function Page() {
         </p>
         <h2>Advertising</h2>
         <p>
-          Third-party advertising is not enabled. Before activating it, we will
-          update these disclosures and provide applicable privacy controls. The
-          browser edition does not use the mobile app’s billing or AdMob SDKs.
+          Free play may be supported by Google AdSense display ads and H5 Games
+          interstitial ads between games. Ads are only requested when
+          advertising is activated and the required consent setup is in place.
+          Google and its partners may process network and device information and
+          use cookies or similar technologies to deliver, measure, and prevent
+          fraud in ads, including non-personalized ads. Where required, Google’s
+          consent message lets you manage advertising choices. These choices are
+          separate from our anonymous usage statistics; declining ads does not
+          prevent play. We do not send our anonymous analytics counters to
+          Google.
         </p>
+        <p>
+          Use “Privacy & cookie settings” when available to revisit the consent
+          message. Browser Do Not Track and Global Privacy Control signals
+          disable our ad requests. Learn more about{" "}
+          <a href="https://policies.google.com/technologies/partner-sites">
+            how Google uses information from sites that use its services
+          </a>
+          . The browser edition does not use the mobile app’s billing or AdMob
+          SDKs.
+        </p>
+        <AdvertisingPrivacy />
         <h2>Contact and the publisher’s policy</h2>
         <p>
           Neurantra LLC publishes PuzzleCub. For broader company information,

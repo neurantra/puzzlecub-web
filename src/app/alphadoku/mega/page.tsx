@@ -1,3 +1,4 @@
+import { AdPlacement } from "../../_components/Advertising";
 import Link from "next/link";
 import { WebShell, AlphaIdentity } from "../../_components/WebShell";
 import MegaGate from "../../_game/MegaGate";
@@ -40,6 +41,7 @@ export default async function Page({
           with the full board, or focus on one box.
         </p>
         <MegaGate key={valid ?? "free"} week={valid} />
+        <AdPlacement gameplay />
       </main>
     </WebShell>
   );

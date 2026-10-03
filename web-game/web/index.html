@@ -42,7 +42,8 @@
     * https://docs.flutter.dev/platform-integration/web/initialization
   -->
   <script>window.addEventListener("flutter-first-frame", () => document.getElementById("loading")?.remove());</script>
-  <script>window.puzzlecubGameAction = completed => window.parent.postMessage({type: "puzzlecub:classic", completed: completed === true}, window.location.origin);</script>
+  <script src="/game-ads.js"></script>
+  <script>window.puzzlecubGameAction = completed => { window.puzzlecubAds?.markPlayed(); window.parent.postMessage({type: "puzzlecub:classic", completed: completed === true}, window.location.origin); };</script>
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>
