@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import PandaMascot from "./PandaMascot";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -11,7 +11,11 @@ const HOME_LINKS = [
 
 export type SiteHeaderVariant = "home" | "subpage";
 
-export function SiteHeader({ variant = "home" }: { variant?: SiteHeaderVariant }) {
+export function SiteHeader({
+  variant = "home",
+}: {
+  variant?: SiteHeaderVariant;
+}) {
   const [active, setActive] = useState<string | null>(null);
 
   useEffect(() => {
@@ -19,7 +23,7 @@ export function SiteHeader({ variant = "home" }: { variant?: SiteHeaderVariant }
     const observer = new IntersectionObserver(
       (entries) => {
         const visible = entries
-          .filter(e => e.isIntersecting)
+          .filter((e) => e.isIntersecting)
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
         if (visible) setActive(visible.target.id);
       },
@@ -40,14 +44,7 @@ export function SiteHeader({ variant = "home" }: { variant?: SiteHeaderVariant }
             href="/"
             className="flex items-center gap-3 transition-opacity hover:opacity-80"
           >
-            <Image
-              src="/puzzlecub/icon.webp"
-              alt=""
-              width={36}
-              height={36}
-              priority
-              className="h-9 w-9"
-            />
+            <PandaMascot />
             <span className="text-[17px] font-bold tracking-tight text-foreground">
               Puzzlecub
             </span>

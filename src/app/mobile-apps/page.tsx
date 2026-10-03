@@ -1,3 +1,4 @@
+import PandaMascot from "../_components/PandaMascot";
 import Image from "next/image";
 import { ChaturangStrip } from "../_components/ChaturangStrip";
 import { GameCard } from "../_components/GameCard";
@@ -6,7 +7,10 @@ import { SiteHeader } from "../_components/SiteHeader";
 import { StoreLinks } from "../_components/StoreLinks";
 import { StandaloneApps } from "../_components/StandaloneApps";
 import { GAMES } from "../_lib/games";
-export const metadata = { title: "PuzzleCub apps — Independent games by Neurantra", alternates: {canonical: "https://puzzlecub.app/"} };
+export const metadata = {
+  title: "PuzzleCub apps — Independent games by Neurantra",
+  alternates: { canonical: "https://puzzlecub.app/" },
+};
 export default function Home() {
   return (
     <div className="flex flex-1 flex-col">
@@ -15,6 +19,9 @@ export default function Home() {
         <section className="border-b border-line">
           <div className="section-wrap grid items-center gap-12 lg:grid-cols-[1.2fr_1fr]">
             <div>
+              <div className="app-cub-welcome">
+                <PandaMascot hero />
+              </div>
               <Image
                 src="/puzzlecub/icon.webp"
                 alt="Puzzlecub icon"

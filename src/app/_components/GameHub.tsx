@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import PandaMascot from "./PandaMascot";
 import { webGames, gamePreferenceKey, type WebGame } from "../_lib/web-games";
 
 export default function GameHub() {
@@ -22,11 +23,18 @@ export default function GameHub() {
   }
   return (
     <section className="games-welcome game-hub" id="games">
-      <span className="tag">SIX WAYS TO FOLLOW YOUR CURIOSITY</span>
-      <h1>
-        Make time for <em>play.</em>
-      </h1>
-      <p>A quick puzzle or a longer adventure. What are you in the mood for?</p>
+      <div className="cub-welcome">
+        <PandaMascot hero />
+        <div className="cub-welcome-copy">
+          <span className="tag">SIX WAYS TO FOLLOW YOUR CURIOSITY</span>
+          <h1>
+            Make time for <em>play.</em>
+          </h1>
+          <p>
+            A quick puzzle or a longer adventure. What are you in the mood for?
+          </p>
+        </div>
+      </div>
       <div className="game-picker" aria-label="Choose your game">
         {webGames.map((game) => (
           <button

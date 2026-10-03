@@ -1,3 +1,5 @@
+import Link from "next/link";
+import PandaMascot from "../_components/PandaMascot";
 import { authConfigured, isAdmin } from "../_lib/analytics/server";
 import Dashboard from "./Dashboard";
 import "./admin.css";
@@ -17,6 +19,10 @@ export default async function Admin({
   const authenticated = await isAdmin();
   return (
     <main className="admin-shell">
+      <Link href="/" className="brand admin-brand">
+        <PandaMascot />
+        puzzlecub.
+      </Link>
       {authenticated ? (
         <Dashboard />
       ) : (

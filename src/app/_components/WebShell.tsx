@@ -1,14 +1,13 @@
 import { ContentAdvertisement, AdvertisingPrivacy } from "./Advertising";
 import Link from "next/link";
+import PandaMascot from "./PandaMascot";
 import ModeCarousel from "./ModeCarousel";
 import Image from "next/image";
 export function WebHeader() {
   return (
     <header className="web-header">
       <Link href="/" className="brand">
-        <span className="brand-symbol">
-          p<span>c</span>
-        </span>
+        <PandaMascot />
         puzzlecub<span className="brand-dot">.</span>
       </Link>
       <nav aria-label="Main navigation">
@@ -27,6 +26,7 @@ export function WebFooter() {
     <footer className="web-footer">
       <div>
         <Link className="brand" href="/">
+          <PandaMascot />
           puzzlecub.
         </Link>
         <p>A little thought. A bright discovery.</p>

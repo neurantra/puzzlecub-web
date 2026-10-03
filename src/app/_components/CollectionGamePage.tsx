@@ -1,3 +1,4 @@
+import PandaMascot from "./PandaMascot";
 import Link from "next/link";
 import { WebShell } from "./WebShell";
 import { AdPlacement } from "./Advertising";
@@ -30,7 +31,9 @@ export default function CollectionGamePage({ slug }: { slug: string }) {
         className="play-page chaturang-play-page collection-play-page"
       >
         <div className="play-heading">
-          <Link href="/#games">← All games</Link>
+          <Link href="/#games" className="cub-game-link">
+            <PandaMascot />← All games
+          </Link>
           <nav>
             <Link href="#how-to-play">How to play</Link>
             <Link href="/privacy">Privacy</Link>

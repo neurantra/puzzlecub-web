@@ -1,3 +1,4 @@
+import PandaMascot from "../_components/PandaMascot";
 import Link from "next/link";
 import { WebShell } from "../_components/WebShell";
 import { AdPlacement } from "../_components/Advertising";
@@ -12,7 +13,9 @@ export default function Chaturang() {
     <WebShell>
       <main id="main" className="play-page chaturang-play-page">
         <div className="play-heading">
-          <Link href="/#games">← All games</Link>
+          <Link href="/#games" className="cub-game-link">
+            <PandaMascot />← All games
+          </Link>
           <nav>
             <Link href="#chaturang-rules">How to play</Link>
             <Link href="/privacy">Privacy</Link>

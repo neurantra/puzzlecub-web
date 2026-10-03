@@ -1,3 +1,4 @@
+import PandaMascot from "./PandaMascot";
 import { CHATURANG_URL } from "../_lib/games";
 
 export function SiteFooter() {
@@ -5,7 +6,8 @@ export function SiteFooter() {
   return (
     <footer className="mt-auto border-t border-line">
       <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-5 px-6 py-10 text-sm text-muted sm:flex-row sm:items-center sm:px-10">
-        <div className="flex items-baseline gap-3">
+        <div className="flex items-center gap-3">
+          <PandaMascot />
           <span className="text-[12px] font-bold tracking-[0.18em] uppercase text-foreground">
             Made by Neurantra
           </span>

@@ -109,19 +109,6 @@ button:focus-visible {
 .brand-dot {
   color: #be7520;
 }
-.brand-symbol {
-  font-size: 18px;
-  letter-spacing: -2px;
-  background: #166a5d;
-  color: #fffbe9;
-  border-radius: 11px;
-  padding: 9px 12px;
-  margin-right: 9px;
-  transform: rotate(-7deg);
-}
-.brand-symbol span {
-  color: #f2c865;
-}
 .web-header nav {
   display: flex;
   align-items: center;
@@ -1110,9 +1097,6 @@ select:focus-visible {
   .brand {
     font-size: 23px;
   }
-  .brand-symbol {
-    font-size: 15px;
-  }
   .web-header nav {
     gap: 20px;
     font-size: 12px;
@@ -1747,3 +1731,55 @@ select:focus-visible {
 .game-direct-links {display:flex;flex-wrap:wrap;justify-content:center;gap:12px 25px;font-size:13px;margin:26px 0 0}.game-direct-links a {text-decoration:underline;text-underline-offset:5px}
 @media(max-width:900px){.game-picker {grid-template-columns:repeat(3,minmax(0,1fr))}.featured-copy {padding:28px}}
 @media(max-width:700px){.game-hub {padding:32px 18px}.game-picker {gap:8px;margin-top:24px}.game-picker button {padding:12px 5px}.game-picker button[aria-pressed=true]{padding:11px 4px}.game-picker img {width:48px;height:48px}.game-picker strong{font-size:12px}.game-picker span{font-size:10px}.featured-game {grid-template-columns:1fr}.featured-copy {padding:28px 24px}.featured-art {min-height:260px;max-height:300px;grid-row:2}.featured-copy h2{margin-top:8px}.featured-copy small{margin-top:16px}}
+
+/* A curious cub, shared by both websites. Motion finishes after one short play. */
+.panda-mascot {
+  position: relative;
+  display: inline-block;
+  flex: 0 0 auto;
+  width: 52px;
+  height: 52px;
+  vertical-align: middle;
+}
+.panda-mascot img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.brand > .panda-mascot { margin-right: 8px; }
+body:has(.mega-play-page) .web-header .panda-mascot { width: 40px; height: 40px; }
+.panda-mascot-hero { width: 210px; height: 210px; }
+.panda-mascot-hero img { transform-origin: 50% 85%; animation: cub-puzzle-play 4.4s ease-in-out; }
+.panda-sparkle { position: absolute; top: 38%; right: 6%; color: #b67722; font-size: 24px; opacity: 0; animation: cub-discovery 4.4s ease-out; }
+.cub-welcome { display: flex; align-items: center; justify-content: center; gap: 24px; text-align: left; }
+.cub-welcome-copy { max-width: 650px; }
+.cub-welcome h1 { font-size: clamp(38px, 5.5vw, 68px); letter-spacing: -.055em; line-height: 1.12; margin: 18px 0; }
+.cub-welcome h1 em { font-style: normal; color: #226356; }
+.cub-welcome p { color: #576960; line-height: 1.7; margin: 0; }
+.game-hub { padding-top: 28px; }
+.cub-game-link { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+.cub-game-link .panda-mascot { width: 30px; height: 30px; }
+.admin-brand { width: fit-content; margin-bottom: 24px; }
+.app-cub-welcome { float: right; margin: -20px 0 8px 12px; }
+.app-cub-welcome .panda-mascot-hero { width: 150px; height: 150px; }
+@keyframes cub-puzzle-play {
+  0%, 100% { transform: rotate(0) translateY(0); }
+  20% { transform: rotate(-5deg) translateY(-3px); }
+  42% { transform: rotate(4deg); }
+  60% { transform: rotate(-3deg) translateY(-3px); }
+  78% { transform: rotate(2deg); }
+}
+@keyframes cub-discovery {
+  0%, 60%, 100% { opacity: 0; transform: scale(.4) rotate(-20deg); }
+  75% { opacity: 1; transform: scale(1) rotate(10deg); }
+}
+@media (max-width: 700px) {
+  .web-header .panda-mascot { width: 40px; height: 40px; }
+  .web-header .brand { font-size: 23px; }
+  .cub-welcome { flex-direction: column; gap: 0; text-align: center; }
+  .panda-mascot-hero { width: 120px; height: 120px; }
+  .cub-welcome h1 { margin: 12px 0; }
+  .cub-welcome .tag { font-size: 10px; }
+  .game-hub { padding-top: 12px; }
+  .classic-mobile-bar .cub-game-link { gap: 2px; }
+  .classic-mobile-bar .panda-mascot { width: 26px; height: 26px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .panda-mascot-hero img, .panda-sparkle { animation: none; }
+}
