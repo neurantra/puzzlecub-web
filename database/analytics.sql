@@ -70,7 +70,7 @@ begin
     on conflict(day,page) do update set views=d.views+p_views, plays=d.plays+p_plays,
       completions=d.completions+p_completions, active_seconds=d.active_seconds+p_seconds, play_seconds=d.play_seconds+p_play_seconds;
   if p_pulse then
-    game_id := case p_page when '/alphadoku/classic' then 'alphadoku-classic' when '/alphadoku/mega' then 'alphadoku-mega' when '/chaturang' then 'chaturang' else '' end;
+    game_id := case p_page when '/alphadoku/classic' then 'alphadoku-classic' when '/alphadoku/mega' then 'alphadoku-mega' when '/chaturang' then 'chaturang' when '/mazewords' then 'mazewords' when '/slide-and-sort' then 'slide-and-sort' when '/mapopia' then 'mapopia' when '/fillthejar' then 'fillthejar' else '' end;
     insert into puzzlecub_usage.aggregate_pulses as p(bucket,game,pulses)
       values(to_timestamp(floor(extract(epoch from now()) / 15) * 15),game_id,1)
       on conflict(bucket,game) do update set pulses=p.pulses+1;
@@ -83,7 +83,7 @@ returns jsonb language sql security invoker set search_path = '' as $$
 with filtered as (
   select * from puzzlecub_usage.aggregate_daily
   where day >= (now() at time zone 'UTC')::date - (least(greatest(p_days,1),90)-1)
-    and (p_game is null or page=case p_game when 'alphadoku-classic' then '/alphadoku/classic' when 'alphadoku-mega' then '/alphadoku/mega' when 'chaturang' then '/chaturang' else 'invalid' end)
+    and (p_game is null or page=case p_game when 'alphadoku-classic' then '/alphadoku/classic' when 'alphadoku-mega' then '/alphadoku/mega' when 'chaturang' then '/chaturang' when 'mazewords' then '/mazewords' when 'slide-and-sort' then '/slide-and-sort' when 'mapopia' then '/mapopia' when 'fillthejar' then '/fillthejar' else 'invalid' end)
 ), daily as (
   select dates.day::date as day, coalesce(sum(f.views),0) as views, coalesce(sum(f.plays),0) as plays,
     coalesce(sum(f.completions),0) as completions, coalesce(sum(f.active_seconds),0) as active_seconds, coalesce(sum(f.play_seconds),0) as play_seconds
@@ -96,7 +96,7 @@ with filtered as (
 select jsonb_build_object(
   'views',coalesce(sum(views),0), 'plays',coalesce(sum(plays),0), 'completions',coalesce(sum(completions),0),
   'activeSeconds',coalesce(sum(active_seconds),0), 'playSeconds',coalesce(sum(play_seconds),0),
-  'gameViews',coalesce(sum(views) filter(where page in ('/alphadoku/classic','/alphadoku/mega','/chaturang')),0),
+  'gameViews',coalesce(sum(views) filter(where page in ('/alphadoku/classic','/alphadoku/mega','/chaturang','/mazewords','/slide-and-sort','/mapopia','/fillthejar')),0),
   'since',(select since from puzzlecub_usage.aggregate_config limit 1),
   'onlineEstimate',(select coalesce(round(sum(pulses)/3.0),0) from puzzlecub_usage.aggregate_pulses where bucket >= to_timestamp(floor(extract(epoch from now())/15)*15)-interval '45 seconds' and bucket < to_timestamp(floor(extract(epoch from now())/15)*15) and (p_game is null or game=p_game)),
   'daily',coalesce((select jsonb_agg(jsonb_build_object('day',day,'views',views,'plays',plays,'completions',completions,'activeSeconds',active_seconds,'playSeconds',play_seconds) order by day) from daily),'[]'::jsonb),

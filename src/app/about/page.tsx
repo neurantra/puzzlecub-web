@@ -17,19 +17,26 @@ export default function Page() {
           We make puzzles built around simple rules, clear feedback, and the
           pleasure of figuring something out.
         </p>
-        <h2>Our first browser game: Alphadoku</h2>
+        <h2>Choose your kind of play</h2>
         <p>
-          Classic turns Sudoku into a word-and-logic puzzle, with nine distinct
-          letters and one hidden line. Mega offers a quieter, larger challenge
-          using A–Y in a 25×25 grid. Both are unlimited, with no account or
-          purchase required.
+          Our browser collection brings together Chaturang, Alphadoku, Maze
+          Words, Slide &amp; Sort, Mapopia, and Fill the Jar. Explore strategy,
+          words, geography, letters, numbers, and shapes. Every game is free to
+          play, with no account or purchase required.
+        </p>
+        <p>
+          Choose a game on the homepage, then open its dedicated play page. This
+          browser remembers your choice. Settings and saved progress stay on
+          your device; clearing browser data removes them.
         </p>
         <h2>Web games and mobile apps</h2>
         <p>
           The browser collection lives at puzzlecub.com. Our mobile app
-          directory lives at puzzlecub.app. The existing PuzzleCub
-          mobile app and sibling games remain separate products; their purchases
-          and saved progress do not transfer to this website.
+          directory lives at puzzlecub.app. The existing PuzzleCub mobile app
+          remains a separate product; its bundled games are not part of the web
+          collection. Our standalone mobile editions remain separate products,
+          and their purchases and saved progress do not transfer to this
+          website.
         </p>
         <h2>How we check our puzzles</h2>
         <p>

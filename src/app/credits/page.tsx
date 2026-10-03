@@ -14,10 +14,11 @@ export default function Page() {
         <h2>Website and game frameworks</h2>
         <p>
           Next.js and React power the website and Mega interface. Flutter and
-          Dart power Classic and Chaturang, sharing their mobile games’ logic
-          and artwork. Classic’s Settings → About → View all licenses and
-          notices contains its dependency notices. Chaturang’s About → Licenses
-          includes its dependency and font notices.
+          Dart power Classic, Chaturang, Maze Words, Slide &amp; Sort, Mapopia,
+          and Fill the Jar, sharing their mobile games’ logic and artwork.
+          Classic’s Settings → About → View all licenses and notices contains
+          its dependency notices. Chaturang’s About → Licenses includes its
+          dependency and font notices.
         </p>
         <h2>Language resources</h2>
         <p>
@@ -35,6 +36,17 @@ export default function Page() {
             ),
           )}
         </ul>
+        <h2>Maps and multilingual word packs</h2>
+        <p>
+          Mapopia preserves the map data and attribution bundled with its mobile
+          edition. Maze Words includes its original mazes and optional language
+          packs, with their source and modification notices available in the
+          game and in the{" "}
+          <a href="/maze-packs/licenses/index.html">
+            language-pack license directory
+          </a>
+          .
+        </p>
         <h2>Typography and icons</h2>
         <p>
           The website uses Plus Jakarta Sans. Classic includes openly licensed

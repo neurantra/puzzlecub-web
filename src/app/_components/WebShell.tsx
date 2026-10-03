@@ -13,8 +13,8 @@ export function WebHeader() {
       </Link>
       <nav aria-label="Main navigation">
         <Link href="/#games">Games</Link>
-        <Link href="/challenges">Challenges</Link>
-        <Link href="/learn">Learn</Link>
+        <Link href="/about">About</Link>
+
         <Link href="/mobile-apps" className="nav-apps">
           Our apps ↗
         </Link>

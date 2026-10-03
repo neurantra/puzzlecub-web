@@ -1,0 +1,294 @@
+{
+  "schemaVersion": 1,
+  "packs": [
+    {
+      "id": "en",
+      "name": "English",
+      "revision": 2,
+      "minReader": 4,
+      "bytes": 709981,
+      "sha256": "40334749019aa3e97b15d469a02c7496623c0be24704f0f7cc5535b0e783e03c",
+      "path": "packs/en/2.json",
+      "access": "free",
+      "reviewStatus": "pilot-unreviewed",
+      "mazeCount": 450,
+      "difficultyCounts": {
+        "easy": 150,
+        "medium": 150,
+        "hard": 150
+      }
+    },
+    {
+      "id": "es",
+      "name": "Español",
+      "revision": 3,
+      "minReader": 4,
+      "bytes": 681443,
+      "sha256": "75b6e7b7c1e91d8b0882e36cc83ea454e43223e825359d6693ad76abfe114c79",
+      "path": "packs/es/3.json",
+      "access": "free",
+      "reviewStatus": "pilot-unreviewed",
+      "mazeCount": 450,
+      "difficultyCounts": {
+        "easy": 150,
+        "medium": 150,
+        "hard": 150
+      }
+    },
+    {
+      "id": "ta",
+      "name": "தமிழ் · Tamil",
+      "revision": 3,
+      "minReader": 2,
+      "bytes": 717761,
+      "sha256": "2d29535f6a46e7d1541718644d8b47caa127e2ba8c137db388338c607ec68b68",
+      "path": "packs/ta/3.json",
+      "access": "free",
+      "reviewStatus": "pilot-unreviewed",
+      "mazeCount": 450,
+      "difficultyCounts": {
+        "easy": 150,
+        "medium": 150,
+        "hard": 150
+      }
+    },
+    {
+      "id": "hi",
+      "name": "हिन्दी · Hindi",
+      "revision": 3,
+      "minReader": 4,
+      "bytes": 693392,
+      "sha256": "26dcd20b124a5d95ad098d30d5f868a484b35305d561cc800cf86688cbb018c5",
+      "path": "packs/hi/3.json",
+      "access": "free",
+      "reviewStatus": "pilot-unreviewed",
+      "mazeCount": 450,
+      "difficultyCounts": {
+        "easy": 150,
+        "medium": 150,
+        "hard": 150
+      }
+    },
+    {
+      "id": "fr",
+      "name": "Français",
+      "revision": 2,
+      "minReader": 4,
+      "bytes": 660065,
+      "sha256": "f7c6515de637d9386cdb84f69f197c9f679dc7e23537094d8f036df96eaea5d8",
+      "path": "packs/fr/2.json",
+      "access": "free",
+      "reviewStatus": "pilot-unreviewed",
+      "mazeCount": 450,
+      "difficultyCounts": {
+        "easy": 150,
+        "medium": 150,
+        "hard": 150
+      }
+    },
+    {
+      "id": "de",
+      "name": "Deutsch",
+      "revision": 2,
+      "minReader": 4,
+      "bytes": 661070,
+      "sha256": "9e419c78c13c90236b3255919775535635c0b2f4a50beefb3417c4357a59d5a7",
+      "path": "packs/de/2.json",
+      "access": "free",
+      "reviewStatus": "pilot-unreviewed",
+      "mazeCount": 450,
+      "difficultyCounts": {
+        "easy": 150,
+        "medium": 150,
+        "hard": 150
+      }
+    },
+    {
+      "id": "pt-BR",
+      "name": "Português · Brasil",
+      "revision": 2,
+      "minReader": 4,
+      "bytes": 674455,
+      "sha256": "271b72d777bb68f891ca2153d545457a6e24fa5dff61205e7bfae74e7e6b972a",
+      "path": "packs/pt-BR/2.json",
+      "access": "free",
+      "reviewStatus": "pilot-unreviewed",
+      "mazeCount": 450,
+      "difficultyCounts": {
+        "easy": 150,
+        "medium": 150,
+        "hard": 150
+      }
+    },
+    {
+      "id": "bn",
+      "name": "বাংলা · Bengali",
+      "revision": 2,
+      "minReader": 4,
+      "bytes": 695324,
+      "sha256": "97a1d259f53fd750c51af0160a27348b90089efced590c143dbbeac69335b709",
+      "path": "packs/bn/2.json",
+      "access": "free",
+      "reviewStatus": "pilot-unreviewed",
+      "mazeCount": 450,
+      "difficultyCounts": {
+        "easy": 150,
+        "medium": 150,
+        "hard": 150
+      }
+    },
+    {
+      "id": "ja",
+      "name": "日本語 · Hiragana",
+      "revision": 2,
+      "minReader": 4,
+      "bytes": 640483,
+      "sha256": "72a48b3df86b89c48928be7e99be250cb8012ce605669bd65f1e4cf9942f6668",
+      "path": "packs/ja/2.json",
+      "access": "free",
+      "reviewStatus": "pilot-unreviewed",
+      "mazeCount": 450,
+      "difficultyCounts": {
+        "easy": 150,
+        "medium": 150,
+        "hard": 150
+      }
+    },
+    {
+      "id": "it",
+      "revision": 1,
+      "name": "Italiano · Italian",
+      "minReader": 5,
+      "bytes": 681078,
+      "sha256": "6dbe766e900cd0d60d93a82f7e8ec6fc3020e103eda31172d233f9b448005314",
+      "path": "packs/it/1.json",
+      "access": "free",
+      "reviewStatus": "pilot-unreviewed",
+      "mazeCount": 450,
+      "difficultyCounts": {
+        "easy": 150,
+        "medium": 150,
+        "hard": 150
+      }
+    },
+    {
+      "id": "nl",
+      "revision": 1,
+      "name": "Nederlands · Dutch",
+      "minReader": 5,
+      "bytes": 668090,
+      "sha256": "0408a9fde8213f3085ce207cdb7821f3aab4f6bdd7c56ef64885b4404769f249",
+      "path": "packs/nl/1.json",
+      "access": "free",
+      "reviewStatus": "pilot-unreviewed",
+      "mazeCount": 450,
+      "difficultyCounts": {
+        "easy": 150,
+        "medium": 150,
+        "hard": 150
+      }
+    },
+    {
+      "id": "te",
+      "revision": 1,
+      "name": "తెలుగు · Telugu",
+      "minReader": 5,
+      "bytes": 736454,
+      "sha256": "5aee2756f80e8fd077f03131e8077c4c1955109846c6da22f2bce53606173ec3",
+      "path": "packs/te/1.json",
+      "access": "free",
+      "reviewStatus": "pilot-unreviewed",
+      "mazeCount": 450,
+      "difficultyCounts": {
+        "easy": 150,
+        "medium": 150,
+        "hard": 150
+      }
+    },
+    {
+      "id": "kn",
+      "revision": 1,
+      "name": "ಕನ್ನಡ · Kannada",
+      "minReader": 5,
+      "bytes": 708657,
+      "sha256": "2b0b7bad4cddb8c9a5a04294b0ccc49932b360ce8a545fa68ebe44e7d2d1b987",
+      "path": "packs/kn/1.json",
+      "access": "free",
+      "reviewStatus": "pilot-unreviewed",
+      "mazeCount": 450,
+      "difficultyCounts": {
+        "easy": 150,
+        "medium": 150,
+        "hard": 150
+      }
+    },
+    {
+      "id": "ml",
+      "revision": 1,
+      "name": "മലയാളം · Malayalam",
+      "minReader": 5,
+      "bytes": 715653,
+      "sha256": "5cdb281e2994c701a24ba91b619ce3c8ae96c8065233d29f20dd3a6eaf174859",
+      "path": "packs/ml/1.json",
+      "access": "free",
+      "reviewStatus": "pilot-unreviewed",
+      "mazeCount": 450,
+      "difficultyCounts": {
+        "easy": 150,
+        "medium": 150,
+        "hard": 150
+      }
+    },
+    {
+      "id": "gu",
+      "revision": 1,
+      "name": "ગુજરાતી · Gujarati",
+      "minReader": 5,
+      "bytes": 687418,
+      "sha256": "b6c94952bdb2190d5ef23d7ea528542d1fd4c8cc400a3c34e830be41274802fb",
+      "path": "packs/gu/1.json",
+      "access": "free",
+      "reviewStatus": "pilot-unreviewed",
+      "mazeCount": 450,
+      "difficultyCounts": {
+        "easy": 150,
+        "medium": 150,
+        "hard": 150
+      }
+    },
+    {
+      "id": "mr",
+      "revision": 1,
+      "name": "मराठी · Marathi",
+      "minReader": 5,
+      "bytes": 685763,
+      "sha256": "b8bae4f69e2dde0221feb7d369cdad9211510d56bbb15ce74a17e36ed58b73ae",
+      "path": "packs/mr/1.json",
+      "access": "free",
+      "reviewStatus": "pilot-unreviewed",
+      "mazeCount": 450,
+      "difficultyCounts": {
+        "easy": 150,
+        "medium": 150,
+        "hard": 150
+      }
+    },
+    {
+      "id": "pa",
+      "revision": 1,
+      "name": "ਪੰਜਾਬੀ · Punjabi (Gurmukhi)",
+      "minReader": 5,
+      "bytes": 673631,
+      "sha256": "45dc2a2afd2c422dda37ed5a7d9150945dc70a567cd5d708f7fa8a812892c4f4",
+      "path": "packs/pa/1.json",
+      "access": "free",
+      "reviewStatus": "pilot-unreviewed",
+      "mazeCount": 450,
+      "difficultyCounts": {
+        "easy": 150,
+        "medium": 150,
+        "hard": 150
+      }
+    }
+  ]
+}

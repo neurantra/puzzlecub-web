@@ -1,5 +1,10 @@
 export const gameNames: Record<string, string> = {
   chaturang: "Chaturang",
+  mazewords: "Maze Words",
+  "slide-and-sort": "Slide & Sort",
+  mapopia: "Mapopia",
+  fillthejar: "Fill the Jar",
+
   "alphadoku-classic": "Classic Alphadoku",
   "alphadoku-mega": "Mega Alphadoku",
 };
@@ -8,6 +13,11 @@ export const gameNames: Record<string, string> = {
 export const pageNames: Record<string, string> = {
   "/": "Home",
   "/chaturang": "Chaturang",
+  "/mazewords": "Maze Words",
+  "/slide-and-sort": "Slide & Sort",
+  "/mapopia": "Mapopia",
+  "/fillthejar": "Fill the Jar",
+
   "/alphadoku": "Alphadoku overview",
   "/alphadoku/classic": "Classic Alphadoku",
   "/alphadoku/mega": "Mega Alphadoku",
@@ -31,6 +41,10 @@ export function pageCategory(path: string) {
   return null;
 }
 export function gameForPage(page: string) {
+  if (
+    ["/mazewords", "/slide-and-sort", "/mapopia", "/fillthejar"].includes(page)
+  )
+    return page.slice(1);
   return page === "/chaturang"
     ? "chaturang"
     : page === "/alphadoku/classic"

@@ -1,0 +1,62 @@
+name: mapopia
+description: 'Mapopia: Fit the pieces. Discover the world.'
+publish_to: none
+version: 1.1.0+4
+environment:
+  sdk: ^3.11.5
+dependencies:
+  flutter:
+    sdk: flutter
+  shared_preferences: ^2.5.5
+  audioplayers: ^6.6.0
+  google_mobile_ads: ^9.1.0
+  purchases_flutter: ^10.13.2
+  url_launcher: ^6.3.2
+  http: ^1.6.0
+  flutter_secure_storage: ^11.2.0
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.4
+  flutter_native_splash: ^2.4.7
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/geo/
+    - assets/art/
+    - assets/fonts/OFL.txt
+    - assets/sounds/
+  fonts:
+    - family: PlusJakartaSans
+      fonts:
+        - asset: assets/fonts/PlusJakartaSans-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/PlusJakartaSans-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/PlusJakartaSans-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/PlusJakartaSans-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/PlusJakartaSans-ExtraBold.ttf
+          weight: 800
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: assets/art/icon.png
+  remove_alpha_ios: true
+  adaptive_icon_background: '#102F3C'
+  adaptive_icon_foreground: assets/art/icon.png
+  web:
+    generate: true
+    image_path: assets/art/icon.png
+    background_color: '#102F3C'
+    theme_color: '#102F3C'
+
+flutter_native_splash:
+  color: '#F7F3E9'
+  image: assets/art/icon.png
+  android_12:
+    color: '#F7F3E9'
+    image: assets/art/icon.png

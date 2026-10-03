@@ -189,3 +189,36 @@ test("Chaturang counters and game filters stay separate from Alphadoku", async (
     "chaturang",
   );
 });
+
+for (const game of ["mazewords", "slide-and-sort", "mapopia", "fillthejar"]) {
+  test(`${game} has independent play counters and online estimates`, async () => {
+    await record({
+      page: `/${game}`,
+      views: 1,
+      plays: 1,
+      completions: 1,
+      seconds: 20,
+      playSeconds: 15,
+      pulse: true,
+    });
+    const data = await report(7, game);
+    assert.equal(data.views, 1);
+    assert.equal(data.gameViews, 1);
+    assert.equal(data.plays, 1);
+    assert.equal(data.completions, 1);
+    assert.equal(data.playSeconds, 15);
+    assert.deepEqual(
+      data.pages.map((row) => row.page),
+      [`/${game}`],
+    );
+    assert.equal(
+      (
+        await db.query(
+          "select game from puzzlecub_usage.aggregate_pulses where game=$1",
+          [game],
+        )
+      ).rows[0].game,
+      game,
+    );
+  });
+}

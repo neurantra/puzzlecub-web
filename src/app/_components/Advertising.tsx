@@ -1,5 +1,6 @@
 "use client";
 import Script from "next/script";
+import { useGameAdsAllowed } from "./useGameAdsAllowed";
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 
@@ -25,7 +26,8 @@ export async function betweenGames() {
 }
 export function AdvertisingScript() {
   const path = usePathname();
-  if (path.startsWith("/admin")) return null;
+  const allowed = useGameAdsAllowed(path);
+  if (path.startsWith("/admin") || !allowed) return null;
   return (
     <Script
       src="/game-ads.js"
@@ -38,6 +40,7 @@ export function AdvertisingScript() {
 }
 export function AdPlacement({ gameplay = false }: { gameplay?: boolean }) {
   const path = usePathname();
+  const allowed = useGameAdsAllowed(path);
   const [config, setConfig] = useState<AdConfig | null>(null);
   const ref = useRef<HTMLModElement>(null);
   const kind = gameplay ? "gameplay" : "content";
@@ -57,14 +60,15 @@ export function AdPlacement({ gameplay = false }: { gameplay?: boolean }) {
   }, []);
   useEffect(() => {
     function request() {
-      if (ref.current && config?.slots[kind])
+      if (allowed && ref.current && config?.slots[kind])
         window.puzzlecubAds?.display(ref.current, config.slots[kind]);
     }
     request();
     window.addEventListener("puzzlecub:ads-ready", request);
     return () => window.removeEventListener("puzzlecub:ads-ready", request);
-  }, [config, kind, path]);
+  }, [config, kind, path, allowed]);
   if (
+    !allowed ||
     !config?.enabled ||
     !config.slots[kind] ||
     (typeof navigator !== "undefined" &&

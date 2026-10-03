@@ -265,3 +265,22 @@ play time. Hints remain free and are not gated by rewarded ads.
 No accounts, cloud saves, public leaderboard or push/email notifications are
 implemented. Browser storage can be cleared and progress is device-local. Classic
 can continue in an already-loaded tab offline; this is not an installable offline PWA.
+
+## Web game collection
+
+The homepage is a six-game selector; it remembers the selected game locally and links to dedicated play pages:
+
+- `/chaturang` — strategy against AI.
+- `/alphadoku` — Classic and Mega, with the tutorial and challenge discovery content.
+- `/mazewords` — timed/relaxed word mazes and daily trails.
+- `/slide-and-sort` — letters/numbers, solo or Pip AI.
+- `/mapopia` — all 18 maps, free hints, local expeditions.
+- `/fillthejar` — all 100 campaign levels; picture themes and extras use earned coins.
+
+The original PuzzleCub mobile bundle is not part of the web-port collection. Its listing remains in the mobile app directory.
+
+The four additional Flutter source snapshots were imported from `~/dev/mazewords-app`, `~/dev/slide-and-sort-app`, `~/dev/mapopia-app`, and `~/dev/fillthejar-app/mobile`. Their web-specific changes live in this repository; the mobile sources are unchanged. Each snapshot contains its game logic, UI, assets, dependency lockfile, and tests. Rebuild with `npm run build:collection`; commit the generated `public/*-game` directories and `public/maze-packs` together with source changes. Vercel serves these precompiled bundles and does not need Flutter. `npm run build` verifies fingerprints to catch stale bundles.
+
+These editions have no purchases, paid tiers, Firebase accounts, or shared coin transfers. SharedPreferences uses a separate per-game prefix so sound and progress cannot collide. Maze Words packs download from this site's `/maze-packs/` path with their existing checksum validation. H5 breaks use the existing ad configuration and only occur between rounds, never on a first launch or in the middle of play. Slide & Sort pauses music during a break. The three games with mobile age declarations retain that local setting; unknown/protected profiles do not request ads on their gameplay pages.
+
+The new game actions use the existing anonymous aggregate analytics. Apply `database/analytics.sql` to update game filtering and online estimates when deploying these routes. No player identity or birth year is included in these events.

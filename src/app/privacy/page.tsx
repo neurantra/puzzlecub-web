@@ -14,7 +14,14 @@ export default function Page() {
           browser. It uses that data to resume play and avoid repeating Classic
           targets. Chaturang stores local statistics, difficulty and cosmetic
           choices; it does not restore unfinished matches. There is no player
-          account or cloud game-save service in this edition.
+          account or cloud game-save service in this edition. The homepage
+          remembers your selected game. Maze Words, Slide &amp; Sort, Mapopia,
+          and Fill the Jar keep their own settings and progress separately. Maze
+          Words, Slide &amp; Sort, and Fill the Jar also keep a local birth-year
+          declaration to select a protected, ad-free experience for younger
+          players. The birth year is not sent to our analytics or ad providers.
+          Their unknown or protected profiles do not request ads on the game
+          page.
         </p>
         <p>
           You can remove these records by clearing this site’s storage in your

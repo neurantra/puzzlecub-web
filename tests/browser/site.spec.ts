@@ -6,8 +6,15 @@ test("homepage discovery and mobile layout", async ({ page }) => {
       name: "Make time for play.",
     }),
   ).toBeVisible();
-  await page.getByRole("button", { name: "E", exact: true }).click();
-  await expect(page.getByRole("status")).toContainText("Exactly");
+  await expect(page.locator(".game-picker button")).toHaveCount(6);
+  await page.getByRole("button", { name: "Mapopia Geography puzzles" }).click();
+  await expect(
+    page.getByRole("link", { name: "Play Mapopia" }),
+  ).toHaveAttribute("href", "/mapopia");
+  await page.reload();
+  await expect(
+    page.getByRole("button", { name: "Mapopia Geography puzzles" }),
+  ).toHaveAttribute("aria-pressed", "true");
   await page.screenshot({
     path: "test-results/home-desktop.png",
     fullPage: true,
@@ -18,9 +25,11 @@ test("homepage discovery and mobile layout", async ({ page }) => {
     path: "test-results/home-mobile.png",
     fullPage: true,
   });
+  await page.goto("/alphadoku");
+  await page.getByRole("button", { name: "E", exact: true }).click();
+  await expect(page.getByRole("status")).toContainText("Exactly");
   await page
-    .getByRole("navigation", { name: "Main navigation" })
-    .getByRole("link", { name: "Learn" })
+    .getByRole("link", { name: "Explore the technique library" })
     .click();
   await expect(
     page.getByRole("heading", { name: "A little logic goes a long way." }),
@@ -220,12 +229,13 @@ test("Mega completes, counts the win once, and plays again", async ({
 });
 test("Classic daily board is reproducible and isolated from free play", async ({
   browser,
+  baseURL,
 }) => {
   const contexts = [await browser.newContext(), await browser.newContext()];
   const boards = [];
   for (const context of contexts) {
     const page = await context.newPage();
-    await page.goto("http://127.0.0.1:3127/alphadoku/classic?day=2026-10-02");
+    await page.goto(`${baseURL}/alphadoku/classic?day=2026-10-02`);
     const f = page.frameLocator("iframe");
     await expect(
       f.getByRole("button", { name: "Play Medium", exact: true }),

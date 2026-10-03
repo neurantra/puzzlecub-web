@@ -1,0 +1,129 @@
+name: maze_words
+description: "Maze Words: Run the maze. Find the words."
+publish_to: none
+version: 1.1.1+5
+environment:
+  sdk: ^3.11.5
+dependencies:
+  flutter:
+    sdk: flutter
+  http: ^1.6.0
+  crypto: ^3.0.7
+  characters: ^1.4.1
+  path_provider: ^2.1.6
+  shared_preferences: ^2.5.5
+  audioplayers: ^6.6.0
+  url_launcher: ^6.3.2
+  firebase_core: ^4.8.0
+  firebase_crashlytics: ^5.2.1
+  firebase_auth: ^6.6.1
+  firebase_database: ^12.5.0
+  google_mobile_ads: ^5.3.0
+  purchases_flutter: ^10.13.2
+dev_dependencies:
+  integration_test:
+    sdk: flutter
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.4
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/regular_vocabulary.json
+    - assets/maze/
+    - assets/pack_catalog.json
+    - assets/fonts/NotoSansTamil-OFL.txt
+    - assets/fonts/NotoSansDevanagari-OFL.txt
+    - assets/fonts/NotoSansBengali-OFL.txt
+    - assets/fonts/NotoSansJP-OFL.txt
+    - assets/fonts/NotoSansTelugu-OFL.txt
+    - assets/fonts/NotoSansKannada-OFL.txt
+    - assets/fonts/NotoSansMalayalam-OFL.txt
+    - assets/fonts/NotoSansGujarati-OFL.txt
+    - assets/fonts/NotoSansGurmukhi-OFL.txt
+    - assets/sounds/
+  fonts:
+    - family: PlusJakartaSans
+      fonts:
+        - asset: assets/fonts/PlusJakartaSans-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/PlusJakartaSans-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/PlusJakartaSans-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/PlusJakartaSans-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/PlusJakartaSans-ExtraBold.ttf
+          weight: 800
+    - family: NotoSansTamil
+      fonts:
+        - asset: assets/fonts/NotoSansTamil-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/NotoSansTamil-Bold.ttf
+          weight: 700
+    - family: NotoSansDevanagari
+      fonts:
+        - asset: assets/fonts/NotoSansDevanagari-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/NotoSansDevanagari-Bold.ttf
+          weight: 700
+
+    - family: NotoSansBengali
+      fonts:
+        - asset: assets/fonts/NotoSansBengali-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/NotoSansBengali-Bold.ttf
+          weight: 700
+    - family: NotoSansJP
+      fonts:
+        - asset: assets/fonts/NotoSansJP.ttf
+
+    - family: NotoSansTelugu
+      fonts:
+        - asset: assets/fonts/NotoSansTelugu-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/NotoSansTelugu-Bold.ttf
+          weight: 700
+
+    - family: NotoSansKannada
+      fonts:
+        - asset: assets/fonts/NotoSansKannada-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/NotoSansKannada-Bold.ttf
+          weight: 700
+
+    - family: NotoSansMalayalam
+      fonts:
+        - asset: assets/fonts/NotoSansMalayalam-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/NotoSansMalayalam-Bold.ttf
+          weight: 700
+
+    - family: NotoSansGujarati
+      fonts:
+        - asset: assets/fonts/NotoSansGujarati-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/NotoSansGujarati-Bold.ttf
+          weight: 700
+
+    - family: NotoSansGurmukhi
+      fonts:
+        - asset: assets/fonts/NotoSansGurmukhi-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/NotoSansGurmukhi-Bold.ttf
+          weight: 700
+
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: branding/icon.png
+  remove_alpha_ios: true
+  adaptive_icon_background: "#163E3B"
+  adaptive_icon_foreground: branding/icon.png
+  web:
+    generate: true
+    image_path: branding/icon.png
+    background_color: "#F8F5EC"
+    theme_color: "#146C60"

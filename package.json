@@ -8,11 +8,12 @@
     "start": "next start",
     "lint": "eslint",
     "build:classic": "./scripts/build-classic.sh",
-    "build:all": "npm run build:classic && npm run build:chaturang && npm run build",
+    "build:all": "npm run build:classic && npm run build:chaturang && npm run build:collection && npm run build",
     "test": "node --test tests/*.test.mjs",
     "test:e2e": "playwright test",
-    "prebuild": "node scripts/classic-fingerprint.mjs && node scripts/chaturang-fingerprint.mjs",
-    "build:chaturang": "./scripts/build-chaturang.sh"
+    "prebuild": "node scripts/classic-fingerprint.mjs && node scripts/chaturang-fingerprint.mjs && node scripts/collection-fingerprint.mjs",
+    "build:chaturang": "./scripts/build-chaturang.sh",
+    "build:collection": "./scripts/build-collection.sh"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.2.0",

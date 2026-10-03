@@ -4,6 +4,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     "",
     "/chaturang",
+    "/mazewords",
+    "/slide-and-sort",
+    "/mapopia",
+    "/fillthejar",
+
     "/alphadoku",
     "/alphadoku/classic",
     "/alphadoku/mega",

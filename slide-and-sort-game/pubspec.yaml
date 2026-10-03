@@ -1,0 +1,48 @@
+name: arrange_alphabets
+description: 'Arrange Alphabets — little letters, big smiles.'
+publish_to: none
+version: 1.0.0+1
+environment:
+  sdk: ^3.11.5
+dependencies:
+  flutter:
+    sdk: flutter
+  url_launcher: ^6.3.2
+  shared_preferences: ^2.5.5
+  audioplayers: ^6.6.0
+  google_mobile_ads: ^5.3.0
+dev_dependencies:
+  url_launcher_platform_interface: ^2.3.2
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.4
+  shared_preferences_platform_interface: ^2.4.1
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/app-icon.png
+    - assets/sounds/
+    - assets/fonts/OFL.txt
+  fonts:
+    - family: PlusJakartaSans
+      fonts:
+        - asset: assets/fonts/PlusJakartaSans-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/PlusJakartaSans-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/PlusJakartaSans-ExtraBold.ttf
+          weight: 800
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: docs/previews/icon.png
+  remove_alpha_ios: true
+  adaptive_icon_background: '#FFFBEE'
+  adaptive_icon_foreground: docs/previews/icon.png
+  web:
+    generate: true
+    image_path: docs/previews/icon.png
+    background_color: '#FFFBEE'
+    theme_color: '#217D77'

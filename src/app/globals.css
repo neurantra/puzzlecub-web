@@ -1731,3 +1731,19 @@ select:focus-visible {
   .chaturang-play-page > p { display: none; }
   .chaturang-play-page > .play-heading { position: sticky; top: 0; z-index: 20; height: 50px; margin: 0; background: #f8f5ec; font-size: 12px; }
 }
+
+/* The web collection shares one selector; each game keeps its own play page. */
+.game-picker {display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;margin:36px 0 24px}
+.game-picker button {font:inherit;cursor:pointer;display:flex;align-items:center;flex-direction:column;gap:10px;padding:18px 8px;border:1px solid #dcded3;border-radius:20px;background:#fffdf7;color:#23443d;transition:background .15s,border-color .15s}
+.game-picker button[aria-pressed=true] {background:#e6eee0;border:2px solid #256658;padding:17px 7px}
+.game-picker button:hover {background:#edf1e6}
+.game-picker img {border-radius:16px;object-fit:cover}
+.game-picker strong {font-size:14px}.game-picker span {font-size:11px;color:#5c6c62}
+.featured-game {display:grid;grid-template-columns:1fr 1fr;overflow:hidden;border-radius:28px;background:#fffdf8;border:1px solid #dcded3;text-align:left;min-height:430px}
+.featured-copy {padding:42px;align-self:center}.featured-copy h2 {font-size:clamp(32px,4vw,52px);letter-spacing:-2px;margin:12px 0;color:var(--game-color)}
+.featured-copy h3 {font-size:21px;font-weight:500;line-height:1.4;margin:0 0 16px}.featured-copy p {font-size:16px;line-height:1.8;margin:0 0 24px}
+.featured-copy small {display:block;font-size:12px;line-height:1.7;margin-top:24px;color:#637168}
+.featured-art {position:relative;background:#e9eee3;min-height:400px;display:grid;place-items:center}.featured-art img {object-fit:contain;padding:16px}.featured-court img {object-fit:cover;padding:0}
+.game-direct-links {display:flex;flex-wrap:wrap;justify-content:center;gap:12px 25px;font-size:13px;margin:26px 0 0}.game-direct-links a {text-decoration:underline;text-underline-offset:5px}
+@media(max-width:900px){.game-picker {grid-template-columns:repeat(3,minmax(0,1fr))}.featured-copy {padding:28px}}
+@media(max-width:700px){.game-hub {padding:32px 18px}.game-picker {gap:8px;margin-top:24px}.game-picker button {padding:12px 5px}.game-picker button[aria-pressed=true]{padding:11px 4px}.game-picker img {width:48px;height:48px}.game-picker strong{font-size:12px}.game-picker span{font-size:10px}.featured-game {grid-template-columns:1fr}.featured-copy {padding:28px 24px}.featured-art {min-height:260px;max-height:300px;grid-row:2}.featured-copy h2{margin-top:8px}.featured-copy small{margin-top:16px}}

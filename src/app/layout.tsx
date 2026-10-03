@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://puzzlecub.com"),
   title: "PuzzleCub — Free puzzles and strategy games.",
   description:
-    "Play Chaturang against AI and Classic or Mega Alphadoku free in your browser. Ancient strategy, letter Sudoku, and fresh puzzle challenges.",
+    "Play Chaturang, Alphadoku, Maze Words, Slide & Sort, Mapopia, and Fill the Jar free in your browser. Six games, no account needed.",
 };
 
 export default function RootLayout({

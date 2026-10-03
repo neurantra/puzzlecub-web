@@ -171,7 +171,9 @@ export default function UsageAnalytics() {
       }
       if (
         event.data?.type !==
-        (game === "chaturang" ? "puzzlecub:chaturang" : "puzzlecub:classic")
+        (game === "alphadoku-classic"
+          ? "puzzlecub:classic"
+          : `puzzlecub:${game}`)
       )
         return;
       gameEvent(

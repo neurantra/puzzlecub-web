@@ -1,0 +1,15 @@
+<!doctype html><html lang="en"><head>
+<base href="/mapopia-game/"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex"><title>mapopia — PuzzleCub</title>
+</head><body style="margin:0;background:#f8f5ec"><p id="loading" style="font:18px system-ui;text-align:center;padding:80px 20px">Opening your game…</p>
+<script>
+window.addEventListener('flutter-first-frame',()=>document.getElementById('loading')?.remove());
+let adsAllowed=false, adsLoaded=false;
+window.parent.postMessage({type:'puzzlecub:audience',allowed:false},location.origin);
+window.puzzlecubSetAdsAllowed=allowed=>{
+ adsAllowed=allowed===true;
+ window.parent.postMessage({type:'puzzlecub:audience',allowed:adsAllowed},location.origin);
+ if(adsAllowed&&!adsLoaded){adsLoaded=true;const s=document.createElement('script');s.src='/game-ads.js';document.head.append(s);}
+};
+window.puzzlecubGameAction=completed=>{window.puzzlecubAds?.markPlayed();window.parent.postMessage({type:'puzzlecub:mapopia',completed:completed===true},location.origin);};
+window.puzzlecubWebBetweenGames=async()=>{if(adsAllowed) await window.puzzlecubAds?.between();};
+</script><script src="flutter_bootstrap.js" async></script></body></html>
