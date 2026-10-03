@@ -7,9 +7,9 @@ export function StandaloneApps() {
     <section id="apps" className="scroll-mt-24 border-b border-line">
       <div className="section-wrap">
         <p className="eyebrow">More from Neurantra</p>
-        <h2 className="section-title">Four worlds of their own.</h2>
+        <h2 className="section-title">Find your next favorite.</h2>
         <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted">
-          Find a new favorite in Fill the Jar, Mapopia, Maze Words, and Slide
+          Explore Alphadoku, Fill the Jar, Mapopia, Maze Words, and Slide
           &amp; Sort. Each is a separate app with its own puzzles and download.
         </p>
         <div className="mt-10 grid gap-6 lg:grid-cols-2">

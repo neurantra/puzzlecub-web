@@ -91,6 +91,23 @@ export const GAMES: Game[] = [
 ];
 export const STANDALONE_APPS: StandaloneApp[] = [
   {
+    slug: "alphadoku",
+    name: "Alphadoku",
+    tagline: "Nine letters. One hidden line.",
+    description:
+      "Sudoku with a word to discover. Fill each row, column, and box with nine unique letters, then find the one hidden line that spells the target in order.",
+    detail:
+      "Choose Easy, Medium, Hard, or Pro. Learn through interactive practice, use pencil marks and hints, and save an unfinished puzzle to return to later.",
+    note: "A standalone letter Sudoku app for iOS and Android.",
+    icon: "/alphadoku/icon.png",
+    screenshot: "/apps/alphadoku.webp",
+    appStoreUrl: "",
+    playStoreUrl:
+      "https://play.google.com/store/apps/details?id=com.alphadoku.app",
+    appStoreComingSoon: true,
+    playStoreComingSoon: true,
+  },
+  {
     slug: "fill-the-jar",
     name: "Fill the Jar",
     tagline: "A little space. A perfect fit.",
