@@ -105,7 +105,6 @@ export const STANDALONE_APPS: StandaloneApp[] = [
     playStoreUrl:
       "https://play.google.com/store/apps/details?id=com.alphadoku.app",
     appStoreComingSoon: true,
-    playStoreComingSoon: true,
   },
   {
     slug: "fill-the-jar",
