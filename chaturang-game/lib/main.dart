@@ -9,6 +9,7 @@ import 'audio/audio_service.dart';
 import 'app_info.dart';
 import 'data/appearance_service.dart';
 import 'data/difficulty_preference.dart';
+import 'data/game_preferences.dart';
 import 'data/stats_service.dart';
 import 'engine/opening_book.dart';
 import 'engine/tablebase.dart';
@@ -28,8 +29,10 @@ final ValueNotifier<Tablebase?> tablebaseNotifier = ValueNotifier<Tablebase?>(
 final ValueNotifier<OpeningBook> openingBookNotifier =
     ValueNotifier<OpeningBook>(OpeningBook.empty);
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // Restore mute before audio loading or the first playable frame.
+  await GamePreferences.soundEnabled.load();
   // Expose the board and card controls to keyboard/screen-reader users on web.
   SemanticsBinding.instance.ensureSemantics();
   LicenseRegistry.addLicense(() async* {

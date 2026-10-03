@@ -121,3 +121,47 @@ test("Chaturang keeps the mobile flow, plays against the worker, offers hints an
     fullPage: true,
   });
 });
+
+test("Chaturang remembers sound off and on across page reloads", async ({
+  page,
+}) => {
+  const frame = page.frameLocator("iframe.chaturang-frame");
+  async function settings() {
+    await frame
+      .getByRole("button", { name: "Settings and more", exact: true })
+      .press("Enter");
+    await frame
+      .getByRole("menuitem", { name: "Settings", exact: true })
+      .press("Enter");
+    await expect(
+      frame.getByText("Sound effects", { exact: true }),
+    ).toBeVisible();
+    return frame.getByRole("switch").first();
+  }
+  await page.goto("/chaturang");
+  const sound = await settings();
+  await expect(sound).toBeChecked();
+  await sound.press("Space");
+  await expect(sound).not.toBeChecked();
+  await expect
+    .poll(() =>
+      page.evaluate(() =>
+        localStorage.getItem("flutter.chaturang.settings.soundEnabled"),
+      ),
+    )
+    .toBe("false");
+  await page.reload();
+  const restored = await settings();
+  await expect(restored).not.toBeChecked();
+  await restored.press("Space");
+  await expect(restored).toBeChecked();
+  await expect
+    .poll(() =>
+      page.evaluate(() =>
+        localStorage.getItem("flutter.chaturang.settings.soundEnabled"),
+      ),
+    )
+    .toBe("true");
+  await page.reload();
+  await expect(await settings()).toBeChecked();
+});

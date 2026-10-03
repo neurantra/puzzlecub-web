@@ -11,7 +11,7 @@ import 'theme.dart';
 /// Opens a bottom-sheet modal with the Settings UI: difficulty, sound
 /// on/off, timed/untimed game-mode toggle.
 ///
-/// Difficulty persists across launches; other choices are shared for the session.
+/// Difficulty and sound persist across launches; game options are session-only.
 Future<void> showSettingsSheet(
   BuildContext context, {
   required ValueNotifier<Difficulty> difficulty,
