@@ -66,6 +66,110 @@ Playwright covers desktop/mobile, discovery, Mega editing/notes/undo/save/resume
 Pro, completion, weekly determinism, Classic startup/resume/daily determinism,
 content routes and `.app` hostname routing. Screenshots go to `test-results/`.
 
+## Private usage dashboard (Neon + Vercel)
+
+`/admin` provides password-protected visit records, game filters, engagement
+totals, active time, last seen, estimated online status, and optional IP addresses.
+Classic and Mega report actual puzzle actions rather than counting page loads
+as play. There are no player accounts: the date is **visit started**, not sign-in.
+Visitors must opt in to usage analytics. Signed-in admin requests are excluded.
+Tracking starts when enabled; earlier usage cannot be reconstructed.
+
+### Configure production
+
+1. In your existing Neon account, create a dedicated **PuzzleCub database** and
+   preferably its own owning role. Keep PlaneSane's tables and credentials separate.
+   Use the Neon connection string for that database as `DATABASE_URL`.
+2. Run [`database/analytics.sql`](database/analytics.sql) in the Neon SQL editor,
+   connected to that database as the same role the app will use. It creates the
+   private `puzzlecub_usage` schema and server-only functions. No database URL or
+   admin secret goes into a `NEXT_PUBLIC_` variable.
+3. In the PuzzleCub Vercel project's environment settings, configure:
+
+   | Variable | Value |
+   | --- | --- |
+   | `DATABASE_URL` | PuzzleCub Neon connection string with SSL |
+   | `ADMIN_PASSWORD` | Unique random password, at least 16 characters |
+   | `ADMIN_SESSION_SECRET` | Independent random value, at least 32 characters |
+   | `CRON_SECRET` | Independent random value for the retention job |
+   | `NEXT_PUBLIC_ANALYTICS_ENABLED` | `true` after the schema is installed |
+   | `ANALYTICS_COLLECT_IP` | `true` for the requested IP column; otherwise `false` |
+
+   Generate each secret separately with `openssl rand -hex 32`, and keep it in
+   your password manager and Vercel, not Git or chat. `.env.example` lists optional
+   settings. For local use copy it to `.env.local`. Vercel's trusted client-IP
+   header is detected automatically. Outside Vercel, IP collection is disabled
+   unless a trusted proxy header is explicitly configured.
+4. Deploy normally through your existing Vercel workflow. The public analytics
+   flag is read at build time, so changing it requires a new deployment. Use a
+   separate Neon database/branch for previews or leave preview analytics disabled.
+5. Open `/admin`, sign in, then use a separate browser/private window to opt in
+   and make a game move. Refresh the admin report to verify the visit and game.
+   Monitor Vercel's daily `/api/cron/usage-retention` job: it removes IPs older
+   than seven days and records older than 90 days. Cleanup runs daily; the report
+   independently hides expired IPs. Vercel sends `CRON_SECRET` as a bearer token.
+
+The admin cookie is HttpOnly, Secure in production, SameSite=Strict, and expires
+after eight hours. Changing the password or session secret invalidates existing
+sessions. Both page rendering and the data API verify authentication; responses
+are uncached. Login limits are stored in Neon and shared across Vercel instances.
+Database failure denies login and reports an error, rather than bypassing checks.
+
+### Reading the numbers and extending games
+
+- One visit is a browser-tab session; 30 minutes without interaction starts a
+  fresh visit on the next interaction. These are visits, **not unique people**.
+- A heartbeat runs every 15 seconds while the page is visible. Online means a
+  visible heartbeat in the last 45 seconds; closing a tab is best effort.
+- Active time counts visible seconds with an interaction within the previous
+  minute. Visit span is the time between first and last reports, including breaks.
+  Neither is an exact measurement of attention. Game thinking time with no
+  interaction for over a minute will not count as active time.
+- Games played and completions are distinct games within each visit, not a
+  count of every puzzle attempt. The table shows the latest 500 matching visits;
+  summary totals cover the whole selected period. Data comes from browsers and
+  can be blocked or spoofed; this is product analytics, not an audit log.
+- Referrer host and device category help explain acquisition and usability.
+  IP addresses can be shared or change and should not identify individual players.
+  Visits are not linked across devices or browser tabs.
+- Add future games to `src/app/_lib/analytics/types.ts`, then call `trackGame(id)`
+  for an accepted game action and `trackGame(id, true)` for completion. No schema
+  change is needed. The Classic iframe uses a same-origin/source-checked bridge.
+- Useful next additions: difficulty, individual game starts/completions and
+  completion rate, device/country breakdowns, and an aggregate daily trend. Returning
+  visitor analysis would require a separate, longer-lived consented identifier.
+- Use Google Search Console alongside this dashboard for search queries,
+  impressions, clicks, and search performance. It does not supply individual
+  gameplay histories or IP addresses.
+
+### Analytics integration tests without Neon credentials
+
+`npm test` runs the analytics schema on an in-memory PostgreSQL engine (PGlite),
+including retry safety, game filtering, online expiry, rate limits, permissions,
+and retention. For end-to-end tests, start an isolated test server:
+
+```sh
+PUZZLECUB_TEST_DATABASE=1 \
+DATABASE_URL=postgresql://test:test@puzzlecub-test.neon.tech/puzzlecub \
+ADMIN_PASSWORD=local-analytics-test-password \
+ADMIN_SESSION_SECRET=local-test-secret-at-least-32-characters \
+NEXT_PUBLIC_ANALYTICS_ENABLED=true ANALYTICS_COLLECT_IP=true \
+ANALYTICS_TRUSTED_IP_HEADER=x-test-ip \
+NODE_OPTIONS='--import=./tests/neon-fixture.mjs' \
+node node_modules/next/dist/bin/next dev --port 3149
+```
+
+In another terminal:
+
+```sh
+PUZZLECUB_TEST_DATABASE=1 PLAYWRIGHT_BASE_URL=http://127.0.0.1:3149 \
+npx playwright test tests/browser/analytics.spec.ts
+```
+
+These credentials and the fake Neon endpoint are test-only. The fixture intercepts
+only that endpoint and runs the real SQL locally. Never enable the fixture on a
+deployment. The existing game browser suite remains `npm run test:e2e`.
+
 ## Before public launch
 
 1. Review both games and editorial pages. Mega is an initial clue-density beta;
@@ -82,7 +186,8 @@ content routes and `.app` hostname routing. Screenshots go to `test-results/`.
 
 ## Monetization boundary
 
-**Ads and third-party analytics are intentionally not active.** No fake publisher
+**Ads and third-party marketing analytics are intentionally not active.** Optional
+first-party usage analytics is available through the admin setup above. No fake publisher
 ID, live ad request, paywall, billing SDK, or consent bypass is included. Gameplay
 is unlimited and hints are free during this launch beta. Pro stays unassisted.
 

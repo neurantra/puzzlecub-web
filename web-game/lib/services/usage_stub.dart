@@ -1,0 +1,1 @@
+void reportGameAction(bool completed) {}

@@ -266,6 +266,8 @@ test("Classic cell picker and board stay tappable on a Pixel-sized screen", asyn
   });
   const page = await context.newPage();
   await page.goto("/alphadoku/classic");
+  if (process.env.PUZZLECUB_TEST_DATABASE === "1")
+    await page.getByRole("button", { name: "No thanks", exact: true }).click();
   const bounds = await page.locator("iframe").boundingBox();
   expect(bounds?.x).toBe(0);
   expect(bounds?.y).toBe(48);

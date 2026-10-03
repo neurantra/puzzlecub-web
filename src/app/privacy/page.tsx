@@ -5,7 +5,7 @@ export default function Page() {
     <WebShell>
       <main id="main" className="article">
         <h1>Your play. Your privacy.</h1>
-        <p>Browser edition · Updated October 2, 2026.</p>
+        <p>Browser edition · Updated October 3, 2026.</p>
         <h2>What this browser edition stores</h2>
         <p>
           PuzzleCub stores game boards, notes, tutorial progress, target
@@ -29,11 +29,28 @@ export default function Page() {
         </p>
         <h2>Advertising and analytics</h2>
         <p>
-          Third-party advertising and analytics are not enabled in this launch
-          build. We plan to support free play through advertising. Before
-          activating it, we will update these disclosures and provide the
-          applicable consent and privacy controls. The browser edition does not
-          use the mobile app’s billing or AdMob SDKs.
+          When optional usage analytics is enabled, we ask before collecting it.
+          Declining does not affect your games. You can change your choice using
+          the analytics control on this page. We record a random visit identifier,
+          visit and last-seen times, page paths, referring website hostname,
+          device category, games interacted with or completed, and estimated
+          active time. If network-address collection is enabled, the visit also
+          includes your IP address. We do not record puzzle entries or the full
+          referring URL. There is no player sign-in or cross-device identity.
+        </p>
+        <p>
+          Your choice is stored in this browser and the visit identifier is
+          stored for the browser tab. Activity records are stored in our Neon
+          database and are available through a password-protected owner dashboard.
+          Vercel serves the website. IP addresses are removed after seven days
+          and visit records after 90 days, by a daily cleanup (which may take up
+          to an additional day). Security rate limits also use a keyed hash of
+          the network address for short-lived abuse protection.
+        </p>
+        <p>
+          Third-party advertising is not enabled. Before activating it, we will
+          update these disclosures and provide applicable privacy controls. The
+          browser edition does not use the mobile app’s billing or AdMob SDKs.
         </p>
         <h2>Contact and the publisher’s policy</h2>
         <p>

@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import '../services/usage.dart';
 
 import 'axis.dart';
 import 'grid.dart';
@@ -78,8 +79,9 @@ class Session extends ChangeNotifier {
               ? lockedAxis!.index == row
               : lockedAxis!.index == col));
 
-  void _changed() {
+  void _changed({bool played = false}) {
     if (isSolved) pause();
+    if (played) reportGameAction(isSolved);
     notifyListeners();
   }
 
@@ -115,7 +117,7 @@ class Session extends ChangeNotifier {
       set.contains(letterIndex)
           ? set.remove(letterIndex)
           : set.add(letterIndex);
-      _changed();
+      _changed(played: true);
       return true;
     }
 
@@ -126,7 +128,7 @@ class Session extends ChangeNotifier {
     board.set(r, c, letterIndex);
     notes.remove(i);
     if (puzzle.solution.at(r, c) != letterIndex) mistakes++;
-    _changed();
+    _changed(played: true);
     return true;
   }
 
@@ -140,7 +142,7 @@ class Session extends ChangeNotifier {
     _history.add(_Move.cell(i, board.at(r, c), notes[i]?.toSet()));
     board.set(r, c, Grid.empty);
     notes.remove(i);
-    _changed();
+    _changed(played: true);
     return true;
   }
 
@@ -176,7 +178,7 @@ class Session extends ChangeNotifier {
   void toggleAxis(AxisTrack axis) {
     if (isSolved || lockedAxis != null) return;
     _ruledOut.contains(axis) ? _ruledOut.remove(axis) : _ruledOut.add(axis);
-    _changed();
+    _changed(played: true);
   }
 
   /// Commit to an axis. Writing the phrase along the right track is the
@@ -186,7 +188,7 @@ class Session extends ChangeNotifier {
     if (axis != puzzle.axis) {
       mistakes++;
       _ruledOut.add(axis);
-      _changed();
+      _changed(played: true);
       return false;
     }
     _history.add(_Move.axis(board, notes, _ruledOut));
@@ -201,7 +203,7 @@ class Session extends ChangeNotifier {
     _ruledOut
       ..clear()
       ..addAll(AxisTrack.all.where((a) => a != axis));
-    _changed();
+    _changed(played: true);
     return true;
   }
 
@@ -216,7 +218,7 @@ class Session extends ChangeNotifier {
     hintsUsed++;
     board.set(r, c, puzzle.solution.at(r, c));
     notes.remove(i);
-    _changed();
+    _changed(played: true);
     return true;
   }
 

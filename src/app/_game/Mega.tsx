@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { trackGame } from "../_lib/analytics/client";
 type Tier = "easy" | "medium" | "hard" | "pro";
 type Puzzle = {
   id: string;
@@ -203,6 +204,7 @@ export default function Mega({ week }: { week?: string }) {
       board[selected] = v;
       notes[selected] = [];
     }
+    trackGame("alphadoku-mega", board.every((value, i) => value === save.puzzle.solution[i]));
     setSave({
       ...save,
       board,
@@ -224,6 +226,7 @@ export default function Mega({ week }: { week?: string }) {
       notes = save.notes.map((n) => [...n]);
     board[selected] = save.puzzle.solution[selected];
     notes[selected] = [];
+    trackGame("alphadoku-mega", board.every((value, i) => value === save.puzzle.solution[i]));
     setSave({
       ...save,
       board,
