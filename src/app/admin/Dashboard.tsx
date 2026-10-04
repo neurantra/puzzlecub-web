@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import {
   gameNames,
+  gameForPage,
   pageNames,
   type UsageReport,
 } from "../_lib/analytics/types";
@@ -57,9 +58,14 @@ export default function Dashboard() {
     const timer = setInterval(() => {
       if (!document.hidden) void refresh(controller.signal);
     }, 30000);
+    const onVisible = () => {
+      if (!document.hidden) void refresh(controller.signal);
+    };
+    document.addEventListener("visibilitychange", onVisible);
     return () => {
       controller.abort();
       clearInterval(timer);
+      document.removeEventListener("visibilitychange", onVisible);
     };
   }, [refresh]);
 
@@ -77,6 +83,12 @@ export default function Dashboard() {
           <button>Sign out</button>
         </form>
       </header>
+      <p className="admin-muted">
+        Your own activity in this browser is excluded while you are signed into
+        admin. To check gameplay counts, use a separate browser or private
+        window without an admin login. Analytics opt-outs and browser privacy
+        signals are still respected.
+      </p>
       <div className="admin-filters">
         <label>
           Period
@@ -114,7 +126,7 @@ export default function Dashboard() {
           {loading ? "Refreshing…" : "Refresh"}
         </button>
         <span className="admin-muted" role="status">
-          {updated && `Updated ${updated} · refreshes every 30s`}
+          {updated && `Updated ${updated} · refreshes every 30s while visible`}
         </span>
       </div>
       {error && (
@@ -167,9 +179,7 @@ export default function Dashboard() {
                     .filter(([id]) => !game || game === id)
                     .map(([id, name]) => {
                       const page = report.pages.find(
-                        (p) =>
-                          p.page ===
-                          `/alphadoku/${id.replace("alphadoku-", "")}`,
+                        (p) => gameForPage(p.page) === id,
                       );
                       return (
                         <tr key={id}>

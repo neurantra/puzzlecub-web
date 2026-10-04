@@ -60,6 +60,23 @@ test("private dashboard shows aggregate counters only; ingestion rejects identif
   expect((await request.post("/api/usage", { headers, data })).status()).toBe(
     204,
   );
+  const otherGames = [
+    ["/chaturang", "Chaturang"],
+    ["/mazewords", "Maze Words"],
+    ["/slide-and-sort", "Slide & Sort"],
+    ["/mapopia", "Mapopia"],
+    ["/fillthejar", "Fill the Jar"],
+  ];
+  for (const [path] of otherGames) {
+    expect(
+      (
+        await request.post("/api/usage", {
+          headers,
+          data: { ...data, eventId: randomUUID(), page: path },
+        })
+      ).status(),
+    ).toBe(204);
+  }
   await page.goto("/admin");
   await page.getByLabel("Admin password").fill("wrong-password");
   await page.getByRole("button", { name: "Sign in securely" }).click();
@@ -80,6 +97,42 @@ test("private dashboard shows aggregate counters only; ingestion rejects identif
   expect(report).not.toHaveProperty("visits");
   expect(JSON.stringify(report)).not.toContain(data.eventId);
   expect(JSON.stringify(report)).not.toContain("203.0.113.22");
+  for (const [, name] of otherGames) {
+    const row = page
+      .locator(".admin-games")
+      .first()
+      .getByRole("row")
+      .filter({ has: page.getByRole("rowheader", { name, exact: true }) });
+    await expect(row.getByRole("cell")).toHaveText([
+      "1",
+      "1",
+      "100%",
+      "0",
+      "0m 10s",
+    ]);
+  }
+  // An authenticated owner's play must not contaminate visitor statistics.
+  expect(
+    (
+      await page.request.post("/api/usage", {
+        headers,
+        data: { ...data, eventId: randomUUID(), page: "/chaturang" },
+      })
+    ).status(),
+  ).toBe(204);
+  const afterOwnerPlay = await (
+    await page.request.get("/api/admin/usage")
+  ).json();
+  expect(afterOwnerPlay.views).toBe(report.views);
+  expect(afterOwnerPlay.plays).toBe(report.plays);
+  await expect(
+    page.getByText(/Your own activity in this browser is excluded/),
+  ).toBeVisible();
+  const visibleRefresh = page.waitForResponse((r) =>
+    r.url().includes("/api/admin/usage"),
+  );
+  await page.evaluate(() => document.dispatchEvent(new Event("visibilitychange")));
+  expect((await visibleRefresh).status()).toBe(200);
   await page.screenshot({
     path: "test-results/admin-anonymous-dashboard.png",
     fullPage: true,
